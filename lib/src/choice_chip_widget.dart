@@ -7,7 +7,9 @@ class ChoicechipWidget extends StatelessWidget {
       this.selected,
       this.selectedTextColor,
       this.unselectedTextColor,
-      this.onSelected})
+      this.onSelected,
+      this.unselectedTextBackgroundColor, 
+      this.selectedTextBackgroundColor})
       : super(key: key);
 
   final String text;
@@ -15,14 +17,16 @@ class ChoicechipWidget extends StatelessWidget {
   final Function(bool) onSelected;
   final Color selectedTextColor;
   final Color unselectedTextColor;
+  final Color unselectedTextBackgroundColor;
+  final Color selectedTextBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: ChoiceChip(
-          backgroundColor: Colors.grey.shade100,
-          selectedColor: Colors.blue,
+          backgroundColor:  selected ? selectedTextBackgroundColor : unselectedTextBackgroundColor,
+          selectedColor:  selected ? selectedTextBackgroundColor : unselectedTextBackgroundColor,
           label: Text(
             '$text',
             style: TextStyle(

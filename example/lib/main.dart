@@ -1,7 +1,5 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
-import './data/countries.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -28,9 +26,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> allTextList =
-      CountriesModel.countriesMAp.map((x) => x["name"]).toList();
-  List<String> selsctedTextList = [];
+  List<String> countList = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Tweleve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+    "Twenty"
+  ];
+  List<String> selectedCountList = [];
+
   void _openFilterList() async {
     var list = await showDialog(
       context: context,
@@ -44,10 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
             height: MediaQuery.of(context).size.height * .8,
             width: MediaQuery.of(context).size.width,
             child: FilterList(
-              allTextList: allTextList,
-              headlineText: "Select Countries",
+              allTextList: countList,
+              headlineText: "Select Count",
               searchFieldHintText: "Search Here",
-              selectedTextList: selsctedTextList,
+              selectedTextList: selectedCountList,
             ),
           ),
         );
@@ -55,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (list != null) {
       setState(() {
-        selsctedTextList = List.from(list);
+        selectedCountList = List.from(list);
       });
     }
   }
@@ -71,17 +90,17 @@ class _MyHomePageState extends State<MyHomePage> {
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ),
-        body: selsctedTextList == null || selsctedTextList.length == 0
+        body: selectedCountList == null || selectedCountList.length == 0
             ? Center(
-                child: Text('No Country selected'),
+                child: Text('No text selected'),
               )
             : ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(selsctedTextList[index]),
+                    title: Text(selectedCountList[index]),
                   );
                 },
                 separatorBuilder: (context, index) => Divider(),
-                itemCount: selsctedTextList.length));
+                itemCount: selectedCountList.length));
   }
 }

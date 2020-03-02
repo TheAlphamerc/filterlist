@@ -15,10 +15,13 @@ class FilterList extends StatefulWidget {
     this.showSelectedTextCount = true,
     this.closeIconColor = Colors.black,
     this.headerTextColor = Colors.black,
-    this.applyButonColor = Colors.blue,
+    this.applyButonTextColor = Colors.white,
+    this.applyButonTextBackgroundColor = Colors.blue,
+    this.allResetButonColor = Colors.blue,
     this.selectedTextColor = Colors.white,
+    this.backgroundColor = Colors.white,
     this.unselectedTextColor = Colors.black,
-    this.searchFieldBackgroundColor = const Color(0xfff8f8f8),
+    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
     this.selectedTextBackgroundColor = Colors.blue,
     this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
   }) : super(key: key);
@@ -27,7 +30,11 @@ class FilterList extends StatefulWidget {
   final bool showSelectedTextCount;
   final Color closeIconColor;
   final Color headerTextColor;
-  final Color applyButonColor;
+  final Color backgroundColor;
+  final Color applyButonTextColor;
+  final Color applyButonTextBackgroundColor;
+  final Color allResetButonColor;
+  
   final Color selectedTextColor;
   final Color unselectedTextColor;
   final Color searchFieldBackgroundColor;
@@ -96,7 +103,7 @@ class _FilterListState extends State<FilterList> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 2.5),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
+        decoration: BoxDecoration(color: widget.backgroundColor, boxShadow: <BoxShadow>[
           BoxShadow(
             offset: Offset(0, 5),
             blurRadius: 15,
@@ -123,7 +130,7 @@ class _FilterListState extends State<FilterList> {
                           style: Theme.of(context)
                               .textTheme
                               .headline
-                              .copyWith(fontSize: 18),
+                              .copyWith(fontSize: 18,color: widget.headerTextColor),
                         ),
                       )),
                   Expanded(
@@ -137,9 +144,9 @@ class _FilterListState extends State<FilterList> {
                         height: 25,
                         width: 25,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black87),
+                            border: Border.all(color: widget.closeIconColor),
                             shape: BoxShape.circle),
-                        child: Icon(Icons.close),
+                        child: Icon(Icons.close, color: widget.closeIconColor,),
                       ),
                     ),
                   ),
@@ -149,6 +156,7 @@ class _FilterListState extends State<FilterList> {
                 height: 10,
               ),
               SearchFieldWidget(
+                searchFieldBackgroundColor: widget.searchFieldBackgroundColor,
                 searchFieldHintText: widget.searchFieldHintText,
                 onChanged: (value) {
                   setState(() {
@@ -183,7 +191,10 @@ class _FilterListState extends State<FilterList> {
           },
           selected: selectedText,
           selectedTextColor: widget.selectedTextColor,
+          selectedTextBackgroundColor: widget.selectedTextBackgroundColor,
+          unselectedTextBackgroundColor: widget.unselectedTextbackGroundColor,
           unselectedTextColor: widget.unselectedTextColor,
+        
           text: item,
         ));
       },
@@ -208,8 +219,8 @@ class _FilterListState extends State<FilterList> {
             Expanded(child: SizedBox()),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: widget.backgroundColor,
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       offset: Offset(0, 5),
@@ -233,7 +244,7 @@ class _FilterListState extends State<FilterList> {
                         style: Theme.of(context)
                             .textTheme
                             .headline
-                            .copyWith(fontSize: 20, color: Colors.blue),
+                            .copyWith(fontSize: 20, color: widget.allResetButonColor),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -252,13 +263,13 @@ class _FilterListState extends State<FilterList> {
                         style: Theme.of(context)
                             .textTheme
                             .headline
-                            .copyWith(fontSize: 20, color: Colors.blue),
+                            .copyWith(fontSize: 20, color: widget.allResetButonColor),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                   MaterialButton(
-                      color: Colors.blue,
+                      color: widget.applyButonTextBackgroundColor,
                       padding: EdgeInsets.only(bottom: 5),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -271,7 +282,7 @@ class _FilterListState extends State<FilterList> {
                           style: Theme.of(context)
                               .textTheme
                               .headline
-                              .copyWith(fontSize: 20, color: Colors.white),
+                              .copyWith(fontSize: 20, color: widget.applyButonTextColor),
                           textAlign: TextAlign.center,
                         ),
                       ))
@@ -297,7 +308,7 @@ class _FilterListState extends State<FilterList> {
         padding: EdgeInsets.only(bottom: 3, top: 3),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.white),
+            color: widget.backgroundColor),
         child: Stack(
           children: <Widget>[
             _body(),
