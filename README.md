@@ -8,6 +8,8 @@ FilterList is a flutter plugin which is designed to provide ease in filter data 
 ## Getting Started
 ### 1. Add library to your pubspec.yaml
 
+
+
 ```yaml
 
 dependencies:
@@ -24,6 +26,8 @@ import 'import 'package:filter_list/filter_list.dart';';
 
 ### 3. How to use FilterList
 
+
+#### Create a list of Strings
 ```dart
   List<String> countList = [
     "One",
@@ -38,7 +42,9 @@ import 'import 'package:filter_list/filter_list.dart';';
     "Ten"
   ];
   List<String> selectedCountList = [];
-
+```
+#### Create a `_openFilterList` function which will open `filterList` pop-up on button clicked
+```dart
   void _openFilterList() async {
     var list = await showDialog(
       context: context,
@@ -53,7 +59,7 @@ import 'import 'package:filter_list/filter_list.dart';';
             width: MediaQuery.of(context).size.width,
             child: FilterList(
               allTextList: countList,
-              headlineText: "Select Countries",
+              headlineText: "Select Count",
               searchFieldHintText: "Search Here",
               selectedTextList: selectedCountList,
             ),
@@ -67,7 +73,10 @@ import 'import 'package:filter_list/filter_list.dart';';
       });
     }
   }
+```
+#### Call `_openFilterList` function on `floatingActionButton` pressed
 
+```dart
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +88,7 @@ import 'import 'package:filter_list/filter_list.dart';';
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ),
+        /// check for empty or null value selctedCountList
         body: selectedCountList == null || selectedCountList.length == 0
             ? Center(
                 child: Text('No text selected'),
