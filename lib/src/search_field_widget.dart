@@ -4,7 +4,11 @@ class SearchFieldWidget extends StatelessWidget {
   final String searchFieldHintText;
   final Color searchFieldBackgroundColor;
   final Function(String) onChanged;
-  const SearchFieldWidget({Key key, this.searchFieldHintText, this.onChanged, this.searchFieldBackgroundColor})
+  const SearchFieldWidget(
+      {Key key,
+      this.searchFieldHintText,
+      this.onChanged,
+      this.searchFieldBackgroundColor})
       : super(key: key);
 
   @override

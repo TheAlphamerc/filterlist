@@ -1,5 +1,6 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -51,27 +52,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> selectedCountList = [];
 
   void _openFilterList() async {
-    var list = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40))),
-            height: MediaQuery.of(context).size.height * .8,
-            width: MediaQuery.of(context).size.width,
-            child: FilterList(
-              allTextList: countList,
-              headlineText: "Select Count",
-              searchFieldHintText: "Search Here",
-              selectedTextList: selectedCountList,
-            ),
-          ),
-        );
-      },
+    var list = await FilterList.showFilterList(
+      context,
+      allTextList: countList,
+      height: 450,
+      borderRadius: 20,
+      headlineText: "Select Count",
+      searchFieldHintText: "Search Here",
+      selectedTextList: selectedCountList,
     );
+    
     if (list != null) {
       setState(() {
         selectedCountList = List.from(list);
