@@ -39,34 +39,33 @@ import 'import 'package:filter_list/filter_list.dart';';
     "Seven",
     "Eight",
     "Nine",
-    "Ten"
+    "Ten",
+    "Eleven",
+    "Tweleve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+    "Twenty"
   ];
   List<String> selectedCountList = [];
 ```
-#### Create a `_openFilterList` function which will open `filterList` pop-up on button clicked
+#### Create a function and call `FilterList.showFilterList()` dialog on button clicked
 ```dart
   void _openFilterList() async {
-    var list = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40))),
-            height: MediaQuery.of(context).size.height * .8,
-            width: MediaQuery.of(context).size.width,
-            child: FilterList(
-              allTextList: countList,
-              headlineText: "Select Count",
-              searchFieldHintText: "Search Here",
-              selectedTextList: selectedCountList,
-            ),
-          ),
-        );
-      },
+    var list = await FilterList.showFilterList(
+      context,
+      allTextList: countList,
+      height: 450,
+      borderRadius: 20,
+      headlineText: "Select Count",
+      searchFieldHintText: "Search Here",
+      selectedTextList: selectedCountList,
     );
+    
     if (list != null) {
       setState(() {
         selectedCountList = List.from(list);
@@ -115,6 +114,77 @@ Screenshot             |  Screenshot
 :-------------------------:|:-------------------------:
 ![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_1.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_2.jpg?raw=true)|
 ![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_3.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_4.jpg?raw=true)|
+
+
+### Parameters and Value
+
+#####  `height`
+* Set height of filter dialog.
+
+##### `width`
+* Set width of filter dialog.
+
+##### `borderRadius`
+* Set border radius of filter dialog.
+
+#### `allTextList`
+* Populate filter dialog with text list.
+
+#### `selectedTextList`
+* Marked selected text in filter dialog.
+
+##### `headlineText`
+* Set header text of filter dialog.
+
+##### `searchFieldHintText`
+* Set hint text in search field.
+
+#### `hideSelectedTextCount`
+* Hide selected text count.
+
+##### `hideSearchField`
+* Hide search text field.
+
+##### `hidecloseIcon`
+* Hide close Icon.
+
+#####  `hideheader`
+* Hide complete header section from filter dialog.
+
+##### `closeIconColor`
+* set color of close Icon.
+
+##### `headerTextColor`
+* Set color of header text.
+
+#### `applyButonTextColor`
+* Set text color of apply button.
+
+#### `applyButonTextBackgroundColor`
+* Set background color of apply button.
+
+##### `allResetButonColor`
+* Set text color of all and reset button.
+
+##### `selectedTextColor`
+* Set color of selected text in filter dialog.
+
+##### `selectedTextBackgroundColor`
+* Set background color of selected text field.
+
+##### `unselectedTextbackGroundColor`
+* Set background color of unselected text field.
+
+#### `unselectedTextColor`
+* Set text color of unselected text in filter dialog
+
+##### `searchFieldBackgroundColor`
+* Set background color of Search field.
+
+#### `backgroundColor`
+* Set background color of filter color.
+
+
 
 
 
