@@ -24,6 +24,7 @@ class FilterListWidget extends StatefulWidget {
     this.selectedTextBackgroundColor,
     this.unselectedTextbackGroundColor,
     this.hideHeader,
+    this.hideheaderText,
     this.hideSearchField,
     this.hidecloseIcon,
     this.hideSelectedTextCount,
@@ -51,6 +52,7 @@ class FilterListWidget extends StatefulWidget {
   final bool hideSearchField;
   final bool hidecloseIcon;
   final bool hideHeader;
+  final bool hideheaderText;
 
   @override
   _FilterListWidgetState createState() => _FilterListWidgetState();
@@ -108,90 +110,95 @@ class _FilterListWidgetState extends State<FilterListWidget> {
   }
 
   Widget _header() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 2.5),
-      child: Container(
-        decoration: BoxDecoration(
-          color: widget.backgroundColor,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              offset: Offset(0, 5),
-              blurRadius: 15,
-              color: Color(0x12000000),
-            )
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
+    return Container(
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            offset: Offset(0, 5),
+            blurRadius: 15,
+            color: Color(0x12000000),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Center(
+                    child: widget.hideheaderText
+                        ? Container()
+                        : Text(
+                            widget.headlineText.toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline
+                                .copyWith(
+                                    fontSize: 18,
+                                    color: widget.headerTextColor),
+                          ),
                   ),
-                  Expanded(
-                    flex: 6,
-                    child: Center(
-                      child: Text(
-                        widget.headlineText.toUpperCase(),
-                        style: Theme.of(context).textTheme.headline.copyWith(
-                            fontSize: 18, color: widget.headerTextColor),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      onTap: () {
-                        Navigator.pop(context, null);
-                      },
-                      child: widget.hidecloseIcon
-                          ? SizedBox()
-                          : Container(
-                              height: 25,
-                              width: 25,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: widget.closeIconColor),
-                                  shape: BoxShape.circle),
-                              child: Icon(
-                                Icons.close,
-                                color: widget.closeIconColor,
-                              ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    onTap: () {
+                      Navigator.pop(context, null);
+                    },
+                    child: widget.hidecloseIcon
+                        ? SizedBox()
+                        : Container(
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: widget.closeIconColor),
+                                shape: BoxShape.circle),
+                            child: Icon(
+                              Icons.close,
+                              color: widget.closeIconColor,
                             ),
-                    ),
+                          ),
                   ),
-                ],
-              ),
-              widget.hideSearchField
-                  ? SizedBox()
-                  : SizedBox(
-                      height: 10,
-                    ),
-              widget.hideSearchField
-                  ? SizedBox()
-                  : SearchFieldWidget(
-                      searchFieldBackgroundColor:
-                          widget.searchFieldBackgroundColor,
-                      searchFieldHintText: widget.searchFieldHintText,
-                      onChanged: (value) {
-                        setState(() {
-                          if (value.isEmpty) {}
-                          _allTextList = widget.allTextList
-                              .where((string) => string
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()))
-                              .toList();
-                        });
-                      },
-                    )
-            ],
-          ),
+                ),
+              ],
+            ),
+            widget.hideSearchField
+                ? SizedBox()
+                : SizedBox(
+                    height: 10,
+                  ),
+            widget.hideSearchField
+                ? SizedBox()
+                : SearchFieldWidget(
+                    searchFieldBackgroundColor:
+                        widget.searchFieldBackgroundColor,
+                    searchFieldHintText: widget.searchFieldHintText,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value.isEmpty) {}
+                        _allTextList = widget.allTextList
+                            .where(
+                              (string) => string.toLowerCase().contains(
+                                    value.toLowerCase(),
+                                  ),
+                            )
+                            .toList();
+                      });
+                    },
+                  )
+          ],
         ),
       ),
     );
@@ -313,6 +320,7 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                 ],
               ),
             ),
+
             /// add Bottom space in list
             Expanded(child: SizedBox()),
           ],
@@ -330,7 +338,6 @@ class _FilterListWidgetState extends State<FilterListWidget> {
         child: Container(
           height: widget.height,
           width: widget.width,
-          padding: EdgeInsets.only(bottom: 3, top: 3),
           color: widget.backgroundColor,
           child: Stack(
             children: <Widget>[
