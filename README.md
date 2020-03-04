@@ -5,6 +5,16 @@
 
 FilterList is a flutter plugin which is designed to provide ease in filter data from list of strings.
 
+## Data flow 
+* Pass list of strings to `FilterList.showFilterList()`.
+* Pass list of selected strings to show pre-selected text otherwise ignore it.
+* Invoke method `FilterList.showFilterList()` to display filter dialog.
+* Make selection from list.
+* Click `All` button to select all text from list.
+* Click `Reset` button to make all text unselected.
+* Click `Apply` buton to return selected list of strings.
+* On `close` icon clicked it close dialog and return null value.
+* Without making any selection `Apply` button is pressed it will return empty list of string.
 
 ## Getting Started
 ### 1. Add library to your pubspec.yaml
