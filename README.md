@@ -6,7 +6,7 @@
 FilterList is a flutter plugin which is designed to provide ease in filter data from list of strings.
 
 ## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
-<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.1/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
+<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.4/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Data flow 
 * Pass list of strings to `FilterList.showFilterList()`.
