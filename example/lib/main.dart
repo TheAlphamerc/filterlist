@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var list = await FilterList.showFilterList(
       context,
       allTextList: countList,
-      height: 450,
+      height: 480,
       borderRadius: 20,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",

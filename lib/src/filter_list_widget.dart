@@ -264,17 +264,19 @@ class _FilterListWidgetState extends State<FilterListWidget> {
               ),
               child: Row(
                 children: <Widget>[
-                  InkWell(
-                    onTap: () {
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    onPressed: () {
                       setState(
                         () {
                           _selectedTextList = List.from(_allTextList);
                         },
                       );
                     },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                   child: Container(
+                      height: double.infinity,
+                      alignment: Alignment.center,
                       child: Text(
                         'All',
                         style: Theme.of(context).textTheme.headline.copyWith(
@@ -283,15 +285,17 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    onPressed: () {
                       setState(() {
                         _selectedTextList.clear();
                       });
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      height: double.infinity,
+                      alignment: Alignment.center,
                       child: Text(
                         'Reset',
                         style: Theme.of(context).textTheme.headline.copyWith(
