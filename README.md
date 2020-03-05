@@ -137,70 +137,70 @@ Customised control button |Customised selected text |Customised unselected text 
 
 ### Parameters and Value
 
-#####  `height`
+ `height` Type: **double**
 * Set height of filter dialog.
 
-##### `width`
+`width` Type: **double**
 * Set width of filter dialog.
 
-##### `borderRadius`
+`borderRadius` Type: **double**
 * Set border radius of filter dialog.
 
-#### `allTextList`
+`allTextList` Type: **List\<String>()**
 * Populate filter dialog with text list.
 
-#### `selectedTextList`
+`selectedTextList` Type: **List\<String>()**
 * Marked selected text in filter dialog.
 
-##### `headlineText`
+`headlineText` Type: **String**
 * Set header text of filter dialog.
 
-##### `searchFieldHintText`
+`searchFieldHintText` Type: **String**
 * Set hint text in search field.
 
-#### `hideSelectedTextCount`
+`hideSelectedTextCount` Type: **bool**
 * Hide selected text count.
 
-##### `hideSearchField`
+ `hideSearchField` Type: **bool**
 * Hide search text field.
 
-##### `hidecloseIcon`
+`hidecloseIcon` Type: **bool**
 * Hide close Icon.
 
-#####  `hideheader`
+`hideheader` Type: **bool**
 * Hide complete header section from filter dialog.
 
-##### `closeIconColor`
+`closeIconColor` Type: **Color**
 * set color of close Icon.
 
-##### `headerTextColor`
+`headerTextColor` Type: **Color**
 * Set color of header text.
 
-#### `applyButonTextColor`
+`applyButonTextColor` Type: **Color**
 * Set text color of apply button.
 
-#### `applyButonTextBackgroundColor`
+ `applyButonTextBackgroundColor` Type: **Color**
 * Set background color of apply button.
 
-##### `allResetButonColor`
+`allResetButonColor` Type: **Color**
 * Set text color of all and reset button.
 
-##### `selectedTextColor`
+`selectedTextColor` Type: **Color**
 * Set color of selected text in filter dialog.
 
-##### `selectedTextBackgroundColor`
+`selectedTextBackgroundColor` Type: **Color**
 * Set background color of selected text field.
 
-##### `unselectedTextbackGroundColor`
+`unselectedTextbackGroundColor` Type: **Color**
 * Set background color of unselected text field.
 
-#### `unselectedTextColor`
+`unselectedTextColor` Type: **Color**
 * Set text color of unselected text in filter dialog
 
-##### `searchFieldBackgroundColor`
+`searchFieldBackgroundColor` Type: **Color**
 * Set background color of Search field.
 
-#### `backgroundColor`
+`backgroundColor` Type: **Color**
 * Set background color of filter color.
 
 
