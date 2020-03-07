@@ -34,7 +34,7 @@ dependencies:
 ### 2. Import library in dart file
 
 ```dart
-import 'import 'package:filter_list/filter_list.dart';';
+import package:filter_list/filter_list.dart';
 ```
 
 
