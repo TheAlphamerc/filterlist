@@ -51,25 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List<String> selectedCountList = [];
 
-  void _openFilterList() async {
-    var list = await FilterListDialog.display(
-      context,
-      allTextList: countList,
-      height: 480,
-      borderRadius: 20,
-      headlineText: "Select Count",
-      searchFieldHintText: "Search Here",
-      selectedTextList: selectedCountList,
-      onApplyButtonClick:(list){
-        print("Get list data");
+  void _openFilterDialog() async {
+    await FilterListDialog.display(context,
+        allTextList: countList,
+        height: 480,
+        borderRadius: 20,
+        headlineText: "Select Count",
+        searchFieldHintText: "Search Here",
+        selectedTextList: selectedCountList, onApplyButtonClick: (list) {
+        if (list != null) {
+        setState(() {
+          selectedCountList = List.from(list);
+        });
+        Navigator.pop(context);
       }
-    );
-
-    if (list != null) {
-      setState(() {
-        selectedCountList = List.from(list);
-      });
-    }
+    });
   }
 
   @override
@@ -122,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.blue,
               ),
               FlatButton(
-                onPressed: _openFilterList,
+                onPressed: _openFilterDialog,
                 child: Text(
                   "Filter Dialog",
                   style: TextStyle(color: Colors.white),
