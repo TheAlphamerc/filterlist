@@ -1,17 +1,17 @@
 library filter_list;
-
+import 'package:filter_list/src/choice_chip_widget.dart';
+import 'package:filter_list/src/search_field_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'src/filter_list_widget.dart';
-
-class FilterList {
-  static Future<List<String>> showFilterList(
+part 'src/filter_list_widget.dart';
+class FilterListDialog {
+  static Future<List<String>> display(
     context, {
     double height,
     double width,
-    double borderRadius = 20,
     List<String> selectedTextList,
     List<String> allTextList,
+    double borderRadius = 20,
     String headlineText = "Select here",
     String searchFieldHintText = "Search here",
     bool hideSelectedTextCount = false,
@@ -30,6 +30,7 @@ class FilterList {
     Color searchFieldBackgroundColor = const Color(0xfff5f5f5),
     Color selectedTextBackgroundColor = Colors.blue,
     Color unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+    Function(List<String>) onApplyButtonClick
   }) async {
     if (height == null) {
       height = MediaQuery.of(context).size.height * .8;
@@ -71,6 +72,7 @@ class FilterList {
               hideHeader: hideheader,
               hideheaderText: hideheaderText,
               hideSearchField: hideSearchField,
+              onApplyButtonClick:onApplyButtonClick
             ),
           ),
         );

@@ -1,33 +1,31 @@
-import 'package:filter_list/src/choice_chip_widget.dart';
-import 'package:filter_list/src/search_field_widget.dart';
-import 'package:flutter/material.dart';
-
+part of './../filter_list.dart';
 class FilterListWidget extends StatefulWidget {
   FilterListWidget({
     Key key,
-    this.borderRadius,
     this.height,
     this.width,
     this.selectedTextList,
     this.allTextList,
-    this.headlineText,
-    this.searchFieldHintText,
-    this.closeIconColor,
-    this.headerTextColor,
-    this.applyButonTextColor,
-    this.applyButonTextBackgroundColor,
-    this.allResetButonColor,
-    this.selectedTextColor,
-    this.backgroundColor,
-    this.unselectedTextColor,
-    this.searchFieldBackgroundColor,
-    this.selectedTextBackgroundColor,
-    this.unselectedTextbackGroundColor,
-    this.hideHeader,
-    this.hideheaderText,
-    this.hideSearchField,
-    this.hidecloseIcon,
-    this.hideSelectedTextCount,
+    this.borderRadius = 20,
+    this.headlineText = "Select here",
+    this.searchFieldHintText = "Search here",
+    this.hideSelectedTextCount = false,
+    this.hideSearchField = false,
+    this.hidecloseIcon = true,
+    this.hideHeader = false,
+    this.hideheaderText = false,
+    this.closeIconColor = Colors.black,
+    this.headerTextColor = Colors.black,
+    this.applyButonTextColor = Colors.white,
+    this.applyButonTextBackgroundColor = Colors.blue,
+    this.allResetButonColor = Colors.blue,
+    this.selectedTextColor = Colors.white,
+    this.backgroundColor = Colors.white,
+    this.unselectedTextColor = Colors.black,
+    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
+    this.selectedTextBackgroundColor = Colors.blue,
+    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+    this.onApplyButtonClick
   }) : super(key: key);
   final double height;
   final double width;
@@ -53,6 +51,7 @@ class FilterListWidget extends StatefulWidget {
   final bool hidecloseIcon;
   final bool hideHeader;
   final bool hideheaderText;
+  final Function(List<String>) onApplyButtonClick;
 
   @override
   _FilterListWidgetState createState() => _FilterListWidgetState();
@@ -77,7 +76,6 @@ class _FilterListWidgetState extends State<FilterListWidget> {
 
   Widget _body() {
     return Container(
-      height: MediaQuery.of(context).size.height - 100,
       child: Stack(
         children: <Widget>[
           Column(
@@ -310,7 +308,12 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                     onPressed: () {
-                      Navigator.pop(context, _selectedTextList);
+                      if(widget.onApplyButtonClick != null){
+                        widget.onApplyButtonClick(_selectedTextList);
+                      }
+                      else{
+                         Navigator.pop(context, _selectedTextList);
+                      }
                     },
                     child: Center(
                       child: Text(

@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> selectedCountList = [];
 
   void _openFilterList() async {
-    var list = await FilterList.showFilterList(
+    var list = await FilterListDialog.display(
       context,
       allTextList: countList,
       height: 480,
@@ -60,8 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
       selectedTextList: selectedCountList,
+      onApplyButtonClick:(list){
+        print("Get list data");
+      }
     );
-    
+
     if (list != null) {
       setState(() {
         selectedCountList = List.from(list);
@@ -72,25 +75,87 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openFilterList,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ),
-        body: selectedCountList == null || selectedCountList.length == 0
-            ? Center(
-                child: Text('No text selected'),
-              )
-            : ListView.separated(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(selectedCountList[index]),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Column(
+        children: <Widget>[
+          selectedCountList == null || selectedCountList.length == 0
+              ? Expanded(
+                  child: Center(
+                    child: Text('No text selected'),
+                  ),
+                )
+              : Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(selectedCountList[index]),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: selectedCountList.length),
+                ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              FlatButton(
+                onPressed: () async {
+                  var list = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FilterPage(
+                        allTextList: countList,
+                      ),
+                    ),
                   );
+                  if (list != null) {
+                    setState(() {
+                      selectedCountList = List.from(list);
+                    });
+                  }
                 },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: selectedCountList.length));
+                child: Text(
+                  "Filter Page",
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.blue,
+              ),
+              FlatButton(
+                onPressed: _openFilterList,
+                child: Text(
+                  "Filter Dialog",
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.blue,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class FilterPage extends StatelessWidget {
+  const FilterPage({Key key, this.allTextList}) : super(key: key);
+  final List<String> allTextList;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Filter list Page"),
+      ),
+      body: SafeArea(
+        child: FilterListWidget(
+          allTextList: allTextList,
+          height: MediaQuery.of(context).size.height,
+          hideheaderText: true,
+          onApplyButtonClick: (list) {
+            Navigator.pop(context, list);
+          },
+        ),
+      ),
+    );
   }
 }
