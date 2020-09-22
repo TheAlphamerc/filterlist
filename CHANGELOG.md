@@ -1,4 +1,4 @@
-## [0.0.5] - Upcoming
+## [0.0.5] - 22 Sep 2020
 * Add `FilterListWidget` widget.
 * `FilterList.showFilterList` is renamed to `FilterListDialog.display`
 * Add `onApplyButtonClick` callback to return selected text list from `FilterListDialog.display`.

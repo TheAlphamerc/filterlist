@@ -27,7 +27,7 @@ FilterList is a flutter plugin which is designed to provide ease in filter data 
 ```yaml
 
 dependencies:
-  filter_list: ^0.0.1
+  filter_list: ^0.0.5
 
 ```
 
@@ -67,27 +67,28 @@ import package:filter_list/filter_list.dart';
   ];
   List<String> selectedCountList = [];
 ```
-#### Create a function and call `FilterList.showFilterList()` dialog on button clicked
+#### Create a function and call `FilterListDialog.display()` on button clicked
 ```dart
-  void _openFilterList() async {
-    var list = await FilterList.showFilterList(
+  void _openFilterDialog() async {
+    await FilterListDialog.display(
       context,
       allTextList: countList,
-      height: 450,
+      height: 480,
       borderRadius: 20,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
       selectedTextList: selectedCountList,
-    );
-    
-    if (list != null) {
-      setState(() {
-        selectedCountList = List.from(list);
+      onApplyButtonClick: (list) {
+        if (list != null) {
+          setState(() {
+            selectedCountList = List.from(list);
+          });
+        }
+        Navigator.pop(context);
       });
-    }
   }
 ```
-#### Call `_openFilterList` function on `floatingActionButton` pressed
+#### Call `_openFilterDialog` function on `floatingActionButton` pressed to display filter dialog
 
 ```dart
   @override
@@ -97,7 +98,7 @@ import package:filter_list/filter_list.dart';
           title: Text(widget.title),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _openFilterList,
+          onPressed: _openFilterDialog,
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ),
@@ -116,7 +117,34 @@ import package:filter_list/filter_list.dart';
                 itemCount: selectedCountList.length));
   }
 ```
+#### To display filter widget use `FilterListWidget` and pass list of strings to it.
 
+```dart
+class FilterPage extends StatelessWidget {
+  const FilterPage({Key key, this.allTextList}) : super(key: key);
+  final List<String> allTextList;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Filter list Page"),
+      ),
+      body: SafeArea(
+        child: FilterListWidget(
+          allTextList: allTextList,
+          height: MediaQuery.of(context).size.height,
+          hideheaderText: true,
+          onApplyButtonClick: (list) {
+            if(list != null){
+              print("selected list length: ${list.length}");
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
 ## Screenshots
 
 
@@ -132,6 +160,9 @@ Customised control button |Customised selected text |Customised unselected text 
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_9.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_10.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_12.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_11.jpg?raw=true)|
 
+FilterListWidget |N/A |N/A |N/A
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_14.jpg?raw=true)
 
 
 
@@ -202,6 +233,9 @@ Customised control button |Customised selected text |Customised unselected text 
 
 `backgroundColor` Type: **Color**
 * Set background color of filter color.
+
+`onApplyButtonClick` Type **Function(List<String>)**
+ * Returns list of strings when apply button is clicked 
 
 ## Flutter plugins
 Plugin Name        | Stars        
