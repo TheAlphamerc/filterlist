@@ -6,7 +6,7 @@
 FilterList is a flutter plugin which is designed to provide ease in filter data from list of strings.
 
 ## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
-<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.1/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
+<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.4/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Data flow 
 * Pass list of strings to `FilterList.showFilterList()`.
@@ -34,7 +34,7 @@ dependencies:
 ### 2. Import library in dart file
 
 ```dart
-import 'import 'package:filter_list/filter_list.dart';';
+import package:filter_list/filter_list.dart';
 ```
 
 
@@ -203,8 +203,11 @@ Customised control button |Customised selected text |Customised unselected text 
 `backgroundColor` Type: **Color**
 * Set background color of filter color.
 
-
-
+## Flutter plugins
+Plugin Name        | Stars        
+:-------------------------|-------------------------
+|[Empty widget](https://github.com/TheAlphamerc/empty_widget) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/empty_widget?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%empty_widget)
+|[Add Thumbnail](https://github.com/TheAlphamerc/flutter_plugin_add_thumbnail) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_add_thumbnail?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_add_thumbnail)
 
 
 ## Pull Requests
