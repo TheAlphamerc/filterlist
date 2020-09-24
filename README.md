@@ -2,8 +2,7 @@
 ## filter_list Plugin 
 [![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list)  [![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build) ![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list) ![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) [![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) ![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
 
-
-FilterList is a flutter plugin which is designed to provide ease in filter data from list of strings.
+Package designed to select multiple items from a list, with the option to filter and even search the items.
 
 ## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
