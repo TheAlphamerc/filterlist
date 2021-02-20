@@ -1,13 +1,56 @@
 part of './../filter_list.dart';
-class FilterListWidget extends StatefulWidget {
+
+/// {@tool snippet}
+///
+/// This example shows how to use [FilterListWidget]
+///
+//  ``` dart
+/// FilterListWidget(
+///   listData: ["One", "Two", "Three", "Four","five","Six","Seven","Eight","Nine","Ten"],
+///   selectedListData: ["One", "Three", "Four","Eight","Nine"],
+///   hideheaderText: true,
+///   height: MediaQuery.of(context).size.height,
+///   // hideheaderText: true,
+///   onApplyButtonClick: (list) {
+///     Navigator.pop(context, list);
+///   },
+///   label: (item) {
+///     /// Used to print text on chip
+///     return item;
+///   },
+///   validateSelectedItem: (list, val) {
+///     ///  identify if item is selected or not
+///     return list.contains(val);
+///   },
+///   onItemSearch: (list, text) {
+///     /// When text change in search text field then return list containing that text value
+///     ///
+///     ///Check if list has value which matchs to text
+///     if (list.any((element) =>
+///         element.toLowerCase().contains(text.toLowerCase()))) {
+///       /// return list which contains matches
+///       return list
+///           .where((element) =>
+///               element.toLowerCase().contains(text.toLowerCase()))
+///           .toList();
+///     }
+///   },
+/// )
+/// ```
+/// {@end-tool}
+///
+class FilterListWidget<T extends Object> extends StatefulWidget {
   FilterListWidget({
     Key key,
     this.height,
     this.width,
-    this.selectedTextList,
-    this.allTextList,
+    this.listData,
+    @required this.validateSelectedItem,
+    @required this.label,
+    @required this.onItemSearch,
+    this.selectedListData,
     this.borderRadius = 20,
-    this.headlineText = "Select here",
+    this.headlineText = "Select",
     this.searchFieldHintText = "Search here",
     this.hideSelectedTextCount = false,
     this.hideSearchField = false,
@@ -25,13 +68,18 @@ class FilterListWidget extends StatefulWidget {
     this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
     this.selectedTextBackgroundColor = Colors.blue,
     this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-    this.onApplyButtonClick
+    this.onApplyButtonClick,
   }) : super(key: key);
   final double height;
   final double width;
   final double borderRadius;
-  final List<String> selectedTextList;
-  final List<String> allTextList;
+
+  /// Pass list containing all data which neeeds to filter
+  final List<T> listData;
+
+  /// pass selected list of object
+  /// every object on selecteListData should be present in list data
+  final List<T> selectedListData;
   final Color closeIconColor;
   final Color headerTextColor;
   final Color backgroundColor;
@@ -51,24 +99,34 @@ class FilterListWidget extends StatefulWidget {
   final bool hidecloseIcon;
   final bool hideHeader;
   final bool hideheaderText;
-  final Function(List<String>) onApplyButtonClick;
+
+  /// Return list of all selected items
+  final Function(List<T>) onApplyButtonClick;
+
+  /// identifies weather a item is selecte or not
+  final bool Function(List<T> list, T item) validateSelectedItem;
+
+  /// filter list on the basis of search field text
+  final List<T> Function(List<T> list, String text) onItemSearch;
+
+  /// Print text on chip
+  final String Function(T item) label;
 
   @override
-  _FilterListWidgetState createState() => _FilterListWidgetState();
+  _FilterListWidgetState createState() => _FilterListWidgetState<T>();
 }
 
-class _FilterListWidgetState extends State<FilterListWidget> {
-  List<String> _selectedTextList = List();
-
-  List<String> _allTextList;
+class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
+  List<T> _listData;
+  List<T> _selectedListData = [];
 
   @override
   void initState() {
-    _allTextList =
-        widget.allTextList == null ? [] : List.from(widget.allTextList);
-    _selectedTextList = widget.selectedTextList != null
-        ? List.from(widget.selectedTextList)
-        : [];
+    _listData =
+        widget.listData == null ? List<T>() : List.from(widget.listData);
+    _selectedListData = widget.selectedListData == null
+        ? List<T>()
+        : List.from(widget.selectedListData);
     super.initState();
   }
 
@@ -86,7 +144,7 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                   : Padding(
                       padding: EdgeInsets.only(top: 5),
                       child: Text(
-                        '${_selectedTextList.length} selected items',
+                        '${_selectedListData.length} selected items',
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -95,7 +153,7 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                 padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
                 child: SingleChildScrollView(
                   child: Wrap(
-                    children: _buildChoiceList(_allTextList),
+                    children: _buildChoiceList(),
                   ),
                 ),
               )),
@@ -137,10 +195,10 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                     child: widget.hideheaderText
                         ? Container()
                         : Text(
-                            widget.headlineText.toUpperCase(),
+                            widget.headlineText,
                             style: Theme.of(context)
                                 .textTheme
-                                .headline
+                                .headline4
                                 .copyWith(
                                     fontSize: 18,
                                     color: widget.headerTextColor),
@@ -185,14 +243,12 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                     searchFieldHintText: widget.searchFieldHintText,
                     onChanged: (value) {
                       setState(() {
-                        if (value.isEmpty) {}
-                        _allTextList = widget.allTextList
-                            .where(
-                              (string) => string.toLowerCase().contains(
-                                    value.toLowerCase(),
-                                  ),
-                            )
-                            .toList();
+                        if (value.isEmpty) {
+                          _listData = widget.listData;
+                          return;
+                        }
+                        _listData =
+                            widget.onItemSearch(widget.listData, value) ?? [];
                       });
                     },
                   )
@@ -202,19 +258,19 @@ class _FilterListWidgetState extends State<FilterListWidget> {
     );
   }
 
-  List<Widget> _buildChoiceList(List<String> list) {
+  List<Widget> _buildChoiceList() {
     List<Widget> choices = List();
-    list.forEach(
+    _listData.forEach(
       (item) {
-        var selectedText = _selectedTextList.contains(item);
+        var selectedText = widget.validateSelectedItem(_selectedListData, item);
         choices.add(
           ChoicechipWidget(
             onSelected: (value) {
               setState(
                 () {
                   selectedText
-                      ? _selectedTextList.remove(item)
-                      : _selectedTextList.add(item);
+                      ? _selectedListData.remove(item)
+                      : _selectedListData.add(item);
                 },
               );
             },
@@ -223,7 +279,7 @@ class _FilterListWidgetState extends State<FilterListWidget> {
             selectedTextBackgroundColor: widget.selectedTextBackgroundColor,
             unselectedTextBackgroundColor: widget.unselectedTextbackGroundColor,
             unselectedTextColor: widget.unselectedTextColor,
-            text: item,
+            text: widget.label(item),
           ),
         );
       },
@@ -268,11 +324,11 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                     onPressed: () {
                       setState(
                         () {
-                          _selectedTextList = List.from(_allTextList);
+                          _selectedListData = List.from(_listData);
                         },
                       );
                     },
-                   child: Container(
+                    child: Container(
                       height: double.infinity,
                       alignment: Alignment.center,
                       child: Text(
@@ -288,7 +344,7 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                     onPressed: () {
                       setState(() {
-                        _selectedTextList.clear();
+                        _selectedListData.clear();
                       });
                     },
                     child: Container(
@@ -308,11 +364,10 @@ class _FilterListWidgetState extends State<FilterListWidget> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                     onPressed: () {
-                      if(widget.onApplyButtonClick != null){
-                        widget.onApplyButtonClick(_selectedTextList);
-                      }
-                      else{
-                         Navigator.pop(context, _selectedTextList);
+                      if (widget.onApplyButtonClick != null) {
+                        widget.onApplyButtonClick(_selectedListData);
+                      } else {
+                        Navigator.pop(context, _selectedListData);
                       }
                     },
                     child: Center(

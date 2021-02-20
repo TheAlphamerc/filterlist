@@ -8,15 +8,13 @@ Package designed to select multiple items from a list, with the option to filter
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Data flow 
-* Pass list of strings to `FilterList.showFilterList()`.
-* Pass list of selected strings to show pre-selected text otherwise ignore it.
-* Invoke method `FilterList.showFilterList()` to display filter dialog.
+* Invoke method `FilterListDialog.display()` to display filter dialog.
 * Make selection from list.
 * Click `All` button to select all text from list.
 * Click `Reset` button to make all text unselected.
 * Click `Apply` buton to return selected list of strings.
 * On `close` icon clicked it close dialog and return null value.
-* Without making any selection `Apply` button is pressed it will return empty list of string.
+* Without making any selection `Apply` button is pressed it will return empty list of items.
 
 ## Getting Started
 ### 1. Add library to your pubspec.yaml
@@ -71,12 +69,25 @@ import package:filter_list/filter_list.dart';
   void _openFilterDialog() async {
     await FilterListDialog.display(
       context,
-      allTextList: countList,
+      listData: countList,
+      selectedListData: selectedCountList,
       height: 480,
       borderRadius: 20,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
-      selectedTextList: selectedCountList,
+      validateSelectedItem: (list, val) {
+          return list.contains(val);
+      },
+      onItemSearch: (list, text) {
+          if (list.any((element) =>
+              element.toLowerCase().contains(text.toLowerCase()))) {
+            /// return list which contains matches
+            return list
+                .where((element) =>
+                    element.toLowerCase().contains(text.toLowerCase()))
+                .toList();
+          }
+        },
       onApplyButtonClick: (list) {
         if (list != null) {
           setState(() {
@@ -116,26 +127,65 @@ import package:filter_list/filter_list.dart';
                 itemCount: selectedCountList.length));
   }
 ```
-#### To display filter widget use `FilterListWidget` and pass list of strings to it.
+#### How to use `FilterListWidget`.
 
 ```dart
+class User {
+  final String name;
+  final String avatar;
+  User({this.name, this.avatar});
+}
+
+
+
 class FilterPage extends StatelessWidget {
-  const FilterPage({Key key, this.allTextList}) : super(key: key);
-  final List<String> allTextList;
+  FilterPage({Key key}) : super(key: key);
+  List<User> userList = [
+    User(name: "Jon", avatar: ""),
+    User(name: "Ethel ", avatar: ""),
+    User(name: "Elyse ", avatar: ""),
+    User(name: "Nail  ", avatar: ""),
+    User(name: "Valarie ", avatar: ""),
+    User(name: "Lindsey ", avatar: ""),
+    User(name: "Emelyan ", avatar: ""),
+    User(name: "Carolina ", avatar: ""),
+    User(name: "Catherine ", avatar: ""),
+    User(name: "Stepanida  ", avatar: ""),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Filter list Page"),
+        title: Text("Filter List Widget Example "),
       ),
       body: SafeArea(
         child: FilterListWidget(
-          allTextList: allTextList,
-          height: MediaQuery.of(context).size.height,
+          listData: userList,
           hideheaderText: true,
           onApplyButtonClick: (list) {
-            if(list != null){
-              print("selected list length: ${list.length}");
+            if (list != null) {
+              print("Selected items count: ${list.length}");
+            }
+          },
+          label: (item) {
+            /// Used to print text on chip
+            return item.name;
+          },
+          validateSelectedItem: (list, val) {
+            ///  identify if item is selected or not
+            return list.contains(val);
+          },
+          onItemSearch: (list, text) {
+            /// When text change in search text field then return list containing that text value
+            ///
+            ///Check if list has value which matchs to text
+            if (list.any((element) =>
+                element.name.toLowerCase().contains(text.toLowerCase()))) {
+              /// return list which contains matches
+              return list
+                  .where((element) =>
+                      element.name.toLowerCase().contains(text.toLowerCase()))
+                  .toList();
             }
           },
         ),
@@ -177,11 +227,20 @@ FilterListWidget |N/A |N/A |N/A
 `borderRadius` Type: **double**
 * Set border radius of filter dialog.
 
-`allTextList` Type: **List\<String>()**
+`listData` Type: **List\<dynamic>()**
 * Populate filter dialog with text list.
 
-`selectedTextList` Type: **List\<String>()**
+`selectedListData` Type: **List\<dynamic>()**
 * Marked selected text in filter dialog.
+
+`label` Type: [Callback] **{String Function(dynamic)}**
+* Print text on chip
+
+`validateSelectedItem` Type: [Callback] **bool Function(List<T> list, T item)** 
+* identifies weather a item is selecte or not
+
+`onItemSearch` Type: [Callback] **List<T> Function(List<T> list, String text)**
+* filter list on the basis of search field text
 
 `headlineText` Type: **String**
 * Set header text of filter dialog.
@@ -234,8 +293,8 @@ FilterListWidget |N/A |N/A |N/A
 `backgroundColor` Type: **Color**
 * Set background color of filter color.
 
-`onApplyButtonClick` Type **Function(List<String>)**
- * Returns list of strings when apply button is clicked 
+`onApplyButtonClick` Type **Function(List<dynamic>)**
+ * Returns list of items when apply button is clicked 
 
 ## Flutter plugins
 Plugin Name        | Stars        
