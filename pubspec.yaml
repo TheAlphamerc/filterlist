@@ -1,6 +1,6 @@
 name: filter_list
-description: filterList is a flutter plugin created to filter data from list.
-version: 0.0.5
+description: filterList is a flutter packageflutter created to filter data from list of dynamic items.
+version: 0.0.7
 homepage: https://github.com/TheAlphamerc/flutter_plugin_filter_list
 
 environment:

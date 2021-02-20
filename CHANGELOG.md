@@ -1,3 +1,6 @@
+## [0.0.7] - 20 Feb 2021
+* Update readme.md
+
 ## [0.0.6] - 20 Feb 2021
 * Convert filter list package to generic list filter package
 * `allTextList` changed to `listData`

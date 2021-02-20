@@ -24,7 +24,7 @@ Package designed to select multiple items from a list, with the option to filter
 ```yaml
 
 dependencies:
-  filter_list: ^0.0.5
+  filter_list: ^0.0.6
 
 ```
 
