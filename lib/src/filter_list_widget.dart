@@ -39,37 +39,43 @@ part of './../filter_list.dart';
 /// ```
 /// {@end-tool}
 ///
-class FilterListWidget<T extends Object> extends StatefulWidget {
-  FilterListWidget({
-    Key key,
-    this.height,
-    this.width,
-    this.listData,
-    @required this.validateSelectedItem,
-    @required this.label,
-    @required this.onItemSearch,
-    this.selectedListData,
-    this.borderRadius = 20,
-    this.headlineText = "Select",
-    this.searchFieldHintText = "Search here",
-    this.hideSelectedTextCount = false,
-    this.hideSearchField = false,
-    this.hidecloseIcon = true,
-    this.hideHeader = false,
-    this.hideheaderText = false,
-    this.closeIconColor = Colors.black,
-    this.headerTextColor = Colors.black,
-    this.applyButonTextColor = Colors.white,
-    this.applyButonTextBackgroundColor = Colors.blue,
-    this.allResetButonColor = Colors.blue,
-    this.selectedTextColor = Colors.white,
-    this.backgroundColor = Colors.white,
-    this.unselectedTextColor = Colors.black,
-    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-    this.selectedTextBackgroundColor = Colors.blue,
-    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-    this.onApplyButtonClick,
-  }) : super(key: key);
+
+typedef ValidateSelectedItem<T> = bool Function(List<T> list, T item);
+typedef OnApplyButtonClick<T> = Function(List<T> list);
+typedef ChoiceItemBuilder<T> = List<Widget> Function(BuildContext context);
+
+class FilterListWidget<T> extends StatefulWidget {
+  const FilterListWidget(
+      {Key key,
+      this.height,
+      this.width,
+      this.listData,
+      @required this.validateSelectedItem,
+      @required this.label,
+      @required this.onItemSearch,
+      this.selectedListData,
+      this.borderRadius = 20,
+      this.headlineText = "Select",
+      this.searchFieldHintText = "Search here",
+      this.hideSelectedTextCount = false,
+      this.hideSearchField = false,
+      this.hidecloseIcon = true,
+      this.hideHeader = false,
+      this.hideheaderText = false,
+      this.closeIconColor = Colors.black,
+      this.headerTextColor = Colors.black,
+      this.applyButonTextColor = Colors.white,
+      this.applyButonTextBackgroundColor = Colors.blue,
+      this.allResetButonColor = Colors.blue,
+      this.selectedTextColor = Colors.white,
+      this.backgroundColor = Colors.white,
+      this.unselectedTextColor = Colors.black,
+      this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
+      this.selectedTextBackgroundColor = Colors.blue,
+      this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+      this.onApplyButtonClick,
+      this.enableOnlySingleSelection = false})
+      : super(key: key);
   final double height;
   final double width;
   final double borderRadius;
@@ -99,12 +105,13 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   final bool hidecloseIcon;
   final bool hideHeader;
   final bool hideheaderText;
+  final bool enableOnlySingleSelection;
 
   /// Return list of all selected items
-  final Function(List<T>) onApplyButtonClick;
+  final OnApplyButtonClick<T> onApplyButtonClick;
 
   /// identifies weather a item is selecte or not
-  final bool Function(List<T> list, T item) validateSelectedItem;
+  final ValidateSelectedItem<T> validateSelectedItem;
 
   /// filter list on the basis of search field text
   final List<T> Function(List<T> list, String text) onItemSearch;
@@ -113,20 +120,19 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   final String Function(T item) label;
 
   @override
-  _FilterListWidgetState createState() => _FilterListWidgetState<T>();
+  _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
 }
 
-class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
+class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
   List<T> _listData;
-  List<T> _selectedListData = [];
+  List<T> _selectedListData = <T>[];
 
   @override
   void initState() {
-    _listData =
-        widget.listData == null ? List<T>() : List.from(widget.listData);
+    _listData = widget.listData == null ? <T>[] : List.from(widget.listData);
     _selectedListData = widget.selectedListData == null
-        ? List<T>()
-        : List.from(widget.selectedListData);
+        ? <T>[]
+        : List<T>.from(widget.selectedListData);
     super.initState();
   }
 
@@ -159,7 +165,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
               )),
             ],
           ),
-          _controlButon()
+          _controlButtonSection()
         ],
       ),
     );
@@ -259,7 +265,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
   }
 
   List<Widget> _buildChoiceList() {
-    List<Widget> choices = List();
+    List<Widget> choices = [];
     _listData.forEach(
       (item) {
         var selectedText = widget.validateSelectedItem(_selectedListData, item);
@@ -268,9 +274,14 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
             onSelected: (value) {
               setState(
                 () {
-                  selectedText
-                      ? _selectedListData.remove(item)
-                      : _selectedListData.add(item);
+                  if (widget.enableOnlySingleSelection) {
+                    _selectedListData.clear();
+                    _selectedListData.add(item);
+                  } else {
+                    selectedText
+                        ? _selectedListData.remove(item)
+                        : _selectedListData.add(item);
+                  }
                 },
               );
             },
@@ -293,99 +304,92 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
     return choices;
   }
 
-  Widget _controlButon() {
+  Widget _controlButton({
+    String label,
+    Function onPressed,
+    Color backgroundColor = Colors.transparent,
+    Color textColor,
+    double elevation = 0,
+  }) {
+    return TextButton(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+          )),
+          backgroundColor: MaterialStateProperty.all(backgroundColor),
+          elevation: MaterialStateProperty.all(elevation),
+          foregroundColor: MaterialStateProperty.all(
+              textColor ?? Theme.of(context).buttonColor)),
+      onPressed: onPressed,
+      clipBehavior: Clip.antiAlias,
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+            fontSize: 20, color: textColor ?? Theme.of(context).buttonColor),
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _controlButtonSection() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         height: 45,
-        width: MediaQuery.of(context).size.width * .9,
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         alignment: Alignment.center,
-        child: Row(
-          children: <Widget>[
-            Expanded(child: SizedBox()),
-            Container(
-              decoration: BoxDecoration(
-                color: widget.backgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    offset: Offset(0, 5),
-                    blurRadius: 15,
-                    color: Color(0x12000000),
-                  )
-                ],
-              ),
-              child: Row(
-                children: <Widget>[
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    onPressed: () {
-                      setState(
-                        () {
-                          _selectedListData = List.from(_listData);
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.backgroundColor,
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                offset: Offset(0, 5),
+                blurRadius: 15,
+                color: Color(0x12000000),
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _controlButton(
+                  label: "All",
+                  onPressed: widget.enableOnlySingleSelection
+                      ? null
+                      : () {
+                          setState(() {
+                            _selectedListData = List.from(_listData);
+                          });
                         },
-                      );
-                    },
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'All',
-                        style: Theme.of(context).textTheme.headline.copyWith(
-                            fontSize: 20, color: widget.allResetButonColor),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    onPressed: () {
-                      setState(() {
-                        _selectedListData.clear();
-                      });
-                    },
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Reset',
-                        style: Theme.of(context).textTheme.headline.copyWith(
-                            fontSize: 20, color: widget.allResetButonColor),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  MaterialButton(
-                    color: widget.applyButonTextBackgroundColor,
-                    padding: EdgeInsets.only(bottom: 5),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    onPressed: () {
-                      if (widget.onApplyButtonClick != null) {
-                        widget.onApplyButtonClick(_selectedListData);
-                      } else {
-                        Navigator.pop(context, _selectedListData);
-                      }
-                    },
-                    child: Center(
-                      child: Text(
-                        'Apply',
-                        style: Theme.of(context).textTheme.headline.copyWith(
-                            fontSize: 20, color: widget.applyButonTextColor),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-                ],
+                  textColor: widget.enableOnlySingleSelection
+                      ? Theme.of(context).dividerColor
+                      : widget.allResetButonColor),
+              _controlButton(
+                  label: "Reset",
+                  onPressed: () {
+                    setState(() {
+                      _selectedListData.clear();
+                    });
+                  },
+                  textColor: widget.allResetButonColor),
+              _controlButton(
+                label: "Apply",
+                onPressed: () {
+                  if (widget.onApplyButtonClick != null) {
+                    widget.onApplyButtonClick(_selectedListData);
+                  } else {
+                    Navigator.pop(context, _selectedListData);
+                  }
+                },
+                elevation: 5,
+                textColor: widget.applyButonTextColor,
+                backgroundColor: widget.applyButonTextBackgroundColor,
               ),
-            ),
-
-            /// add Bottom space in list
-            Expanded(child: SizedBox()),
-          ],
+            ],
+          ),
         ),
       ),
     );

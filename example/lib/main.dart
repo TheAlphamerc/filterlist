@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         validateSelectedItem: (list, val) {
           return list.contains(val);
         },
+        enableOnlySingleSelection: true,
         onItemSearch: (list, text) {
           /// When text change in search text field then return list containing that text value
           ///
@@ -50,11 +51,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     element.name.toLowerCase().contains(text.toLowerCase()))
                 .toList();
           }
+          return null;
         },
         height: 480,
+        // width: MediaQuery.of(context).size.width * .6,
         borderRadius: 20,
         headlineText: "Select Count",
         searchFieldHintText: "Search Here",
+        // enableOnlySingleSelection: true,
         onApplyButtonClick: (list) {
           if (list != null) {
             setState(() {
@@ -74,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: () async {
               var list = await Navigator.push(
                 context,
@@ -95,15 +99,18 @@ class _MyHomePageState extends State<MyHomePage> {
               "Filter Page",
               style: TextStyle(color: Colors.white),
             ),
-            color: Colors.blue,
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue)),
           ),
-          FlatButton(
+          TextButton(
             onPressed: _openFilterDialog,
             child: Text(
               "Filter Dialog",
               style: TextStyle(color: Colors.white),
             ),
-            color: Colors.blue,
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue)),
+            // color: Colors.blue,
           ),
         ],
       ),
@@ -170,6 +177,7 @@ class FilterPage extends StatelessWidget {
                       element.name.toLowerCase().contains(text.toLowerCase()))
                   .toList();
             }
+            return null;
           },
         ),
       ),
