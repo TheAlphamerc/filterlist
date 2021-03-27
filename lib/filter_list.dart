@@ -93,6 +93,10 @@ class FilterListDialog {
     Color searchFieldBackgroundColor = const Color(0xfff5f5f5),
     Color selectedTextBackgroundColor = Colors.blue,
     Color unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+    String applyButonText = 'Apply',
+    String allButonText = 'All',
+    String resetButonText = 'Reset',
+    String selectedItemsText = 'selected items',
   }) async {
     if (height == null) {
       height = MediaQuery.of(context).size.height * .8;
@@ -138,6 +142,10 @@ class FilterListDialog {
               hideHeader: hideheader,
               hideheaderText: hideheaderText,
               hideSearchField: hideSearchField,
+              allButonText: allButonText,
+              applyButonText: applyButonText,
+              resetButonText: resetButonText,
+              selectedItemsText: selectedItemsText,
             ),
           ),
         );

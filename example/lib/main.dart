@@ -30,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _openFilterDialog() async {
     await FilterListDialog.display(context,
+        allButonText: 'Todos',
         listData: userList,
         selectedListData: selectedUserList,
         label: (item) {
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         height: 480,
         borderRadius: 20,
-        headlineText: "Select Count",
+        headlineText: "Select Count123",
         searchFieldHintText: "Search Here",
         onApplyButtonClick: (list) {
           if (list != null) {

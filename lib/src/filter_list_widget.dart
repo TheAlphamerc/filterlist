@@ -69,6 +69,10 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
     this.selectedTextBackgroundColor = Colors.blue,
     this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
     this.onApplyButtonClick,
+    this.applyButonText = 'Apply',
+    this.allButonText = 'All',
+    this.resetButonText = 'Reset',
+    this.selectedItemsText = 'selected items',
   }) : super(key: key);
   final double height;
   final double width;
@@ -112,6 +116,18 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   /// Print text on chip
   final String Function(T item) label;
 
+  /// Print text on apply button
+  final String applyButonText;
+
+  /// Print text on all button
+  final String allButonText;
+
+  /// Print text on reset button
+  final String resetButonText;
+
+  /// Print text on selected items
+  final String selectedItemsText;
+
   @override
   _FilterListWidgetState createState() => _FilterListWidgetState<T>();
 }
@@ -144,7 +160,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
                   : Padding(
                       padding: EdgeInsets.only(top: 5),
                       child: Text(
-                        '${_selectedListData.length} selected items',
+                        '${_selectedListData.length} ${widget.selectedItemsText}',
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -332,7 +348,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
                       height: double.infinity,
                       alignment: Alignment.center,
                       child: Text(
-                        'All',
+                        widget.allButonText,
                         style: Theme.of(context).textTheme.headline.copyWith(
                             fontSize: 20, color: widget.allResetButonColor),
                         textAlign: TextAlign.center,
@@ -351,7 +367,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
                       height: double.infinity,
                       alignment: Alignment.center,
                       child: Text(
-                        'Reset',
+                        widget.resetButonText,
                         style: Theme.of(context).textTheme.headline.copyWith(
                             fontSize: 20, color: widget.allResetButonColor),
                         textAlign: TextAlign.center,
@@ -372,7 +388,7 @@ class _FilterListWidgetState<T extends Object> extends State<FilterListWidget> {
                     },
                     child: Center(
                       child: Text(
-                        'Apply',
+                        widget.allButonText,
                         style: Theme.of(context).textTheme.headline.copyWith(
                             fontSize: 20, color: widget.applyButonTextColor),
                         textAlign: TextAlign.center,
