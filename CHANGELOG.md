@@ -1,3 +1,5 @@
+## [0.0.8] - Comming Soon
+*  Added choiceChipBuilder to build custom choice chip
 ## [0.0.7] - 20 Feb 2021
 * Update readme.md
 

@@ -29,44 +29,62 @@ class _MyHomePageState extends State<MyHomePage> {
   List<User> selectedUserList = [];
 
   void _openFilterDialog() async {
-    await FilterListDialog.display(context,
-        listData: userList,
-        selectedListData: selectedUserList,
-        label: (item) {
-          return item.name;
-        },
-        validateSelectedItem: (list, val) {
-          return list.contains(val);
-        },
-        enableOnlySingleSelection: true,
-        onItemSearch: (list, text) {
-          /// When text change in search text field then return list containing that text value
-          ///
-          ///Check if list has value which matchs to text
-          if (list.any((element) =>
-              element.name.toLowerCase().contains(text.toLowerCase()))) {
-            /// return list which contains matches
-            return list
-                .where((element) =>
-                    element.name.toLowerCase().contains(text.toLowerCase()))
-                .toList();
-          }
-          return null;
-        },
-        height: 480,
-        // width: MediaQuery.of(context).size.width * .6,
-        borderRadius: 20,
-        headlineText: "Select Count",
-        searchFieldHintText: "Search Here",
-        // enableOnlySingleSelection: true,
-        onApplyButtonClick: (list) {
-          if (list != null) {
-            setState(() {
-              selectedUserList = List.from(list);
-            });
-            Navigator.pop(context);
-          }
-        });
+    await FilterListDialog.display(
+      context,
+      listData: userList,
+      selectedListData: selectedUserList,
+      label: (item) {
+        return item.name;
+      },
+      validateSelectedItem: (list, val) {
+        return list.contains(val);
+      },
+      onItemSearch: (list, text) {
+        /// When text change in search text field then return list containing that text value
+        ///
+        ///Check if list has value which matchs to text
+        if (list.any((element) =>
+            element.name.toLowerCase().contains(text.toLowerCase()))) {
+          /// return list which contains matches
+          return list
+              .where((element) =>
+                  element.name.toLowerCase().contains(text.toLowerCase()))
+              .toList();
+        }
+        return null;
+      },
+      height: 480,
+      // width: MediaQuery.of(context).size.width * .8,
+      // enableOnlySingleSelection: true,
+      borderRadius: 20,
+      headlineText: "Select Count",
+      searchFieldHintText: "Search Here",
+
+      /// uncomment below code to create custom choice chip
+      /*  choiceChipBuilder: (context, item, isSelected) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+              border: Border.all(
+            color: isSelected ? Colors.blue[300] : Colors.grey[300],
+          )),
+          child: Text(
+            item.name,
+            style: TextStyle(
+                color: isSelected ? Colors.blue[300] : Colors.grey[300]),
+          ),
+        );
+      },*/
+      onApplyButtonClick: (list) {
+        if (list != null) {
+          setState(() {
+            selectedUserList = List.from(list);
+          });
+          Navigator.pop(context);
+        }
+      },
+    );
   }
 
   @override
@@ -160,6 +178,17 @@ class FilterPage extends StatelessWidget {
           label: (item) {
             /// Used to print text on chip
             return item.name;
+          },
+          choiceChipBuilder: (context, item, isSelected) {
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                color: isSelected ? Colors.blue[300] : Colors.grey[300],
+              )),
+              child: Text(item.name),
+            );
           },
           validateSelectedItem: (list, val) {
             ///  identify if item is selected or not

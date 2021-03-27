@@ -1,4 +1,4 @@
-part of './../filter_list.dart';
+part of 'filter_list_dialog.dart';
 
 /// {@tool snippet}
 ///
@@ -42,7 +42,8 @@ part of './../filter_list.dart';
 
 typedef ValidateSelectedItem<T> = bool Function(List<T> list, T item);
 typedef OnApplyButtonClick<T> = Function(List<T> list);
-typedef ChoiceItemBuilder<T> = List<Widget> Function(BuildContext context);
+typedef ChoiceChipBuilder<T> = Widget Function(
+    BuildContext context, T item, bool iselected);
 
 class FilterListWidget<T> extends StatefulWidget {
   const FilterListWidget(
@@ -56,6 +57,7 @@ class FilterListWidget<T> extends StatefulWidget {
       this.selectedListData,
       this.borderRadius = 20,
       this.headlineText = "Select",
+      this.onApplyButtonClick,
       this.searchFieldHintText = "Search here",
       this.hideSelectedTextCount = false,
       this.hideSearchField = false,
@@ -73,9 +75,18 @@ class FilterListWidget<T> extends StatefulWidget {
       this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
       this.selectedTextBackgroundColor = Colors.blue,
       this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-      this.onApplyButtonClick,
-      this.enableOnlySingleSelection = false})
-      : super(key: key);
+      this.enableOnlySingleSelection = false,
+      this.choiceChipBuilder})
+      : assert(validateSelectedItem != null, ''' 
+            validateSelectedItem callback can not be null
+
+            Tried to use below callback to ignore error.
+
+             validateSelectedItem: (list, val) {
+                  return list.contains(val);
+             }
+            '''),
+        super(key: key);
   final double height;
   final double width;
   final double borderRadius;
@@ -118,6 +129,9 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// Print text on chip
   final String Function(T item) label;
+
+  /// Builder for custom choice chip
+  final ChoiceChipBuilder choiceChipBuilder;
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
@@ -270,7 +284,9 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
       (item) {
         var selectedText = widget.validateSelectedItem(_selectedListData, item);
         choices.add(
-          ChoicechipWidget(
+          ChoiceChipWidget(
+            choiceChipBuilder: widget.choiceChipBuilder,
+            item: item,
             onSelected: (value) {
               setState(
                 () {
