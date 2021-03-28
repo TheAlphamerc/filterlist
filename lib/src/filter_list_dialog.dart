@@ -24,9 +24,6 @@ class FilterListDialog {
   ///         return list.contains(val);
   ///       },
   ///       onItemSearch: (list, text) {
-  ///         /// When text change in search text field then return list containing that text value
-  ///         ///
-  ///         ///Check if list has value which matchs to text
   ///         if (list.any((element) =>
   ///             element.toLowerCase().contains(text.toLowerCase()))) {
   ///           /// return list which contains matches
@@ -43,7 +40,7 @@ class FilterListDialog {
   ///       onApplyButtonClick: (list) {
   ///         if (list != null) {
   ///           setState(() {
-  ///             selectedUserList = List.from(list);
+  ///            var selectedList = List.from(list);
   ///           });
   ///           Navigator.pop(context);
   ///         }
@@ -62,13 +59,16 @@ class FilterListDialog {
       /// every object on selecteListData should be present in list data
       List<T> selectedListData,
 
-      /// Print text on chip
+      /// Display text value on choice chip
       @required String Function(T b) label,
 
       /// identifies weather a item is selecte or not
       @required ValidateSelectedItem<T> validateSelectedItem,
 
       /// filter list on the basis of search field text
+      /// When text change in search text field then return list containing that text value
+      ///
+      ///Check if list has value which matches to text
       @required List<T> Function(List<T> list, String text) onItemSearch,
 
       /// Return list of all selected items
@@ -83,18 +83,44 @@ class FilterListDialog {
       bool hidecloseIcon = false,
       bool hideheader = false,
       bool hideheaderText = false,
-      bool enableOnlySingleSelection = false,
       Color closeIconColor = Colors.black,
-      Color headerTextColor = Colors.black,
-      Color applyButonTextColor = Colors.white,
-      Color applyButonTextBackgroundColor = Colors.blue,
-      Color allResetButonColor = Colors.blue,
-      Color selectedTextColor = Colors.white,
+      bool barrierDismissible = true,
+      bool useSafeArea = true,
+      bool useRootNavigator = true,
+      RouteSettings routeSettings,
+
+      /// if `enableOnlySingleSelection` is true then it disabled the multiple selection
+      /// and enabled the single selection model.
+      ///
+      /// Defautl value is `false`
+      bool enableOnlySingleSelection = false,
+
+      /// Background color of dialog box
       Color backgroundColor = Colors.white,
-      Color unselectedTextColor = Colors.black,
+
+      /// Background color for search field
       Color searchFieldBackgroundColor = const Color(0xfff5f5f5),
-      Color selectedTextBackgroundColor = Colors.blue,
-      Color unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+
+      /// Background color for Apply button
+      Color applyButonTextBackgroundColor = Colors.blue,
+
+      /// TextStyle for chip when selected
+      TextStyle selectedChipTextStyle,
+
+      /// TextStyle for chip when not selected
+      TextStyle unselectedChipTextStyle,
+
+      /// TextStyle for `All` and `Reset` button text
+      TextStyle controlButtonTextStyle,
+
+      /// TextStyle for `Apply` button
+      TextStyle applyButtonTextStyle,
+
+      /// TextStyle for header text
+      TextStyle headerTextStyle,
+
+      /// TextStyle for search field text
+      TextStyle searchFieldTextStyle,
 
       /// Builder for custom choice chip
       ChoiceChipBuilder choiceChipBuilder}) async {
@@ -115,6 +141,10 @@ class FilterListDialog {
     }
     await showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
+      routeSettings: routeSettings,
+      useRootNavigator: useRootNavigator,
+      useSafeArea: useSafeArea,
       builder: (BuildContext context) {
         return Dialog(
           elevation: 0,
@@ -124,35 +154,35 @@ class FilterListDialog {
             width: width,
             color: Colors.transparent,
             child: FilterListWidget(
-                onApplyButtonClick: onApplyButtonClick,
-                validateSelectedItem: validateSelectedItem,
-                listData: listData,
-                label: label,
-                selectedListData: selectedListData,
-                onItemSearch: onItemSearch,
-                height: height,
-                width: width,
-                borderRadius: borderRadius,
-                headlineText: headlineText,
-                searchFieldHintText: searchFieldHintText,
-                allResetButonColor: allResetButonColor,
-                applyButonTextBackgroundColor: applyButonTextBackgroundColor,
-                applyButonTextColor: applyButonTextColor,
-                backgroundColor: backgroundColor,
-                closeIconColor: closeIconColor,
-                headerTextColor: headerTextColor,
-                searchFieldBackgroundColor: searchFieldBackgroundColor,
-                selectedTextBackgroundColor: selectedTextBackgroundColor,
-                selectedTextColor: selectedTextColor,
-                hideSelectedTextCount: hideSelectedTextCount,
-                unselectedTextbackGroundColor: unselectedTextbackGroundColor,
-                unselectedTextColor: unselectedTextColor,
-                hidecloseIcon: hidecloseIcon,
-                hideHeader: hideheader,
-                hideheaderText: hideheaderText,
-                hideSearchField: hideSearchField,
-                enableOnlySingleSelection: enableOnlySingleSelection,
-                choiceChipBuilder: choiceChipBuilder),
+              listData: listData,
+              label: label,
+              width: width,
+              height: height,
+              hideHeader: hideheader,
+              borderRadius: borderRadius,
+              headlineText: headlineText,
+              onItemSearch: onItemSearch,
+              closeIconColor: closeIconColor,
+              headerTextStyle: headerTextStyle,
+              backgroundColor: backgroundColor,
+              selectedListData: selectedListData,
+              onApplyButtonClick: onApplyButtonClick,
+              validateSelectedItem: validateSelectedItem,
+              hideSelectedTextCount: hideSelectedTextCount,
+              hidecloseIcon: hidecloseIcon,
+              hideheaderText: hideheaderText,
+              hideSearchField: hideSearchField,
+              choiceChipBuilder: choiceChipBuilder,
+              searchFieldHintText: searchFieldHintText,
+              applyButtonTextStyle: applyButtonTextStyle,
+              searchFieldTextStyle: searchFieldTextStyle,
+              selectedChipTextStyle: selectedChipTextStyle,
+              controlButtonTextStyle: controlButtonTextStyle,
+              unselectedChipTextStyle: unselectedChipTextStyle,
+              enableOnlySingleSelection: enableOnlySingleSelection,
+              searchFieldBackgroundColor: searchFieldBackgroundColor,
+              applyButonTextBackgroundColor: applyButonTextBackgroundColor,
+            ),
           ),
         );
       },

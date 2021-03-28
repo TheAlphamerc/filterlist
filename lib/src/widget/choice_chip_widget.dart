@@ -7,25 +7,33 @@ class ChoiceChipWidget<T> extends StatelessWidget {
       this.text,
       this.item,
       this.selected,
-      this.selectedTextColor,
-      this.unselectedTextColor,
       this.onSelected,
       this.unselectedTextBackgroundColor,
       this.selectedTextBackgroundColor,
-      this.choiceChipBuilder})
+      this.choiceChipBuilder,
+      this.selectedChipTextStyle,
+      this.unselectedChipTextStyle})
       : super(key: key);
 
   final String text;
   final bool selected;
   final Function(bool) onSelected;
-  final Color selectedTextColor;
-  final Color unselectedTextColor;
   final Color unselectedTextBackgroundColor;
   final Color selectedTextBackgroundColor;
+  final TextStyle selectedChipTextStyle;
+  final TextStyle unselectedChipTextStyle;
   final T item;
 
   /// Builder for custom choice chip
   final ChoiceChipBuilder choiceChipBuilder;
+
+  TextStyle getSelectedTextStyle(BuildContext context) {
+    return selected
+        ? selectedChipTextStyle ??
+            TextStyle(color: Theme.of(context).colorScheme.onPrimary)
+        : unselectedChipTextStyle ?? TextStyle(color: Colors.black);
+  }
+
   @override
   Widget build(BuildContext context) {
     return choiceChipBuilder != null
@@ -38,20 +46,19 @@ class ChoiceChipWidget<T> extends StatelessWidget {
         : Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ChoiceChip(
-                backgroundColor: selected
-                    ? selectedTextBackgroundColor
-                    : unselectedTextBackgroundColor,
-                selectedColor: selected
-                    ? selectedTextBackgroundColor
-                    : unselectedTextBackgroundColor,
-                label: Text(
-                  '$text',
-                  style: TextStyle(
-                      color:
-                          selected ? selectedTextColor : unselectedTextColor),
-                ),
-                selected: selected,
-                onSelected: onSelected),
+              backgroundColor: selected
+                  ? selectedTextBackgroundColor
+                  : unselectedTextBackgroundColor,
+              selectedColor: selected
+                  ? selectedTextBackgroundColor
+                  : unselectedTextBackgroundColor,
+              label: Text(
+                '$text',
+                style: getSelectedTextStyle(context),
+              ),
+              selected: selected,
+              onSelected: onSelected,
+            ),
           );
   }
 }

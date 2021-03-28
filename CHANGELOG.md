@@ -1,5 +1,7 @@
 ## [0.0.8] - Comming Soon
-*  Added choiceChipBuilder to build custom choice chip
+* Added `choiceChipBuilder` to build custom choice chip.
+* Added `selectedChipTextStyle`,`unselectedChipTextStyle`,`controlButtonTextStyle`,`applyButtonTextStyle`,`headerTextStyle` and `searchFieldTextStyle` styles.
+* Removed `applyButonTextColor`,`allResetButonColor`,`selectedTextColor`,`unselectedTextColor` colors properties.
 ## [0.0.7] - 20 Feb 2021
 * Update readme.md
 

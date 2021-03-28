@@ -4,7 +4,7 @@ part of 'filter_list_dialog.dart';
 ///
 /// This example shows how to use [FilterListWidget]
 ///
-//  ``` dart
+///  ``` dart
 /// FilterListWidget(
 ///   listData: ["One", "Two", "Three", "Four","five","Six","Seven","Eight","Nine","Ten"],
 ///   selectedListData: ["One", "Three", "Four","Eight","Nine"],
@@ -46,38 +46,40 @@ typedef ChoiceChipBuilder<T> = Widget Function(
     BuildContext context, T item, bool iselected);
 
 class FilterListWidget<T> extends StatefulWidget {
-  const FilterListWidget(
-      {Key key,
-      this.height,
-      this.width,
-      this.listData,
-      @required this.validateSelectedItem,
-      @required this.label,
-      @required this.onItemSearch,
-      this.selectedListData,
-      this.borderRadius = 20,
-      this.headlineText = "Select",
-      this.onApplyButtonClick,
-      this.searchFieldHintText = "Search here",
-      this.hideSelectedTextCount = false,
-      this.hideSearchField = false,
-      this.hidecloseIcon = true,
-      this.hideHeader = false,
-      this.hideheaderText = false,
-      this.closeIconColor = Colors.black,
-      this.headerTextColor = Colors.black,
-      this.applyButonTextColor = Colors.white,
-      this.applyButonTextBackgroundColor = Colors.blue,
-      this.allResetButonColor = Colors.blue,
-      this.selectedTextColor = Colors.white,
-      this.backgroundColor = Colors.white,
-      this.unselectedTextColor = Colors.black,
-      this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-      this.selectedTextBackgroundColor = Colors.blue,
-      this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-      this.enableOnlySingleSelection = false,
-      this.choiceChipBuilder})
-      : assert(validateSelectedItem != null, ''' 
+  const FilterListWidget({
+    Key key,
+    this.height,
+    this.width,
+    this.listData,
+    @required this.validateSelectedItem,
+    @required this.label,
+    @required this.onItemSearch,
+    this.selectedListData,
+    this.borderRadius = 20,
+    this.headlineText = "Select",
+    this.onApplyButtonClick,
+    this.searchFieldHintText = "Search here",
+    this.hideSelectedTextCount = false,
+    this.hideSearchField = false,
+    this.hidecloseIcon = true,
+    this.hideHeader = false,
+    this.hideheaderText = false,
+    this.closeIconColor = Colors.black,
+    this.headerTextColor = Colors.black,
+    this.applyButonTextBackgroundColor = Colors.blue,
+    this.backgroundColor = Colors.white,
+    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
+    this.selectedTextBackgroundColor = Colors.blue,
+    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+    this.enableOnlySingleSelection = false,
+    this.choiceChipBuilder,
+    this.selectedChipTextStyle,
+    this.unselectedChipTextStyle,
+    this.controlButtonTextStyle,
+    this.applyButtonTextStyle,
+    this.headerTextStyle,
+    this.searchFieldTextStyle,
+  })  : assert(validateSelectedItem != null, ''' 
             validateSelectedItem callback can not be null
 
             Tried to use below callback to ignore error.
@@ -95,16 +97,13 @@ class FilterListWidget<T> extends StatefulWidget {
   final List<T> listData;
 
   /// pass selected list of object
-  /// every object on selecteListData should be present in list data
+  ///
+  /// every object on selecteListData should be present in `listData`
   final List<T> selectedListData;
   final Color closeIconColor;
   final Color headerTextColor;
   final Color backgroundColor;
-  final Color applyButonTextColor;
   final Color applyButonTextBackgroundColor;
-  final Color allResetButonColor;
-  final Color selectedTextColor;
-  final Color unselectedTextColor;
   final Color searchFieldBackgroundColor;
   final Color selectedTextBackgroundColor;
   final Color unselectedTextbackGroundColor;
@@ -113,9 +112,38 @@ class FilterListWidget<T> extends StatefulWidget {
   final String searchFieldHintText;
   final bool hideSelectedTextCount;
   final bool hideSearchField;
+
+  /// TextStyle for chip when selected
+  final TextStyle selectedChipTextStyle;
+
+  /// TextStyle for chip when not selected
+  final TextStyle unselectedChipTextStyle;
+
+  /// TextStyle for `All` and `Reset` button text
+  final TextStyle controlButtonTextStyle;
+
+  /// TextStyle for `Apply` button
+  final TextStyle applyButtonTextStyle;
+
+  /// TextStyle for header text
+  final TextStyle headerTextStyle;
+
+  /// TextStyle for search field text
+  final TextStyle searchFieldTextStyle;
+
+  /// if true then it hides close icon
   final bool hidecloseIcon;
+
+  /// If true then it hide complete header section
   final bool hideHeader;
+
+  /// If true then it hides the header text
   final bool hideheaderText;
+
+  /// if `enableOnlySingleSelection` is true then it disabled the multiple selection
+  /// and enabled the single selection model.
+  ///
+  /// Defautl value is `false`
   final bool enableOnlySingleSelection;
 
   /// Return list of all selected items
@@ -127,7 +155,7 @@ class FilterListWidget<T> extends StatefulWidget {
   /// filter list on the basis of search field text
   final List<T> Function(List<T> list, String text) onItemSearch;
 
-  /// Print text on chip
+  /// Display text value on choice chip
   final String Function(T item) label;
 
   /// Builder for custom choice chip
@@ -216,10 +244,8 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                         ? Container()
                         : Text(
                             widget.headlineText,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4
-                                .copyWith(
+                            style: widget.headerTextStyle ??
+                                Theme.of(context).textTheme.headline4.copyWith(
                                     fontSize: 18,
                                     color: widget.headerTextColor),
                           ),
@@ -261,6 +287,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                     searchFieldBackgroundColor:
                         widget.searchFieldBackgroundColor,
                     searchFieldHintText: widget.searchFieldHintText,
+                    searchFieldTextStyle: widget.searchFieldTextStyle,
                     onChanged: (value) {
                       setState(() {
                         if (value.isEmpty) {
@@ -302,10 +329,10 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
               );
             },
             selected: selectedText,
-            selectedTextColor: widget.selectedTextColor,
             selectedTextBackgroundColor: widget.selectedTextBackgroundColor,
             unselectedTextBackgroundColor: widget.unselectedTextbackGroundColor,
-            unselectedTextColor: widget.unselectedTextColor,
+            selectedChipTextStyle: widget.selectedChipTextStyle,
+            unselectedChipTextStyle: widget.unselectedChipTextStyle,
             text: widget.label(item),
           ),
         );
@@ -324,8 +351,8 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
     String label,
     Function onPressed,
     Color backgroundColor = Colors.transparent,
-    Color textColor,
     double elevation = 0,
+    TextStyle textStyle,
   }) {
     return TextButton(
       style: ButtonStyle(
@@ -334,14 +361,13 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
           )),
           backgroundColor: MaterialStateProperty.all(backgroundColor),
           elevation: MaterialStateProperty.all(elevation),
-          foregroundColor: MaterialStateProperty.all(
-              textColor ?? Theme.of(context).buttonColor)),
+          foregroundColor:
+              MaterialStateProperty.all(Theme.of(context).buttonColor)),
       onPressed: onPressed,
       clipBehavior: Clip.antiAlias,
       child: Text(
         label,
-        style: Theme.of(context).textTheme.bodyText2.copyWith(
-            fontSize: 20, color: textColor ?? Theme.of(context).buttonColor),
+        style: textStyle,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
       ),
@@ -372,25 +398,33 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _controlButton(
-                  label: "All",
-                  onPressed: widget.enableOnlySingleSelection
-                      ? null
-                      : () {
-                          setState(() {
-                            _selectedListData = List.from(_listData);
-                          });
-                        },
-                  textColor: widget.enableOnlySingleSelection
-                      ? Theme.of(context).dividerColor
-                      : widget.allResetButonColor),
+                label: "All",
+                onPressed: widget.enableOnlySingleSelection
+                    ? null
+                    : () {
+                        setState(() {
+                          _selectedListData = List.from(_listData);
+                        });
+                      },
+                // textColor:
+                textStyle: widget.controlButtonTextStyle ??
+                    Theme.of(context).textTheme.bodyText2.copyWith(
+                        fontSize: 20,
+                        color: widget.enableOnlySingleSelection
+                            ? Theme.of(context).dividerColor
+                            : Theme.of(context).primaryColor),
+              ),
               _controlButton(
-                  label: "Reset",
-                  onPressed: () {
-                    setState(() {
-                      _selectedListData.clear();
-                    });
-                  },
-                  textColor: widget.allResetButonColor),
+                label: "Reset",
+                onPressed: () {
+                  setState(() {
+                    _selectedListData.clear();
+                  });
+                },
+                textStyle: widget.controlButtonTextStyle ??
+                    Theme.of(context).textTheme.bodyText2.copyWith(
+                        fontSize: 20, color: Theme.of(context).primaryColor),
+              ),
               _controlButton(
                 label: "Apply",
                 onPressed: () {
@@ -401,8 +435,13 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                   }
                 },
                 elevation: 5,
-                textColor: widget.applyButonTextColor,
                 backgroundColor: widget.applyButonTextBackgroundColor,
+                textStyle: widget.applyButtonTextStyle ??
+                    Theme.of(context).textTheme.bodyText2.copyWith(
+                        fontSize: 20,
+                        color: widget.enableOnlySingleSelection
+                            ? Theme.of(context).dividerColor
+                            : Theme.of(context).buttonColor),
               ),
             ],
           ),

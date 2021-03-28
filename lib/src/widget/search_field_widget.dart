@@ -4,12 +4,14 @@ class SearchFieldWidget extends StatelessWidget {
   final String searchFieldHintText;
   final Color searchFieldBackgroundColor;
   final Function(String) onChanged;
-  const SearchFieldWidget(
-      {Key key,
-      this.searchFieldHintText,
-      this.onChanged,
-      this.searchFieldBackgroundColor})
-      : super(key: key);
+  final TextStyle searchFieldTextStyle;
+  const SearchFieldWidget({
+    Key key,
+    this.searchFieldHintText,
+    this.onChanged,
+    this.searchFieldBackgroundColor,
+    this.searchFieldTextStyle,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class SearchFieldWidget extends StatelessWidget {
             color: searchFieldBackgroundColor),
         child: TextField(
           onChanged: onChanged,
-          style: TextStyle(fontSize: 18, color: Colors.black87),
+          style: searchFieldTextStyle ??
+              TextStyle(fontSize: 18, color: Colors.black87),
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.search, color: Colors.black38),
             hintText: searchFieldHintText,

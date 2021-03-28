@@ -2,12 +2,12 @@
 ## filter_list Plugin 
 [![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list)  [![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build) ![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list) ![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) [![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) ![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
 
-Package designed to select multiple items from a list, with the option to filter and even search the items.
+Filter_list Package is designed to make single/multiple item selection from a list of strings/object.
 
 ## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
-## Data flow 
+## Data flow
 * Invoke method `FilterListDialog.display()` to display filter dialog.
 * Make selection from list.
 * Click `All` button to select all text from list.
@@ -72,7 +72,6 @@ import package:filter_list/filter_list.dart';
       listData: countList,
       selectedListData: selectedCountList,
       height: 480,
-      borderRadius: 20,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
       validateSelectedItem: (list, val) {
@@ -266,26 +265,35 @@ FilterListWidget |N/A |N/A |N/A
 `headerTextColor` Type: **Color**
 * Set color of header text.
 
-`applyButonTextColor` Type: **Color**
-* Set text color of apply button.
-
- `applyButonTextBackgroundColor` Type: **Color**
+`applyButonTextBackgroundColor` Type: **Color**
 * Set background color of apply button.
 
-`allResetButonColor` Type: **Color**
-* Set text color of all and reset button.
+`selectedChipTextStyle` Type **TextStyle**
+* TextStyle for chip when selected
 
-`selectedTextColor` Type: **Color**
-* Set color of selected text in filter dialog.
+`unselectedChipTextStyle` Type **TextStyle**
+* TextStyle for chip when not selected
+
+`controlButtonTextStyle` Type **TextStyle**
+* TextStyle for `All` and `Reset` button text
+
+`applyButtonTextStyle` Type **TextStyle**
+* TextStyle for `Apply` button
+
+`headerTextStyle` Type **TextStyle**
+* TextStyle for header text
+
+`searchFieldTextStyle` Type **TextStyle**
+* TextStyle for search field text
+
+`choiceChipBuilder` Type **TextStyle**
+* Builder for custom choice chip
 
 `selectedTextBackgroundColor` Type: **Color**
 * Set background color of selected text field.
 
 `unselectedTextbackGroundColor` Type: **Color**
 * Set background color of unselected text field.
-
-`unselectedTextColor` Type: **Color**
-* Set text color of unselected text in filter dialog
 
 `searchFieldBackgroundColor` Type: **Color**
 * Set background color of Search field.

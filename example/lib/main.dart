@@ -33,16 +33,17 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       listData: userList,
       selectedListData: selectedUserList,
+      height: 480,
+      headlineText: "Select Users",
+      searchFieldHintText: "Search Here",
       label: (item) {
         return item.name;
       },
       validateSelectedItem: (list, val) {
         return list.contains(val);
       },
+
       onItemSearch: (list, text) {
-        /// When text change in search text field then return list containing that text value
-        ///
-        ///Check if list has value which matchs to text
         if (list.any((element) =>
             element.name.toLowerCase().contains(text.toLowerCase()))) {
           /// return list which contains matches
@@ -53,12 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         return null;
       },
-      height: 480,
-      // width: MediaQuery.of(context).size.width * .8,
-      // enableOnlySingleSelection: true,
-      borderRadius: 20,
-      headlineText: "Select Count",
-      searchFieldHintText: "Search Here",
+
+      onApplyButtonClick: (list) {
+        if (list != null) {
+          setState(() {
+            selectedUserList = List.from(list);
+          });
+          Navigator.pop(context);
+        }
+      },
 
       /// uncomment below code to create custom choice chip
       /*  choiceChipBuilder: (context, item, isSelected) {
@@ -76,14 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       },*/
-      onApplyButtonClick: (list) {
-        if (list != null) {
-          setState(() {
-            selectedUserList = List.from(list);
-          });
-          Navigator.pop(context);
-        }
-      },
     );
   }
 
