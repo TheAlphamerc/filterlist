@@ -2,7 +2,7 @@
 ## filter_list Plugin 
 [![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list)  [![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build) ![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list) ![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) [![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) ![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
 
-Filter_list Package is designed to make single/multiple item selection from a list of strings/object.
+Filter_list Package is designed to make single/multiple item selection from a list of string/object.
 
 ## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
@@ -24,7 +24,7 @@ Filter_list Package is designed to make single/multiple item selection from a li
 ```yaml
 
 dependencies:
-  filter_list: ^0.0.6
+  filter_list: ^0.0.8
 
 ```
 
@@ -74,13 +74,15 @@ import package:filter_list/filter_list.dart';
       height: 480,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
+      label: (item) {
+        return item;
+      },
       validateSelectedItem: (list, val) {
           return list.contains(val);
       },
       onItemSearch: (list, text) {
           if (list.any((element) =>
               element.toLowerCase().contains(text.toLowerCase()))) {
-            /// return list which contains matches
             return list
                 .where((element) =>
                     element.toLowerCase().contains(text.toLowerCase()))
@@ -111,7 +113,6 @@ import package:filter_list/filter_list.dart';
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ),
-        /// check for empty or null value selctedCountList
         body: selectedCountList == null || selectedCountList.length == 0
             ? Center(
                 child: Text('No text selected'),
