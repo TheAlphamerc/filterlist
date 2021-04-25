@@ -326,5 +326,8 @@ I welcome and encourage all pull requests. It usually will take me within 24-48 
 > * [PayPal](https://www.paypal.me/TheAlphamerc/)
 
 
+## Visitors Count
+
+<img align="left" src = "https://profile-counter.glitch.me/flutter_plugin_filter_list/count.svg" alt ="Loading">
 
 
