@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SearchFieldWidget extends StatelessWidget {
-  final String searchFieldHintText;
-  final Color searchFieldBackgroundColor;
-  final Function(String) onChanged;
-  final TextStyle searchFieldTextStyle;
+  final String? searchFieldHintText;
+  final Color? searchFieldBackgroundColor;
+  final Function(String)? onChanged;
+  final TextStyle? searchFieldTextStyle;
   const SearchFieldWidget({
-    Key key,
+    Key? key,
     this.searchFieldHintText,
     this.onChanged,
     this.searchFieldBackgroundColor,

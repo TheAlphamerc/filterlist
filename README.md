@@ -1,10 +1,21 @@
 
 ## filter_list Plugin 
-[![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list)  [![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build) ![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list) ![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) [![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) ![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
+[![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build)
+![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) 
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
+![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) 
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Thealphamerc/flutter_plugin_filter_list.svg)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
+[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) 
+![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
 
-Filter_list Package is designed to make single/multiple item selection from a list of string/object.
+[![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list) 
+[![Likes](https://badges.bar/filter_list/likes)](https://pub.dev/packages/flutter_plugin_filter_list/score)
+[![Popularity](https://badges.bar/filter_list/popularity)](https://pub.dev/packages/filter_list/score)
+[![Pub points](https://badges.bar/flutter_week_view/pub%20points)](https://pub.dev/packages/filter_list/score)
 
-## Download App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
+FilterList is a flutter package which provide utility to search/filter on the basis of single/multiple selection from provided dynamic list.
+
+## Download Demo App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Data flow
@@ -24,7 +35,7 @@ Filter_list Package is designed to make single/multiple item selection from a li
 ```yaml
 
 dependencies:
-  filter_list: ^0.0.8
+  filter_list: ^0.0.9
 
 ```
 
@@ -62,31 +73,34 @@ import package:filter_list/filter_list.dart';
     "Nineteen",
     "Twenty"
   ];
-  List<String> selectedCountList = [];
+  List<String>? selectedCountList = [];
 ```
 #### Create a function and call `FilterListDialog.display()` on button clicked
 ```dart
   void _openFilterDialog() async {
-    await FilterListDialog.display(
+    await FilterListDialog.display<String>(
       context,
       listData: countList,
       selectedListData: selectedCountList,
       height: 480,
       headlineText: "Select Count",
       searchFieldHintText: "Search Here",
-      label: (item) {
+      choiceChipLabel: (item) {
         return item;
       },
       validateSelectedItem: (list, val) {
-          return list.contains(val);
+          return list!.contains(val);
       },
       onItemSearch: (list, text) {
-          if (list.any((element) =>
+          if (list!.any((element) =>
               element.toLowerCase().contains(text.toLowerCase()))) {
-            return list
+            return list!
                 .where((element) =>
                     element.toLowerCase().contains(text.toLowerCase()))
                 .toList();
+          }
+          else{
+            return [];
           }
         },
       onApplyButtonClick: (list) {
@@ -113,33 +127,33 @@ import package:filter_list/filter_list.dart';
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ),
-        body: selectedCountList == null || selectedCountList.length == 0
+        body: selectedCountList == null || selectedCountList!.length == 0
             ? Center(
                 child: Text('No text selected'),
               )
             : ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(selectedCountList[index]),
+                    title: Text(selectedCountList![index]!),
                   );
                 },
                 separatorBuilder: (context, index) => Divider(),
-                itemCount: selectedCountList.length));
+                itemCount: selectedCountList!.length));
   }
 ```
 #### How to use `FilterListWidget`.
 
 ```dart
 class User {
-  final String name;
-  final String avatar;
+  final String? name;
+  final String? avatar;
   User({this.name, this.avatar});
 }
 
 
 
 class FilterPage extends StatelessWidget {
-  FilterPage({Key key}) : super(key: key);
+  FilterPage({Key? key}) : super(key: key);
   List<User> userList = [
     User(name: "Jon", avatar: ""),
     User(name: "Ethel ", avatar: ""),
@@ -159,33 +173,36 @@ class FilterPage extends StatelessWidget {
         title: Text("Filter List Widget Example "),
       ),
       body: SafeArea(
-        child: FilterListWidget(
+        child: FilterListWidget<User>(
           listData: userList,
-          hideheaderText: true,
+          hideHeaderText: true,
           onApplyButtonClick: (list) {
             if (list != null) {
-              print("Selected items count: ${list.length}");
+              print("Selected items count: ${list!.length}");
             }
           },
           label: (item) {
             /// Used to print text on chip
-            return item.name;
+            return item!.name;
           },
           validateSelectedItem: (list, val) {
             ///  identify if item is selected or not
-            return list.contains(val);
+            return list!.contains(val);
           },
           onItemSearch: (list, text) {
             /// When text change in search text field then return list containing that text value
             ///
             ///Check if list has value which matchs to text
-            if (list.any((element) =>
+            if (list!.any((element) =>
                 element.name.toLowerCase().contains(text.toLowerCase()))) {
               /// return list which contains matches
-              return list
+              return list!
                   .where((element) =>
                       element.name.toLowerCase().contains(text.toLowerCase()))
                   .toList();
+            }
+            else{
+              return [];
             }
           },
         ),
@@ -218,91 +235,94 @@ Customised control button |Customised selected text |Customised unselected text 
 
 ### Parameters and Value
 
- `height` Type: **double**
+ `height` Type **&#8594;** **double**
 * Set height of filter dialog.
 
-`width` Type: **double**
+`width` Type **&#8594;** **double**
 * Set width of filter dialog.
 
-`borderRadius` Type: **double**
+`borderRadius` Type **&#8594;** **double**
 * Set border radius of filter dialog.
 
-`listData` Type: **List\<dynamic>()**
+`listData` Type **&#8594;** **List\<dynamic>()**
 * Populate filter dialog with text list.
 
-`selectedListData` Type: **List\<dynamic>()**
+`selectedListData` Type **&#8594;** **List\<dynamic>()**
 * Marked selected text in filter dialog.
 
-`label` Type: [Callback] **{String Function(dynamic)}**
-* Print text on chip
+`choiceChipLabel` Type  **&#8594;** **String Function(dynamic)**
+* Display text on choice chip.
 
-`validateSelectedItem` Type: [Callback] **bool Function(List<T> list, T item)** 
+`validateSelectedItem` Type  **&#8594;** **bool Function(List<T> list, T item)** 
 * identifies weather a item is selecte or not
 
-`onItemSearch` Type: [Callback] **List<T> Function(List<T> list, String text)**
+`onItemSearch` Type **&#8594;** **List<T> Function(List<T> list, String text)**
 * filter list on the basis of search field text
 
-`headlineText` Type: **String**
+`headlineText` Type **&#8594;** **String**
 * Set header text of filter dialog.
+ 
+`hideHeaderText` TYPE **&#8594;** **bool**
+* If `true` then it will hide the header text
 
-`searchFieldHintText` Type: **String**
+`searchFieldHintText` Type **&#8594;** **String**
 * Set hint text in search field.
 
-`hideSelectedTextCount` Type: **bool**
+`hideSelectedTextCount` Type **&#8594;** **bool**
 * Hide selected text count.
 
- `hideSearchField` Type: **bool**
+`hideSearchField` Type **&#8594;** **bool**
 * Hide search text field.
 
-`hidecloseIcon` Type: **bool**
+`hideCloseIcon` Type **&#8594;** **bool**
 * Hide close Icon.
 
-`hideheader` Type: **bool**
+`hideheader` Type **&#8594;** **bool**
 * Hide complete header section from filter dialog.
 
-`closeIconColor` Type: **Color**
+`closeIconColor` Type **&#8594;** **Color**
 * set color of close Icon.
 
-`headerTextColor` Type: **Color**
+`headerTextColor` Type **&#8594;** **Color**
 * Set color of header text.
 
-`applyButonTextBackgroundColor` Type: **Color**
+`applyButonTextBackgroundColor` Type **&#8594;** **Color**
 * Set background color of apply button.
 
-`selectedChipTextStyle` Type **TextStyle**
+`selectedChipTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for chip when selected
 
-`unselectedChipTextStyle` Type **TextStyle**
+`unselectedChipTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for chip when not selected
 
-`controlButtonTextStyle` Type **TextStyle**
+`controlButtonTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for `All` and `Reset` button text
 
-`applyButtonTextStyle` Type **TextStyle**
+`applyButtonTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for `Apply` button
 
-`headerTextStyle` Type **TextStyle**
+`headerTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for header text
 
-`searchFieldTextStyle` Type **TextStyle**
+`searchFieldTextStyle` Type  **&#8594;** **TextStyle**
 * TextStyle for search field text
 
-`choiceChipBuilder` Type **TextStyle**
-* Builder for custom choice chip
+`choiceChipBuilder` Type  **&#8594;** **TextStyle**
+* The `choiceChipBuilder` is a builder to design custom choice chip.
 
-`selectedTextBackgroundColor` Type: **Color**
+`selectedTextBackgroundColor` Type **&#8594;** **Color**
 * Set background color of selected text field.
 
-`unselectedTextbackGroundColor` Type: **Color**
+`unselectedTextbackGroundColor` Type **&#8594;** **Color**
 * Set background color of unselected text field.
 
-`searchFieldBackgroundColor` Type: **Color**
+`searchFieldBackgroundColor` Type **&#8594;** **Color**
 * Set background color of Search field.
 
-`backgroundColor` Type: **Color**
+`backgroundColor` Type **&#8594;** **Color**
 * Set background color of filter color.
 
-`onApplyButtonClick` Type **Function(List<dynamic>)**
+`onApplyButtonClick` Type  **&#8594;** **Function(List<dynamic>)**
  * Returns list of items when apply button is clicked 
 
 ## Flutter plugins
@@ -323,6 +343,8 @@ I welcome and encourage all pull requests. It usually will take me within 24-48 
 
 > If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
 >
+
+> * <a href="https://www.buymeacoffee.com/thealphamerc"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200"></a>
 > * [PayPal](https://www.paypal.me/TheAlphamerc/)
 
 

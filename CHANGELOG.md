@@ -1,4 +1,8 @@
-## [0.0.8] - Comming Soon
+## [0.0.9] - 01 Apr 2021
+* Migrat to null safty.
+* `label` is replaced with `choiceChipLabel`
+
+## [0.0.8] - 28 Mar 2021
 * Added `choiceChipBuilder` to build custom choice chip.
 * Added `selectedChipTextStyle`,`unselectedChipTextStyle`,`controlButtonTextStyle`,`applyButtonTextStyle`,`headerTextStyle` and `searchFieldTextStyle` styles.
 * Removed `applyButonTextColor`,`allResetButonColor`,`selectedTextColor`,`unselectedTextColor` colors properties.
