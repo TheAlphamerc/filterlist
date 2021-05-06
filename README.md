@@ -5,7 +5,7 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
 ![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) 
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Thealphamerc/flutter_plugin_filter_list.svg)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
-[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_filter_list) 
+[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=https://github.com/FTheAlphamerc/flutter_plugin_filter_list) 
 ![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
 
 [![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list) 
@@ -233,103 +233,51 @@ Customised control button |Customised selected text |Customised unselected text 
 
 
 
-### Parameters and Value
 
- `height` Type **&#8594;** **double**
-* Set height of filter dialog.
+## Parameters
 
-`width` Type **&#8594;** **double**
-* Set width of filter dialog.
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| height | `double` | Set height of filter dialog.|
+| width  | `double` | Set width of filter dialog.|
+| borderRadius|`double` | Set border radius of filter dialog. |
+| hideCloseIcon|`bool`|Hide close Icon.|
+| hideheader|`bool`|Hide complete header section from filter dialog.|
+| hideHeaderText|`bool`|If `true` then it will hide the header text|
+| hideSelectedTextCount|`bool`|Hide selected text count.|
+| hideSearchField|`bool`|Hide search text field.|
+| searchFieldHintText|`String`|Set hint text in search field.|
+| headlineText|`String`|Set header text of filter dialog.|
+| closeIconColor|`Color`| Set color of close Icon.|
+| headerTextColor|`Color`|Set color of header text.|
+| backgroundColor|`Color`|Set background color of filter color|
+| searchFieldBackgroundColor|`Color`|Set background color of Search field.|
+| unselectedTextbackGroundColor|`Color`|Set background color of unselected text field.|
+| selectedTextBackgroundColor|`Color`|Set background color of selected text field. |
+| applyButonTextBackgroundColor|`Color`|Set background color of apply button.|
+| applyButtonTextStyle|`TextStyle`| TextStyle for `Apply` button|
+| selectedChipTextStyle|`TextStyle`|TextStyle for chip when selected |
+| unselectedChipTextStyle|`TextStyle`|TextStyle for chip when not selected|
+| controlButtonTextStyle|`TextStyle`| TextStyle for `All` and `Reset` button text|
+| headerTextStyle|`TextStyle`| TextStyle for header text|
+| searchFieldTextStyle|`TextStyle`|TextStyle for search field tex|
+| listData|`List<T>()`|Populate filter dialog with text list. |
+| selectedListData|` List<T>()`|Marked selected text in filter dialog.|
+| choiceChipLabel|`String Function(T item)`| Display text on choice chip.|
+| validateSelectedItem|`bool Function(List<T>? list, T item)`| Identifies weather a item is selected or not|
+| onItemSearch|`List<T> Function(List<T>? list, String text)`| Perform search operation and returns filtered list|
+| choiceChipBuilder|`Widget Function(BuildContext context, T? item, bool? iselected)`|The choiceChipBuilder is a builder to design custom choice chip.|
+| onApplyButtonClick|`Function(List<T> list)`|Returns list of items when apply button is clicked|
 
-`borderRadius` Type **&#8594;** **double**
-* Set border radius of filter dialog.
+> `T` can be a String or any user defined Model 
+  
 
-`listData` Type **&#8594;** **List\<dynamic>()**
-* Populate filter dialog with text list.
-
-`selectedListData` Type **&#8594;** **List\<dynamic>()**
-* Marked selected text in filter dialog.
-
-`choiceChipLabel` Type  **&#8594;** **String Function(dynamic)**
-* Display text on choice chip.
-
-`validateSelectedItem` Type  **&#8594;** **bool Function(List<T> list, T item)** 
-* identifies weather a item is selecte or not
-
-`onItemSearch` Type **&#8594;** **List<T> Function(List<T> list, String text)**
-* filter list on the basis of search field text
-
-`headlineText` Type **&#8594;** **String**
-* Set header text of filter dialog.
- 
-`hideHeaderText` TYPE **&#8594;** **bool**
-* If `true` then it will hide the header text
-
-`searchFieldHintText` Type **&#8594;** **String**
-* Set hint text in search field.
-
-`hideSelectedTextCount` Type **&#8594;** **bool**
-* Hide selected text count.
-
-`hideSearchField` Type **&#8594;** **bool**
-* Hide search text field.
-
-`hideCloseIcon` Type **&#8594;** **bool**
-* Hide close Icon.
-
-`hideheader` Type **&#8594;** **bool**
-* Hide complete header section from filter dialog.
-
-`closeIconColor` Type **&#8594;** **Color**
-* set color of close Icon.
-
-`headerTextColor` Type **&#8594;** **Color**
-* Set color of header text.
-
-`applyButonTextBackgroundColor` Type **&#8594;** **Color**
-* Set background color of apply button.
-
-`selectedChipTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for chip when selected
-
-`unselectedChipTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for chip when not selected
-
-`controlButtonTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for `All` and `Reset` button text
-
-`applyButtonTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for `Apply` button
-
-`headerTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for header text
-
-`searchFieldTextStyle` Type  **&#8594;** **TextStyle**
-* TextStyle for search field text
-
-`choiceChipBuilder` Type  **&#8594;** **TextStyle**
-* The `choiceChipBuilder` is a builder to design custom choice chip.
-
-`selectedTextBackgroundColor` Type **&#8594;** **Color**
-* Set background color of selected text field.
-
-`unselectedTextbackGroundColor` Type **&#8594;** **Color**
-* Set background color of unselected text field.
-
-`searchFieldBackgroundColor` Type **&#8594;** **Color**
-* Set background color of Search field.
-
-`backgroundColor` Type **&#8594;** **Color**
-* Set background color of filter color.
-
-`onApplyButtonClick` Type  **&#8594;** **Function(List<dynamic>)**
- * Returns list of items when apply button is clicked 
-
-## Flutter plugins
-Plugin Name        | Stars        
-:-------------------------|-------------------------
-|[Empty widget](https://github.com/TheAlphamerc/empty_widget) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/empty_widget?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%empty_widget)
-|[Add Thumbnail](https://github.com/TheAlphamerc/flutter_plugin_add_thumbnail) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_add_thumbnail?style=social)](https://github.com/login?return_to=%2FTheAlphamerc%flutter_plugin_add_thumbnail)
+## Other Flutter packages
+ Name        | Stars        | Pub |
+:-------------------------|------------------------- | ------------------------- |
+|[Empty widget](https://github.com/TheAlphamerc/empty_widget) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/empty_widget?style=social)](https://github.com/login?return_to=https://github.com/TheAlphamerc/empty_widget) | [![pub package](https://img.shields.io/pub/v/empty_widget?color=blue)](https://pub.dev/packages/empty_widget) |
+|[Add Thumbnail](https://github.com/TheAlphamerc/flutter_plugin_add_thumbnail) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_add_thumbnail?style=social)](https://github.com/login?return_to=https://github.com/TheAlphamerc/flutter_plugin_add_thumbnail) | [![pub package](https://img.shields.io/pub/v/add_thumbnail?color=blue)](https://pub.dev/packages/add_thumbnail) |
+|[Country Provider](https://github.com/TheAlphamerc/country_provider) |[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/country_provider?style=social)](https://github.com/login?return_to=https://github.com/TheAlphamerc/country_provider) | [![pub package](https://img.shields.io/pub/v/country_provider?color=blue)](https://pub.dev/packages/country_provider) |
 
 
 ## Pull Requests
