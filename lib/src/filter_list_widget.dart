@@ -47,44 +47,56 @@ typedef LabelDelegate<T> = String? Function(T?);
 ///   )
 /// ```
 class FilterListWidget<T> extends StatefulWidget {
-  const FilterListWidget({
-    Key? key,
-    this.height,
-    this.width,
-    this.listData,
-    required this.validateSelectedItem,
-    required this.choiceChipLabel,
-    required this.onItemSearch,
-    this.selectedListData,
-    this.borderRadius = 20,
-    this.onApplyButtonClick,
-    this.choiceChipBuilder,
-    this.selectedChipTextStyle,
-    this.unselectedChipTextStyle,
-    this.controlButtonTextStyle,
-    this.applyButtonTextStyle,
-    this.headerTextStyle,
-    this.searchFieldTextStyle,
-    this.headlineText = "Select",
-    this.searchFieldHintText = "Search here",
-    this.hideSelectedTextCount = false,
-    this.hideSearchField = false,
-    this.hideCloseIcon = true,
-    this.hideHeader = false,
-    this.hideHeaderText = false,
-    this.closeIconColor = Colors.black,
-    this.headerTextColor = Colors.black,
-    this.applyButonTextBackgroundColor = Colors.blue,
-    this.backgroundColor = Colors.white,
-    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-    this.selectedTextBackgroundColor = Colors.blue,
-    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-    this.enableOnlySingleSelection = false,
-    this.allButtonText = 'All',
-    this.applyButtonText = 'Apply',
-    this.resetButtonText = 'Reset',
-    this.selectedItemsText = 'selected items'
-  }) : super(key: key);
+  const FilterListWidget(
+      {Key? key,
+      this.height,
+      this.width,
+      this.listData,
+      required this.validateSelectedItem,
+      required this.choiceChipLabel,
+      required this.onItemSearch,
+      this.selectedListData,
+      this.borderRadius = 20,
+      this.onApplyButtonClick,
+      this.choiceChipBuilder,
+      this.selectedChipTextStyle,
+      this.unselectedChipTextStyle,
+      this.controlButtonTextStyle,
+      this.applyButtonTextStyle,
+      this.headerTextStyle,
+      this.searchFieldTextStyle,
+      this.headlineText = "Select",
+      this.searchFieldHintText = "Search here",
+      this.hideSelectedTextCount = false,
+      this.hideSearchField = false,
+      this.hideCloseIcon = true,
+      this.hideHeader = false,
+      this.hideHeaderText = false,
+      this.closeIconColor = Colors.black,
+      this.headerTextColor = Colors.black,
+      this.applyButonTextBackgroundColor = Colors.blue,
+      this.backgroundColor = Colors.white,
+      this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
+      this.selectedTextBackgroundColor = Colors.blue,
+      this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+      this.enableOnlySingleSelection = false,
+      this.allButtonText = 'All',
+      this.applyButtonText = 'Apply',
+      this.resetButtonText = 'Reset',
+      this.selectedItemsText = 'selected items',
+      this.controlContainerDecoration = const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(25)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            offset: Offset(0, 5),
+            blurRadius: 15,
+            color: Color(0x12000000),
+          )
+        ],
+      ),
+      this.buttonRadius})
+      : super(key: key);
   final double? height;
   final double? width;
   final double borderRadius;
@@ -167,6 +179,12 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// Selected items count text
   final String? selectedItemsText;
+
+  /// Control button actions container styling
+  final BoxDecoration? controlContainerDecoration;
+
+  /// Control button radius
+  final double? buttonRadius;
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
@@ -353,17 +371,17 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
     return choices;
   }
 
-  Widget _controlButton({
-    required String choiceChipLabel,
-    Function? onPressed,
-    Color backgroundColor = Colors.transparent,
-    double elevation = 0,
-    TextStyle? textStyle,
-  }) {
+  Widget _controlButton(
+      {required String choiceChipLabel,
+      Function? onPressed,
+      Color backgroundColor = Colors.transparent,
+      double elevation = 0,
+      TextStyle? textStyle,
+      double? radius}) {
     return TextButton(
       style: ButtonStyle(
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderRadius: BorderRadius.all(Radius.circular(radius ?? 25)),
           )),
           backgroundColor: MaterialStateProperty.all(backgroundColor),
           elevation: MaterialStateProperty.all(elevation),
@@ -388,67 +406,57 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         alignment: Alignment.center,
         child: Container(
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                offset: Offset(0, 5),
-                blurRadius: 15,
-                color: Color(0x12000000),
-              )
-            ],
-          ),
+          decoration: widget.controlContainerDecoration,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _controlButton(
-                choiceChipLabel: '${widget.allButtonText}',
-                onPressed: widget.enableOnlySingleSelection!
-                    ? null
-                    : () {
-                        setState(() {
-                          _selectedListData = List.from(_listData!);
-                        });
-                      },
-                // textColor:
-                textStyle: widget.controlButtonTextStyle ??
-                    Theme.of(context).textTheme.bodyText2!.copyWith(
-                        fontSize: 20,
-                        color: widget.enableOnlySingleSelection!
-                            ? Theme.of(context).dividerColor
-                            : Theme.of(context).primaryColor),
-              ),
+                  choiceChipLabel: '${widget.allButtonText}',
+                  onPressed: widget.enableOnlySingleSelection!
+                      ? null
+                      : () {
+                          setState(() {
+                            _selectedListData = List.from(_listData!);
+                          });
+                        },
+                  // textColor:
+                  textStyle: widget.controlButtonTextStyle ??
+                      Theme.of(context).textTheme.bodyText2!.copyWith(
+                          fontSize: 20,
+                          color: widget.enableOnlySingleSelection!
+                              ? Theme.of(context).dividerColor
+                              : Theme.of(context).primaryColor),
+                  radius: widget.buttonRadius),
               _controlButton(
-                choiceChipLabel: '${widget.resetButtonText}',
-                onPressed: () {
-                  setState(() {
-                    _selectedListData.clear();
-                  });
-                },
-                textStyle: widget.controlButtonTextStyle ??
-                    Theme.of(context).textTheme.bodyText2!.copyWith(
-                        fontSize: 20, color: Theme.of(context).primaryColor),
-              ),
+                  choiceChipLabel: '${widget.resetButtonText}',
+                  onPressed: () {
+                    setState(() {
+                      _selectedListData.clear();
+                    });
+                  },
+                  textStyle: widget.controlButtonTextStyle ??
+                      Theme.of(context).textTheme.bodyText2!.copyWith(
+                          fontSize: 20, color: Theme.of(context).primaryColor),
+                  radius: widget.buttonRadius),
               _controlButton(
-                choiceChipLabel: '${widget.applyButtonText}',
-                onPressed: () {
-                  if (widget.onApplyButtonClick != null) {
-                    widget.onApplyButtonClick!(_selectedListData);
-                  } else {
-                    Navigator.pop(context, _selectedListData);
-                  }
-                },
-                elevation: 5,
-                backgroundColor: widget.applyButonTextBackgroundColor!,
-                textStyle: widget.applyButtonTextStyle ??
-                    Theme.of(context).textTheme.bodyText2!.copyWith(
-                        fontSize: 20,
-                        color: widget.enableOnlySingleSelection!
-                            ? Theme.of(context).dividerColor
-                            : Theme.of(context).buttonColor),
-              ),
+                  choiceChipLabel: '${widget.applyButtonText}',
+                  onPressed: () {
+                    if (widget.onApplyButtonClick != null) {
+                      widget.onApplyButtonClick!(_selectedListData);
+                    } else {
+                      Navigator.pop(context, _selectedListData);
+                    }
+                  },
+                  elevation: 5,
+                  backgroundColor: widget.applyButonTextBackgroundColor!,
+                  textStyle: widget.applyButtonTextStyle ??
+                      Theme.of(context).textTheme.bodyText2!.copyWith(
+                          fontSize: 20,
+                          color: widget.enableOnlySingleSelection!
+                              ? Theme.of(context).dividerColor
+                              : Theme.of(context).buttonColor),
+                  radius: widget.buttonRadius),
             ],
           ),
         ),

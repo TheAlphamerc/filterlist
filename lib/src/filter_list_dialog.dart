@@ -196,6 +196,12 @@ class FilterListDialog {
       /// Selected items count text
       String? selectedItemsText,
 
+      /// Control container box decoration
+      BoxDecoration? controlContainerDecoration,
+
+      /// Button radius
+      double? buttonRadius,
+
       /// The `choiceChipBuilder` is a builder to design custom choice chip.
       ChoiceChipBuilder? choiceChipBuilder}) async {
     if (height == null) {
@@ -251,6 +257,8 @@ class FilterListDialog {
               applyButtonText: applyButtonText,
               resetButtonText: resetButtonText,
               allButtonText: allButtonText,
+              buttonRadius: buttonRadius,
+              controlContainerDecoration: controlContainerDecoration,
             ),
           ),
         );
