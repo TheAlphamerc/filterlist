@@ -189,7 +189,7 @@ class FilterListWidget<T> extends StatefulWidget {
   final double? buttonRadius;
 
   /// Spacing between control buttons
-  double? buttonSpacing,
+  final double? buttonSpacing,
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
