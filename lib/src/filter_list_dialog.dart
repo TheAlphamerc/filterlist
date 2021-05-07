@@ -262,6 +262,7 @@ class FilterListDialog {
               allButtonText: allButtonText,
               buttonRadius: buttonRadius,
               controlContainerDecoration: controlContainerDecoration,
+              buttonSpacing: buttonSpacing,
             ),
           ),
         );
