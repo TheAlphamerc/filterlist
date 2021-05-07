@@ -157,16 +157,16 @@ class FilterListWidget<T> extends StatefulWidget {
   final ChoiceChipBuilder? choiceChipBuilder;
 
   /// Apply Button Label
-  final String applyButtonText; /*required*/
+  final String? applyButtonText;
 
   /// Reset Button Label
-  final String resetButtonText; /*required*/
+  final String? resetButtonText;
 
   /// All Button Label
-  final String allButtonText; /*required*/
+  final String? allButtonText;
 
   /// Selected items count text
-  final String selectedItemsText; /*required*/
+  final String? selectedItemsText;
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
