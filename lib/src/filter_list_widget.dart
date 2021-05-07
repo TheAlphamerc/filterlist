@@ -95,7 +95,9 @@ class FilterListWidget<T> extends StatefulWidget {
           )
         ],
       ),
-      this.buttonRadius})
+      this.buttonRadius,
+      this.buttonSpacing
+      })
       : super(key: key);
   final double? height;
   final double? width;
@@ -185,6 +187,9 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// Control button radius
   final double? buttonRadius;
+
+  /// Spacing between control buttons
+  double? buttonSpacing,
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
@@ -428,6 +433,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                               ? Theme.of(context).dividerColor
                               : Theme.of(context).primaryColor),
                   radius: widget.buttonRadius),
+              SizedBox(width: widget.buttonSpacing ?? 0,),
               _controlButton(
                   choiceChipLabel: '${widget.resetButtonText}',
                   onPressed: () {
@@ -439,6 +445,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                       Theme.of(context).textTheme.bodyText2!.copyWith(
                           fontSize: 20, color: Theme.of(context).primaryColor),
                   radius: widget.buttonRadius),
+              SizedBox(width: widget.buttonSpacing ?? 0,),
               _controlButton(
                   choiceChipLabel: '${widget.applyButtonText}',
                   onPressed: () {

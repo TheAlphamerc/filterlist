@@ -202,6 +202,9 @@ class FilterListDialog {
       /// Button radius
       double? buttonRadius,
 
+      /// Spacing between control buttons
+      double? buttonSpacing,
+
       /// The `choiceChipBuilder` is a builder to design custom choice chip.
       ChoiceChipBuilder? choiceChipBuilder}) async {
     if (height == null) {
