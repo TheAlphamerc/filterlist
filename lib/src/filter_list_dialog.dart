@@ -247,6 +247,10 @@ class FilterListDialog {
               enableOnlySingleSelection: enableOnlySingleSelection,
               searchFieldBackgroundColor: searchFieldBackgroundColor,
               applyButonTextBackgroundColor: applyButonTextBackgroundColor,
+              selectedItemsText: selectedItemsText,
+              applyButtonText: applyButtonText,
+              resetButtonText: resetButtonText,
+              allButtonText: allButtonText,
             ),
           ),
         );
