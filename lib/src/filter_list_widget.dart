@@ -80,6 +80,10 @@ class FilterListWidget<T> extends StatefulWidget {
     this.selectedTextBackgroundColor = Colors.blue,
     this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
     this.enableOnlySingleSelection = false,
+    this.allButtonText = 'All',
+    this.applyButtonText = 'Apply',
+    this.resetButtonText = 'Reset',
+    this.selectedItemsText = 'selected items'
   }) : super(key: key);
   final double? height;
   final double? width;
@@ -152,6 +156,18 @@ class FilterListWidget<T> extends StatefulWidget {
   /// The `choiceChipBuilder` is a builder to design custom choice chip.
   final ChoiceChipBuilder? choiceChipBuilder;
 
+  /// Apply Button Label
+  final String applyButtonText; /*required*/
+
+  /// Reset Button Label
+  final String resetButtonText; /*required*/
+
+  /// All Button Label
+  final String allButtonText; /*required*/
+
+  /// Selected items count text
+  final String selectedItemsText; /*required*/
+
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
 }
@@ -183,7 +199,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                   : Padding(
                       padding: EdgeInsets.only(top: 5),
                       child: Text(
-                        '${_selectedListData.length} selected items',
+                        '${_selectedListData.length} ${widget.selectedItemsText}',
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -388,7 +404,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _controlButton(
-                choiceChipLabel: "All",
+                choiceChipLabel: '${widget.allButtonText}',
                 onPressed: widget.enableOnlySingleSelection!
                     ? null
                     : () {
@@ -405,7 +421,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                             : Theme.of(context).primaryColor),
               ),
               _controlButton(
-                choiceChipLabel: "Reset",
+                choiceChipLabel: '${widget.resetButtonText}',
                 onPressed: () {
                   setState(() {
                     _selectedListData.clear();
@@ -416,7 +432,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                         fontSize: 20, color: Theme.of(context).primaryColor),
               ),
               _controlButton(
-                choiceChipLabel: "Apply",
+                choiceChipLabel: '${widget.applyButtonText}',
                 onPressed: () {
                   if (widget.onApplyButtonClick != null) {
                     widget.onApplyButtonClick!(_selectedListData);

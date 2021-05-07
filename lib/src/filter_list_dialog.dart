@@ -184,6 +184,18 @@ class FilterListDialog {
       /// TextStyle for search field text.
       TextStyle? searchFieldTextStyle,
 
+      /// Apply Button Label
+      String? applyButtonText,
+
+      /// Reset Button Label
+      String? resetButtonText,
+
+      /// All Button Label
+      String? allButtonText,
+
+      /// Selected items count text
+      String? selectedItemsText,
+
       /// The `choiceChipBuilder` is a builder to design custom choice chip.
       ChoiceChipBuilder? choiceChipBuilder}) async {
     if (height == null) {
