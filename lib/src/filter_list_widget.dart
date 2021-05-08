@@ -6,7 +6,7 @@ typedef ChoiceChipBuilder<T> = Widget Function(
     BuildContext context, T? item, bool? iselected);
 typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String text);
 typedef LabelDelegate<T> = String? Function(T?);
-typedef ValidateRemoveItem<T> = bool Function(List<T>? list, T item);
+typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
@@ -162,7 +162,7 @@ class FilterListWidget<T> extends StatefulWidget {
   /// The `validateSelectedItem` dentifies weather a item is selecte or not.
   final ValidateSelectedItem<T> validateSelectedItem; /*required*/
 
-  /// The `validateRemoveItem` identifies if a item should be remove or not.
+  /// The `validateRemoveItem` identifies if a item should be remove or not and returns the list filtered.
   final ValidateRemoveItem<T>? validateRemoveItem;
 
   /// The `onItemSearch` is delagate which filter the list on the basis of search field text.
@@ -354,12 +354,11 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                     _selectedListData.clear();
                     _selectedListData.add(item);
                   } else {
+                    print(selectedText);
                     if(selectedText) {
                       if(widget.validateRemoveItem != null) {
                        var shouldDelete = widget.validateRemoveItem!(_selectedListData, item);
-                       if(shouldDelete) {
-                         _selectedListData.remove(item);
-                       }
+                       _selectedListData = shouldDelete;
                       } else {
                         _selectedListData.remove(item);
                       }

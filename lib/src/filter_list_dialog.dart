@@ -101,7 +101,7 @@ class FilterListDialog {
       /// identifies weather a item is selecte or not.
       required ValidateSelectedItem<T> validateSelectedItem,
 
-      /// The `validateRemoveItem` identifies if a item should be remove or not.
+      /// The `validateRemoveItem` identifies if a item should be remove or not and returns the list filtered.
       ValidateRemoveItem<T>? validateRemoveItem,
 
       /// filter list on the basis of search field text.
