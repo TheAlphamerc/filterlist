@@ -268,6 +268,14 @@ Customised control button |Customised selected text |Customised unselected text 
 | onItemSearch|`List<T> Function(List<T>? list, String text)`| Perform search operation and returns filtered list|
 | choiceChipBuilder|`Widget Function(BuildContext context, T? item, bool? iselected)`|The choiceChipBuilder is a builder to design custom choice chip.|
 | onApplyButtonClick|`Function(List<T> list)`|Returns list of items when apply button is clicked|
+| ValidateRemoveItem|`List<T> Function(List<T>? list, T item)`| Return the list of items filtered by the user logic |
+| applyButtonText|`String`| Apply button text to customize or translate |
+| resetButtonText|`String`| Reset button text to customize or translate |
+| allButtonText|`String`| All button text to customize or translate |
+| selectedItemsText|`String`| Selected items text to customize or translate |
+| controlContainerDecoration|`BoxDecoration`| Customize the bottom area of the dialog, where the buttons are placed |
+| buttonRadius|`double`| Button border radius |
+| buttonSpacing|`double`| Space between bottom control buttons |
 
 > `T` can be a String or any user defined Model 
   
