@@ -6,6 +6,7 @@ typedef ChoiceChipBuilder<T> = Widget Function(
     BuildContext context, T? item, bool? iselected);
 typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String text);
 typedef LabelDelegate<T> = String? Function(T?);
+typedef ValidateRemoveItem<T> = bool Function(List<T>? list, T item);
 
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
@@ -53,6 +54,7 @@ class FilterListWidget<T> extends StatefulWidget {
       this.width,
       this.listData,
       required this.validateSelectedItem,
+      this.validateRemoveItem,
       required this.choiceChipLabel,
       required this.onItemSearch,
       this.selectedListData,
@@ -96,8 +98,7 @@ class FilterListWidget<T> extends StatefulWidget {
         ],
       ),
       this.buttonRadius,
-      this.buttonSpacing
-      })
+      this.buttonSpacing})
       : super(key: key);
   final double? height;
   final double? width;
@@ -160,6 +161,9 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// The `validateSelectedItem` dentifies weather a item is selecte or not.
   final ValidateSelectedItem<T> validateSelectedItem; /*required*/
+
+  /// The `validateRemoveItem` identifies if a item should be remove or not.
+  final ValidateRemoveItem<T>? validateRemoveItem;
 
   /// The `onItemSearch` is delagate which filter the list on the basis of search field text.
   final ItemSearchDelegate<T> onItemSearch; /*required*/
@@ -350,9 +354,19 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                     _selectedListData.clear();
                     _selectedListData.add(item);
                   } else {
-                    selectedText
-                        ? _selectedListData.remove(item)
-                        : _selectedListData.add(item);
+                    if(selectedText) {
+                      if(widget.validateRemoveItem != null) {
+                       var shouldDelete = widget.validateRemoveItem!(_selectedListData, item);
+                       if(shouldDelete) {
+                         _selectedListData.remove(item);
+                       }
+                      } else {
+                        _selectedListData.remove(item);
+                      }
+                    } else {
+                      _selectedListData.add(item);
+                    }
+
                   }
                 },
               );
@@ -433,7 +447,9 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                               ? Theme.of(context).dividerColor
                               : Theme.of(context).primaryColor),
                   radius: widget.buttonRadius),
-              SizedBox(width: widget.buttonSpacing ?? 0,),
+              SizedBox(
+                width: widget.buttonSpacing ?? 0,
+              ),
               _controlButton(
                   choiceChipLabel: '${widget.resetButtonText}',
                   onPressed: () {
@@ -445,7 +461,9 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                       Theme.of(context).textTheme.bodyText2!.copyWith(
                           fontSize: 20, color: Theme.of(context).primaryColor),
                   radius: widget.buttonRadius),
-              SizedBox(width: widget.buttonSpacing ?? 0,),
+              SizedBox(
+                width: widget.buttonSpacing ?? 0,
+              ),
               _controlButton(
                   choiceChipLabel: '${widget.applyButtonText}',
                   onPressed: () {
