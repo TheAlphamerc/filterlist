@@ -101,6 +101,9 @@ class FilterListDialog {
       /// identifies weather a item is selecte or not.
       required ValidateSelectedItem<T> validateSelectedItem,
 
+      /// The `validateRemoveItem` identifies if a item should be remove or not and returns the list filtered.
+      ValidateRemoveItem<T>? validateRemoveItem,
+
       /// filter list on the basis of search field text.
       /// When text change in search text field then return list containing that text value.
       ///
@@ -184,6 +187,27 @@ class FilterListDialog {
       /// TextStyle for search field text.
       TextStyle? searchFieldTextStyle,
 
+      /// Apply Button Label
+      String? applyButtonText = 'Apply',
+
+      /// Reset Button Label
+      String? resetButtonText = 'Reset',
+
+      /// All Button Label
+      String? allButtonText = 'All',
+
+      /// Selected items count text
+      String? selectedItemsText = 'selected items',
+
+      /// Control container box decoration
+      BoxDecoration? controlContainerDecoration,
+
+      /// Button radius
+      double? buttonRadius,
+
+      /// Spacing between control buttons
+      double? buttonSpacing,
+
       /// The `choiceChipBuilder` is a builder to design custom choice chip.
       ChoiceChipBuilder? choiceChipBuilder}) async {
     if (height == null) {
@@ -235,6 +259,14 @@ class FilterListDialog {
               enableOnlySingleSelection: enableOnlySingleSelection,
               searchFieldBackgroundColor: searchFieldBackgroundColor,
               applyButonTextBackgroundColor: applyButonTextBackgroundColor,
+              selectedItemsText: selectedItemsText,
+              applyButtonText: applyButtonText,
+              resetButtonText: resetButtonText,
+              allButtonText: allButtonText,
+              buttonRadius: buttonRadius,
+              controlContainerDecoration: controlContainerDecoration,
+              buttonSpacing: buttonSpacing,
+              validateRemoveItem: validateRemoveItem,
             ),
           ),
         );
