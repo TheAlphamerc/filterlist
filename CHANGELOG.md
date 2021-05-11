@@ -1,3 +1,15 @@
+## [1.0.0] Comming soon
+* Improved visual customization. Including remove custom function.
+* Added below arguments to improve the customization and make it translatable. 
+    * allButtonText = 'All',
+    * applyButtonText = 'Apply',
+    * resetButtonText = 'Reset',
+    * selectedItemsText = 'selected item'
+* Added `buttonRadius` button border radius argument.
+* Added `controlContainerDecoration` action buttons box decoration argument.
+* Added `buttonSpacing` button spacing argument.
+* Added  `validateRemoveItem` custom remove function that returns the selected list items filtered by the user conditions.
+
 ## [0.0.9] - 01 Apr 2021
 * Migrat to null safty.
 * `label` is replaced with `choiceChipLabel`
