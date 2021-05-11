@@ -188,16 +188,16 @@ class FilterListDialog {
       TextStyle? searchFieldTextStyle,
 
       /// Apply Button Label
-      String? applyButtonText,
+      String? applyButtonText = 'Apply',
 
       /// Reset Button Label
-      String? resetButtonText,
+      String? resetButtonText = 'Reset',
 
       /// All Button Label
-      String? allButtonText,
+      String? allButtonText = 'All',
 
       /// Selected items count text
-      String? selectedItemsText,
+      String? selectedItemsText = 'selected items',
 
       /// Control container box decoration
       BoxDecoration? controlContainerDecoration,
