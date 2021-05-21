@@ -48,58 +48,61 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 ///   )
 /// ```
 class FilterListWidget<T> extends StatefulWidget {
-  const FilterListWidget(
-      {Key? key,
-      this.height,
-      this.width,
-      this.listData,
-      required this.validateSelectedItem,
-      this.validateRemoveItem,
-      required this.choiceChipLabel,
-      required this.onItemSearch,
-      this.selectedListData,
-      this.borderRadius = 20,
-      this.onApplyButtonClick,
-      this.choiceChipBuilder,
-      this.selectedChipTextStyle,
-      this.unselectedChipTextStyle,
-      this.controlButtonTextStyle,
-      this.applyButtonTextStyle,
-      this.headerTextStyle,
-      this.searchFieldTextStyle,
-      this.headlineText = "Select",
-      this.searchFieldHintText = "Search here",
-      this.hideSelectedTextCount = false,
-      this.hideSearchField = false,
-      this.hideCloseIcon = true,
-      this.hideHeader = false,
-      this.hideHeaderText = false,
-      this.closeIconColor = Colors.black,
-      this.headerTextColor = Colors.black,
-      this.applyButonTextBackgroundColor = Colors.blue,
-      this.backgroundColor = Colors.white,
-      this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-      this.selectedTextBackgroundColor = Colors.blue,
-      this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
-      this.enableOnlySingleSelection = false,
-      this.allButtonText = 'All',
-      this.applyButtonText = 'Apply',
-      this.resetButtonText = 'Reset',
-      this.selectedItemsText = 'selected items',
-      this.controlContainerDecoration = const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(25)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            offset: Offset(0, 5),
-            blurRadius: 15,
-            color: Color(0x12000000),
-          )
-        ],
-      ),
-      this.buttonRadius,
-      this.buttonSpacing})
-      : super(key: key);
+  const FilterListWidget({
+    Key? key,
+    this.height,
+    this.width,
+    this.listData,
+    required this.validateSelectedItem,
+    this.validateRemoveItem,
+    required this.choiceChipLabel,
+    required this.onItemSearch,
+    this.selectedListData,
+    this.borderRadius = 20,
+    this.onApplyButtonClick,
+    this.choiceChipBuilder,
+    this.selectedChipTextStyle,
+    this.unselectedChipTextStyle,
+    this.controlButtonTextStyle,
+    this.applyButtonTextStyle,
+    this.headerTextStyle,
+    this.searchFieldTextStyle,
+    this.headlineText = "Select",
+    this.searchFieldHintText = "Search here",
+    this.hideSelectedTextCount = false,
+    this.hideSearchField = false,
+    this.hideCloseIcon = true,
+    this.hideHeader = false,
+    this.hideHeaderText = false,
+    this.closeIconColor = Colors.black,
+    this.headerTextColor = Colors.black,
+    this.applyButonTextBackgroundColor = Colors.blue,
+    this.backgroundColor = Colors.white,
+    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
+    this.selectedTextBackgroundColor = Colors.blue,
+    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
+    this.enableOnlySingleSelection = false,
+    this.allButtonText = 'All',
+    this.applyButtonText = 'Apply',
+    this.resetButtonText = 'Reset',
+    this.selectedItemsText = 'selected items',
+    this.controlContainerDecoration = const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(25)),
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          offset: Offset(0, 5),
+          blurRadius: 15,
+          color: Color(0x12000000),
+        )
+      ],
+    ),
+    this.buttonRadius,
+    this.buttonSpacing,
+    this.wrapAlignment = WrapAlignment.start,
+    this.wrapCrossAxisAlignment = WrapCrossAlignment.start,
+    this.wrapSpacing = 0.0,
+  }) : super(key: key);
   final double? height;
   final double? width;
   final double borderRadius;
@@ -187,6 +190,19 @@ class FilterListWidget<T> extends StatefulWidget {
   final String? selectedItemsText;
 
   /// Control button actions container styling
+  /// ``` dart
+  ///  const BoxDecoration(
+  ///   color: Colors.white,
+  ///   borderRadius: BorderRadius.all(Radius.circular(25)),
+  ///   boxShadow: <BoxShadow>[
+  ///     BoxShadow(
+  ///       offset: Offset(0, 5),
+  ///       blurRadius: 15,
+  ///       color: Color(0x12000000),
+  ///     )
+  ///   ],
+  /// ),
+  /// ```
   final BoxDecoration? controlContainerDecoration;
 
   /// Control button radius
@@ -194,6 +210,25 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// Spacing between control buttons
   final double? buttonSpacing;
+
+  /// How the choice chip within a run should be placed in the main axis.
+  /// For example, if [wrapSpacing] is [WrapAlignment.center], the choice chip in each run are grouped together in the center of their run in the main axis.
+  ///
+  /// Defaults to [WrapAlignment.start].
+  final WrapAlignment wrapAlignment;
+
+  /// How the choice chip within a run should be aligned relative to each other in the cross axis.
+  ///For example, if this is set to [WrapCrossAlignment.end], and the [direction] is [Axis.horizontal], then the choice chip within each run will have their bottom edges aligned to the bottom edge of the run.
+  ///
+  ///Defaults to [WrapCrossAlignment.start].
+  final WrapCrossAlignment wrapCrossAxisAlignment;
+
+  ///How much space to place between choice chip in a run in the main axis.
+  ///For example, if [wrapSpacing] is 10.0, the choice chip will be spaced at least 10.0 logical pixels apart in the main axis.
+  ///If there is additional free space in a run (e.g., because the wrap has a minimum size that is not filled or because some runs are longer than others), the additional free space will be allocated according to the [alignment].
+  ///
+  ///Defaults to 0.0.
+  final double wrapSpacing;
 
   @override
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
@@ -235,6 +270,9 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                 padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
                 child: SingleChildScrollView(
                   child: Wrap(
+                    alignment: widget.wrapAlignment,
+                    crossAxisAlignment: widget.wrapCrossAxisAlignment,
+                    spacing: widget.wrapSpacing,
                     children: _buildChoiceList(),
                   ),
                 ),
@@ -354,18 +392,17 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                     _selectedListData.clear();
                     _selectedListData.add(item);
                   } else {
-                    print(selectedText);
-                    if(selectedText) {
-                      if(widget.validateRemoveItem != null) {
-                       var shouldDelete = widget.validateRemoveItem!(_selectedListData, item);
-                       _selectedListData = shouldDelete;
+                    if (selectedText) {
+                      if (widget.validateRemoveItem != null) {
+                        var shouldDelete =
+                            widget.validateRemoveItem!(_selectedListData, item);
+                        _selectedListData = shouldDelete;
                       } else {
                         _selectedListData.remove(item);
                       }
                     } else {
                       _selectedListData.add(item);
                     }
-
                   }
                 },
               );
@@ -416,6 +453,7 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
     );
   }
 
+  /// Bottom section for control buttons
   Widget _controlButtonSection() {
     return Align(
       alignment: Alignment.bottomCenter,

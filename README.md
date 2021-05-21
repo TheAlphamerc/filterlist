@@ -276,6 +276,10 @@ Customised control button |Customised selected text |Customised unselected text 
 | controlContainerDecoration|`BoxDecoration`| Customize the bottom area of the dialog, where the buttons are placed |
 | buttonRadius|`double`| Button border radius |
 | buttonSpacing|`double`| Space between bottom control buttons |
+| insetPadding| `EdgeInsets`| The amount of padding added to [MediaQueryData.viewInsets] on the outside of the dialog.|
+| wrapAlignment | `WrapAlignment`| Controls the choice chips alignment in main axis.|
+| wrapCrossAxisAlignment | `wrapSpacing`| Controls the choice chip within a run should be aligned relative to each other in the cross axis.|
+| wrapSpacing | `WrapAlignment`| controls the space to place between choice chip in a run in the main axis.|
 
 > `T` can be a String or any user defined Model 
   

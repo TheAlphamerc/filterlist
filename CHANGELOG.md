@@ -1,14 +1,18 @@
-## [1.0.0] Comming soon
+## [1.0.0] 21 May 2021
 * Improved visual customization. Including remove custom function.
 * Added below arguments to improve the customization and make it translatable. 
-    * allButtonText = 'All',
-    * applyButtonText = 'Apply',
-    * resetButtonText = 'Reset',
-    * selectedItemsText = 'selected item'
+    * `allButtonText` = 'All',
+    * `applyButtonText` = 'Apply',
+    * `resetButtonText` = 'Reset',
+    * `selectedItemsText` = 'selected item'
 * Added `buttonRadius` button border radius argument.
 * Added `controlContainerDecoration` action buttons box decoration argument.
 * Added `buttonSpacing` button spacing argument.
-* Added  `validateRemoveItem` custom remove function that returns the selected list items filtered by the user conditions.
+* Added `validateRemoveItem` custom remove function that returns the selected list items filtered by the user conditions.
+* Added `insetPadding` dialog padding argument.
+* Added `wrapAlignment` argument to control the choice chips alignment in main axis. 
+* Added `wrapCrossAxisAlignment` argument to control choice chip within a run should be aligned relative to each other in the cross axis. 
+* Added `wrapSpacing` argument to control the space to place between choice chip in a run in the main axis.
 
 ## [0.0.9] - 01 Apr 2021
 * Migrat to null safty.
