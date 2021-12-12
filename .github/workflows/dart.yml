@@ -27,8 +27,12 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable' # or: 'beta', 'dev' or 'master'
-    - working-directory: ./example
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter pub get
-    - run: flutter build apk
+    - name: Getting packages
+      working-directory: ./example
+      run: flutter pub get
+    - name: Checking tests
+      working-directory: ./example
+      run: flutter test
+    - name: Creating apk
+      working-directory: ./example
+      run: flutter build apk
