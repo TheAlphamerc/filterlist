@@ -67,6 +67,7 @@ class FilterListWidget<T> extends StatefulWidget {
     this.applyButtonTextStyle,
     this.headerTextStyle,
     this.searchFieldTextStyle,
+    this.headerCloseIcon,
     this.headlineText = "Select",
     this.searchFieldHintText = "Search here",
     this.hideSelectedTextCount = false,
@@ -146,6 +147,11 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// if true then it hides close icon.
   final bool hideCloseIcon;
+
+  /// Widget to close the dialog.
+  ///
+  /// If widget is not provided then default close icon will be used.
+  final Widget? headerCloseIcon;
 
   /// If true then it hide complete header section.
   final bool? hideHeader;
@@ -332,18 +338,19 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
                     },
                     child: widget.hideCloseIcon
                         ? SizedBox()
-                        : Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: widget.closeIconColor!),
-                                shape: BoxShape.circle),
-                            child: Icon(
-                              Icons.close,
-                              color: widget.closeIconColor,
+                        : widget.headerCloseIcon ??
+                            Container(
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: widget.closeIconColor!),
+                                  shape: BoxShape.circle),
+                              child: Icon(
+                                Icons.close,
+                                color: widget.closeIconColor,
+                              ),
                             ),
-                          ),
                   ),
                 ),
               ],
