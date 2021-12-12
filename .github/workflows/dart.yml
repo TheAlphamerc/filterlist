@@ -12,7 +12,7 @@ name: Dart
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 
 jobs:
