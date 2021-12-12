@@ -34,6 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
       listData: userList,
       selectedListData: selectedUserList,
       height: 480,
+      wrapSpacing: 20,
+      buttonSpacing: 30,
       headlineText: "Select Users",
       searchFieldHintText: "Search Here",
       choiceChipLabel: (item) {
@@ -66,20 +68,20 @@ class _MyHomePageState extends State<MyHomePage> {
       },
 
       /// uncomment below code to create custom choice chip
-      /* choiceChipBuilder: (context, item, isSelected) {
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-                border: Border.all(
-              color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-            )),
-            child: Text(
-              item.name,
-              style: TextStyle(
-                  color: isSelected ? Colors.blue[300] : Colors.grey[300]),
-            ),
-          );
+      /*choiceChipBuilder: (context, item, isSelected) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+              border: Border.all(
+            color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
+          )),
+          child: Text(
+            item.name,
+            style: TextStyle(
+                color: isSelected ? Colors.blue[300] : Colors.grey[300]),
+          ),
+        );
       },*/
     );
   }
@@ -90,44 +92,47 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title!),
       ),
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          TextButton(
-            onPressed: () async {
-              var list = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FilterPage(
-                    allTextList: userList,
-                    selectedUserList: selectedUserList,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TextButton(
+              onPressed: () async {
+                var list = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FilterPage(
+                      allTextList: userList,
+                      selectedUserList: selectedUserList,
+                    ),
                   ),
-                ),
-              );
-              if (list != null) {
-                setState(() {
-                  selectedUserList = List.from(list);
-                });
-              }
-            },
-            child: Text(
-              "Filter Page",
-              style: TextStyle(color: Colors.white),
+                );
+                if (list != null) {
+                  setState(() {
+                    selectedUserList = List.from(list);
+                  });
+                }
+              },
+              child: Text(
+                "Filter Page",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
             ),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          ),
-          TextButton(
-            onPressed: _openFilterDialog,
-            child: Text(
-              "Filter Dialog",
-              style: TextStyle(color: Colors.white),
+            TextButton(
+              onPressed: _openFilterDialog,
+              child: Text(
+                "Filter Dialog",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
+              // color: Colors.blue,
             ),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue)),
-            // color: Colors.blue,
-          ),
-        ],
+          ],
+        ),
       ),
       body: Column(
         children: <Widget>[
