@@ -13,9 +13,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-      - working-directory: ./example
-      - run: flutter pub get
-      - run: flutter test
-      - uses: bluefireteam/flutter-gh-pages@v7
-        with:
-          baseHref: /registration-desk/
+      - name: Getting packages
+        working-directory: ./example
+        run: flutter pub get
+      - name: Getting packages
+        working-directory: ./example
+        uses: bluefireteam/flutter-gh-pages@v7
+          with:
+            baseHref: /registration-desk/
