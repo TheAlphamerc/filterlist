@@ -13,7 +13,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-        working-directory: ./example
+      - working-directory: ./example
       - run: flutter pub get
       - run: flutter test
       - uses: bluefireteam/flutter-gh-pages@v7
