@@ -153,6 +153,11 @@ class FilterListDialog {
     /// Used to hide header text.
     bool hideHeaderText = false,
 
+    /// Hide header area shadow if value is true
+    ///
+    /// By default it is false
+    final bool? hideHeaderAreaShadow,
+
     ///Color of close icon
     Color closeIconColor = Colors.black,
     Color headerTextColor = Colors.black,
@@ -298,6 +303,7 @@ class FilterListDialog {
               validateSelectedItem: validateSelectedItem,
               hideSelectedTextCount: hideSelectedTextCount,
               hideCloseIcon: hideCloseIcon,
+              hideHeaderAreaShadow: hideHeaderAreaShadow,
               headerCloseIcon: headerCloseIcon,
               hideHeaderText: hideHeaderText,
               hideSearchField: hideSearchField,

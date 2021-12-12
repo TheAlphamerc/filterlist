@@ -68,6 +68,7 @@ class FilterListWidget<T> extends StatefulWidget {
     this.headerTextStyle,
     this.searchFieldTextStyle,
     this.headerCloseIcon,
+    this.hideHeaderAreaShadow = false,
     this.headlineText = "Select",
     this.searchFieldHintText = "Search here",
     this.hideSelectedTextCount = false,
@@ -158,6 +159,11 @@ class FilterListWidget<T> extends StatefulWidget {
 
   /// If true then it hides the header text.
   final bool? hideHeaderText;
+
+  /// Hide header area shadow if value is true
+  ///
+  /// By default it is false
+  final bool? hideHeaderAreaShadow;
 
   /// if [enableOnlySingleSelection] is true then it disabled the multiple selection.
   /// and enabled the single selection model.
@@ -295,13 +301,15 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
     return Container(
       decoration: BoxDecoration(
         color: widget.backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            offset: Offset(0, 5),
-            blurRadius: 15,
-            color: Color(0x12000000),
-          )
-        ],
+        boxShadow: widget.hideHeaderAreaShadow == true
+            ? null
+            : <BoxShadow>[
+                BoxShadow(
+                  offset: Offset(0, 5),
+                  blurRadius: 15,
+                  color: Color(0x12000000),
+                )
+              ],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

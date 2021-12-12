@@ -243,6 +243,7 @@ Customised control button |Customised selected text |Customised unselected text 
 | borderRadius|`double` | Set border radius of filter dialog. |
 | hideCloseIcon|`bool`|Hide close Icon.|
 | hideheader|`bool`|Hide complete header section from filter dialog.|
+| hideHeaderAreaShadow|`bool`|Hide header area shadow if value is true.|
 | headerCloseIcon|`Widget`|Widget to close the dialog.|
 | hideHeaderText|`bool`|If `true` then it will hide the header text|
 | hideSelectedTextCount|`bool`|Hide selected text count.|
