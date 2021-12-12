@@ -30,6 +30,9 @@ jobs:
     - name: Getting packages
       working-directory: ./example
       run: flutter pub get
+    - name: Checking tests
+      working-directory: ./example
+      run: flutter test
     - name: Creating apk
       working-directory: ./example
       run: flutter build apk
