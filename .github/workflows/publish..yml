@@ -2,7 +2,7 @@ name: Flutter Web
 on:
   push:
     branches:
-      - master
+      - feature/enhancement
 jobs:
   build:
     name: Build Web
@@ -27,7 +27,7 @@ jobs:
           git config --global user.email sonu.sharma045@gmail.com
           git config --global user.name Sonu Sharma
           git status
-          git remote add origin https://${{secrets.commit_secret}}@github.com/TheAlphamerc/flutter_plugin_filter_list.git
+          git remote add origin https://git@github.com/TheAlphamerc/flutter_plugin_filter_list.git
           git checkout -b gh-pages
           git add --all
           git commit -m "Update web"
