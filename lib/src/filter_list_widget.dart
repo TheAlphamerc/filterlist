@@ -47,9 +47,10 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 ///    },
 ///   )
 /// ```
-class FilterListWidget<T> extends StatefulWidget {
+class FilterListWidget<T extends Object> extends StatefulWidget {
   const FilterListWidget({
     Key? key,
+    this.themeData,
     this.height,
     this.width,
     this.listData,
@@ -61,8 +62,6 @@ class FilterListWidget<T> extends StatefulWidget {
     this.borderRadius = 20,
     this.onApplyButtonClick,
     this.choiceChipBuilder,
-    this.selectedChipTextStyle,
-    this.unselectedChipTextStyle,
     this.controlButtonTextStyle,
     this.applyButtonTextStyle,
     this.headerTextStyle,
@@ -81,8 +80,6 @@ class FilterListWidget<T> extends StatefulWidget {
     this.applyButonTextBackgroundColor = Colors.blue,
     this.backgroundColor = Colors.white,
     this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-    this.selectedTextBackgroundColor = Colors.blue,
-    this.unselectedTextbackGroundColor = const Color(0xfff8f8f8),
     this.enableOnlySingleSelection = false,
     this.allButtonText = 'All',
     this.applyButtonText = 'Apply',
@@ -105,6 +102,10 @@ class FilterListWidget<T> extends StatefulWidget {
     this.wrapCrossAxisAlignment = WrapCrossAlignment.start,
     this.wrapSpacing = 0.0,
   }) : super(key: key);
+
+  /// Filter theme
+  final FilterListThemeData? themeData;
+
   final double? height;
   final double? width;
   final double borderRadius;
@@ -120,19 +121,11 @@ class FilterListWidget<T> extends StatefulWidget {
   final Color? backgroundColor;
   final Color? applyButonTextBackgroundColor;
   final Color? searchFieldBackgroundColor;
-  final Color? selectedTextBackgroundColor;
-  final Color? unselectedTextbackGroundColor;
 
   final String headlineText;
   final String searchFieldHintText;
   final bool hideSelectedTextCount;
   final bool hideSearchField;
-
-  /// TextStyle for chip when selected.
-  final TextStyle? selectedChipTextStyle;
-
-  /// TextStyle for chip when not selected.
-  final TextStyle? unselectedChipTextStyle;
 
   /// TextStyle for `All` and `Reset` button text.
   final TextStyle? controlButtonTextStyle;
@@ -246,7 +239,8 @@ class FilterListWidget<T> extends StatefulWidget {
   _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
 }
 
-class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
+class _FilterListWidgetState<T extends Object>
+    extends State<FilterListWidget<T>> {
   List<T>? _listData;
   List<T> _selectedListData = <T>[];
 
@@ -423,10 +417,6 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
               );
             },
             selected: selectedText,
-            selectedTextBackgroundColor: widget.selectedTextBackgroundColor,
-            unselectedTextBackgroundColor: widget.unselectedTextbackGroundColor,
-            selectedChipTextStyle: widget.selectedChipTextStyle,
-            unselectedChipTextStyle: widget.unselectedChipTextStyle,
             text: widget.choiceChipLabel(item),
           ),
         );
@@ -543,18 +533,21 @@ class _FilterListWidgetState<T> extends State<FilterListWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-        child: Container(
-          height: widget.height,
-          width: widget.width,
-          color: widget.backgroundColor,
-          child: Stack(
-            children: <Widget>[
-              _body(),
-            ],
+    return FilterListTheme(
+      data: widget.themeData ?? FilterListThemeData.light(context),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+          child: Container(
+            height: widget.height,
+            width: widget.width,
+            color: widget.backgroundColor,
+            child: Stack(
+              children: <Widget>[
+                _body(),
+              ],
+            ),
           ),
         ),
       ),

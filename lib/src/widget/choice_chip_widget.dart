@@ -2,62 +2,60 @@ import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceChipWidget<T> extends StatelessWidget {
-  const ChoiceChipWidget(
-      {Key? key,
-      this.text,
-      this.item,
-      this.selected,
-      this.onSelected,
-      this.unselectedTextBackgroundColor,
-      this.selectedTextBackgroundColor,
-      this.choiceChipBuilder,
-      this.selectedChipTextStyle,
-      this.unselectedChipTextStyle})
-      : super(key: key);
+  const ChoiceChipWidget({
+    Key? key,
+    this.text,
+    this.item,
+    this.selected,
+    this.onSelected,
+    this.choiceChipBuilder,
+  }) : super(key: key);
 
   final String? text;
   final bool? selected;
-  final Function(bool)? onSelected;
-  final Color? unselectedTextBackgroundColor;
-  final Color? selectedTextBackgroundColor;
-  final TextStyle? selectedChipTextStyle;
-  final TextStyle? unselectedChipTextStyle;
+  final void Function(bool)? onSelected;
   final T? item;
 
   /// Builder for custom choice chip
   final ChoiceChipBuilder? choiceChipBuilder;
 
-  TextStyle getSelectedTextStyle(BuildContext context) {
+  TextStyle? getSelectedTextStyle(BuildContext context) {
     return selected!
-        ? selectedChipTextStyle ??
-            TextStyle(color: Theme.of(context).colorScheme.onPrimary)
-        : unselectedChipTextStyle ?? TextStyle(color: Colors.black);
+        ? FilterListTheme.of(context).choiceChipTheme.selectedTextStyle
+        : FilterListTheme.of(context).choiceChipTheme.textStyle;
+  }
+
+  Color? getBackgroundColor(BuildContext context) {
+    return selected!
+        ? FilterListTheme.of(context).choiceChipTheme.selectedBackgroundColor
+        : FilterListTheme.of(context).choiceChipTheme.backgroundColor;
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = FilterListTheme.of(context).choiceChipTheme;
     return choiceChipBuilder != null
         ? GestureDetector(
-            onTap: () {
-              onSelected!(true);
-            },
+            onTap: () => onSelected!(true),
             child: choiceChipBuilder!(context, item, selected),
           )
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+        : Padding(
+            padding: theme.margin,
             child: ChoiceChip(
-              backgroundColor: selected!
-                  ? selectedTextBackgroundColor
-                  : unselectedTextBackgroundColor,
-              selectedColor: selected!
-                  ? selectedTextBackgroundColor
-                  : unselectedTextBackgroundColor,
-              label: Text(
-                '$text',
-                style: getSelectedTextStyle(context),
-              ),
+              labelPadding: theme.labelPadding,
+              padding: theme.padding,
+              backgroundColor: getBackgroundColor(context),
+              selectedColor: theme.selectedBackgroundColor,
+              label: Text('$text'),
+              labelStyle: getSelectedTextStyle(context),
+              visualDensity: theme.visualDensity,
               selected: selected!,
               onSelected: onSelected,
+              elevation: theme.elevation,
+              side: theme.side,
+              shape: theme.shape,
+              shadowColor: theme.shadowColor,
+              selectedShadowColor: theme.selectedShadowColor,
             ),
           );
   }

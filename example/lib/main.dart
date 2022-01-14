@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _openFilterDialog() async {
     await FilterListDialog.display<User>(
       context,
+      themeData: FilterListThemeData(context: context),
       listData: userList,
       selectedListData: selectedUserList,
       height: 480,
@@ -171,6 +172,9 @@ class FilterPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: FilterListWidget<User>(
+          themeData: FilterListThemeData(
+            context: context,
+          ),
           listData: userList,
           selectedListData: selectedUserList,
           hideHeaderText: true,
@@ -181,17 +185,17 @@ class FilterPage extends StatelessWidget {
             /// Used to print text on chip
             return item!.name;
           },
-          choiceChipBuilder: (context, item, isSelected) {
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-              )),
-              child: Text(item.name),
-            );
-          },
+          // choiceChipBuilder: (context, item, isSelected) {
+          //   return Container(
+          //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          //     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          //     decoration: BoxDecoration(
+          //         border: Border.all(
+          //       color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
+          //     )),
+          //     child: Text(item.name),
+          //   );
+          // },
           validateSelectedItem: (list, val) {
             ///  identify if item is selected or not
             return list!.contains(val);

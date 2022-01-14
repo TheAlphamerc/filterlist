@@ -1,9 +1,9 @@
 library filter_list;
 
+import 'package:filter_list/src/theme/theme.dart';
 import 'package:filter_list/src/widget/choice_chip_widget.dart';
 import 'package:filter_list/src/widget/search_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 part 'filter_list_widget.dart';
 
@@ -90,8 +90,11 @@ part 'filter_list_widget.dart';
 /// ```
 
 class FilterListDialog {
-  static Future display<T>(
+  static Future display<T extends Object>(
     context, {
+
+    /// Filter theme
+    FilterListThemeData? themeData,
 
     /// Pass list containing all data which neeeds to filter.
     required List<T> listData,
@@ -161,8 +164,6 @@ class FilterListDialog {
     ///Color of close icon
     Color closeIconColor = Colors.black,
     Color headerTextColor = Colors.black,
-    Color selectedTextBackgroundColor = Colors.blue,
-    Color unselectedTextbackGroundColor = const Color(0xfff8f8f8),
 
     /// The `barrierDismissible` argument is used to indicate whether tapping on the barrier will dismiss the dialog.
     ///
@@ -186,12 +187,6 @@ class FilterListDialog {
 
     /// Background color for Apply button.
     Color applyButonTextBackgroundColor = Colors.blue,
-
-    /// TextStyle for chip when selected.
-    TextStyle? selectedChipTextStyle,
-
-    /// TextStyle for chip when not selected.
-    TextStyle? unselectedChipTextStyle,
 
     /// TextStyle for [All] and [Reset] button text.
     TextStyle? controlButtonTextStyle,
@@ -287,6 +282,7 @@ class FilterListDialog {
             width: width,
             color: Colors.transparent,
             child: FilterListWidget(
+              themeData: themeData,
               listData: listData,
               choiceChipLabel: choiceChipLabel,
               width: width,
@@ -311,9 +307,7 @@ class FilterListDialog {
               searchFieldHintText: searchFieldHintText,
               applyButtonTextStyle: applyButtonTextStyle,
               searchFieldTextStyle: searchFieldTextStyle,
-              selectedChipTextStyle: selectedChipTextStyle,
               controlButtonTextStyle: controlButtonTextStyle,
-              unselectedChipTextStyle: unselectedChipTextStyle,
               enableOnlySingleSelection: enableOnlySingleSelection,
               searchFieldBackgroundColor: searchFieldBackgroundColor,
               applyButonTextBackgroundColor: applyButonTextBackgroundColor,
@@ -326,8 +320,6 @@ class FilterListDialog {
               buttonSpacing: buttonSpacing,
               validateRemoveItem: validateRemoveItem,
               headerTextColor: headerTextColor,
-              selectedTextBackgroundColor: selectedTextBackgroundColor,
-              unselectedTextbackGroundColor: unselectedTextbackGroundColor,
               wrapAlignment: wrapAlignment,
               wrapCrossAxisAlignment: wrapCrossAxisAlignment,
               wrapSpacing: wrapSpacing,

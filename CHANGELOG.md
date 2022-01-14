@@ -1,3 +1,11 @@
+## [1.0.1] - coming soon
+*  🚨 Breaking change
+  * Removed `selectedChipTextStyle` option
+  * Removed `unselectedChipTextStyle` option
+  * Removed `selectedTextBackgroundColor` option
+  * Removed `unselectedTextbackGroundColor` option
+* Add `FilterListTheme` for filter list widget theme 
+* Add `ChoiceChipTheme` for choice chip theme.
 ## [1.0.0] 21 May 2021
 * Improved visual customization. Including remove custom function.
 * Added below arguments to improve the customization and make it translatable. 
