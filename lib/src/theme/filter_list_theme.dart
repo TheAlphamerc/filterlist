@@ -1,4 +1,5 @@
 import 'package:filter_list/src/theme/choice_chip_theme.dart';
+import 'package:filter_list/src/theme/header_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +21,14 @@ class FilterListTheme extends InheritedWidget {
   /// Retrieves the [FilterListThemeData] from the closest ancestor
   /// [FilterListTheme] widget.
   static FilterListThemeData of(BuildContext context) {
-    final pensilTheme =
-        context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
+    final theme = context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
 
     assert(
-      pensilTheme != null,
-      'You must have a StreamFeedTheme widget at the top of your widget tree',
+      theme != null,
+      'You must have a FilterListTheme widget at the top of your widget tree',
     );
 
-    return pensilTheme!.data;
+    return theme!.data;
   }
 }
 
@@ -41,6 +41,7 @@ class FilterListThemeData with Diagnosticable {
     Brightness? brightness,
     IconThemeData? primaryIconTheme,
     ChoiceChipThemeData? choiceChipTheme,
+    HeaderThemeData? headerTheme,
   }) {
     // Use the given brightness, or a default
     final _brightness = brightness ?? Brightness.light;
@@ -54,10 +55,13 @@ class FilterListThemeData with Diagnosticable {
 
     choiceChipTheme = choiceChipTheme ?? ChoiceChipThemeData.light(context);
 
+    headerTheme = headerTheme ?? HeaderThemeData.light(context);
+
     return FilterListThemeData.raw(
       brightness: _brightness,
       primaryIconTheme: primaryIconTheme,
       choiceChipTheme: choiceChipTheme,
+      headerTheme: headerTheme,
     );
   }
 
@@ -74,6 +78,7 @@ class FilterListThemeData with Diagnosticable {
     required this.brightness,
     required this.primaryIconTheme,
     required this.choiceChipTheme,
+    required this.headerTheme,
   });
 
   /// The [Brightness] of this theme.
@@ -85,6 +90,9 @@ class FilterListThemeData with Diagnosticable {
   /// {@macro choice_chip_theme}
   final ChoiceChipThemeData choiceChipTheme;
 
+  /// {@macro header_theme}
+  final HeaderThemeData headerTheme;
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -93,6 +101,7 @@ class FilterListThemeData with Diagnosticable {
       ..add(DiagnosticsProperty<IconThemeData>(
           'primaryIconTheme', primaryIconTheme))
       ..add(DiagnosticsProperty<ChoiceChipThemeData>(
-          'choiceChipTheme', choiceChipTheme));
+          'choiceChipTheme', choiceChipTheme))
+      ..add(DiagnosticsProperty<HeaderThemeData>('headerTheme', headerTheme));
   }
 }

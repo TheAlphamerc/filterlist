@@ -2,7 +2,7 @@ library filter_list;
 
 import 'package:filter_list/src/theme/theme.dart';
 import 'package:filter_list/src/widget/choice_chip_widget.dart';
-import 'package:filter_list/src/widget/search_field_widget.dart';
+import 'package:filter_list/src/widget/header.dart';
 import 'package:flutter/material.dart';
 
 part 'filter_list_widget.dart';
@@ -131,10 +131,7 @@ class FilterListDialog {
     double borderRadius = 20,
 
     /// Headline text to be display as header of dialog.
-    String headlineText = "Select",
-
-    /// Hint text for search field.
-    String searchFieldHintText = "Search here",
+    String? headlineText,
 
     /// Used to hide selected text count.
     bool hideSelectedTextCount = false,
@@ -153,18 +150,6 @@ class FilterListDialog {
     /// Used to hide header.
     bool hideheader = false,
 
-    /// Used to hide header text.
-    bool hideHeaderText = false,
-
-    /// Hide header area shadow if value is true
-    ///
-    /// By default it is false
-    final bool? hideHeaderAreaShadow,
-
-    ///Color of close icon
-    Color closeIconColor = Colors.black,
-    Color headerTextColor = Colors.black,
-
     /// The `barrierDismissible` argument is used to indicate whether tapping on the barrier will dismiss the dialog.
     ///
     ///  It is true by default and can not be null.
@@ -182,9 +167,6 @@ class FilterListDialog {
     /// Background color of dialog box.
     Color backgroundColor = Colors.white,
 
-    /// Background color for search field.
-    Color searchFieldBackgroundColor = const Color(0xfff5f5f5),
-
     /// Background color for Apply button.
     Color applyButonTextBackgroundColor = Colors.blue,
 
@@ -196,9 +178,6 @@ class FilterListDialog {
 
     /// TextStyle for header text.
     TextStyle? headerTextStyle,
-
-    /// TextStyle for search field text.
-    TextStyle? searchFieldTextStyle,
 
     /// Apply Button Label
     String? applyButtonText = 'Apply',
@@ -291,25 +270,18 @@ class FilterListDialog {
               borderRadius: borderRadius,
               headlineText: headlineText,
               onItemSearch: onItemSearch,
-              closeIconColor: closeIconColor,
-              headerTextStyle: headerTextStyle,
               backgroundColor: backgroundColor,
               selectedListData: selectedListData,
               onApplyButtonClick: onApplyButtonClick,
               validateSelectedItem: validateSelectedItem,
               hideSelectedTextCount: hideSelectedTextCount,
               hideCloseIcon: hideCloseIcon,
-              hideHeaderAreaShadow: hideHeaderAreaShadow,
               headerCloseIcon: headerCloseIcon,
-              hideHeaderText: hideHeaderText,
               hideSearchField: hideSearchField,
               choiceChipBuilder: choiceChipBuilder,
-              searchFieldHintText: searchFieldHintText,
               applyButtonTextStyle: applyButtonTextStyle,
-              searchFieldTextStyle: searchFieldTextStyle,
               controlButtonTextStyle: controlButtonTextStyle,
               enableOnlySingleSelection: enableOnlySingleSelection,
-              searchFieldBackgroundColor: searchFieldBackgroundColor,
               applyButonTextBackgroundColor: applyButonTextBackgroundColor,
               selectedItemsText: selectedItemsText,
               applyButtonText: applyButtonText,
@@ -319,7 +291,6 @@ class FilterListDialog {
               controlContainerDecoration: controlContainerDecoration,
               buttonSpacing: buttonSpacing,
               validateRemoveItem: validateRemoveItem,
-              headerTextColor: headerTextColor,
               wrapAlignment: wrapAlignment,
               wrapCrossAxisAlignment: wrapCrossAxisAlignment,
               wrapSpacing: wrapSpacing,

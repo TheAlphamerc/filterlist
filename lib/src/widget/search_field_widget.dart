@@ -1,35 +1,33 @@
+import 'package:filter_list/src/theme/filter_list_theme.dart';
 import 'package:flutter/material.dart';
 
 class SearchFieldWidget extends StatelessWidget {
-  final String? searchFieldHintText;
-  final Color? searchFieldBackgroundColor;
-  final Function(String)? onChanged;
-  final TextStyle? searchFieldTextStyle;
+  final ValueChanged<String> onChanged;
   const SearchFieldWidget({
     Key? key,
-    this.searchFieldHintText,
-    this.onChanged,
-    this.searchFieldBackgroundColor,
-    this.searchFieldTextStyle,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final headerTheme = FilterListTheme.of(context).headerTheme;
     return Material(
       color: Colors.transparent,
       child: Container(
         margin: EdgeInsets.all(4),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: searchFieldBackgroundColor),
+          borderRadius:
+              BorderRadius.circular(headerTheme.searchFieldBorderRadius),
+          color: headerTheme.searchFieldBackgroundColor,
+        ),
         child: TextField(
           onChanged: onChanged,
-          style: searchFieldTextStyle ??
-              TextStyle(fontSize: 18, color: Colors.black87),
+          style: headerTheme.searchFieldTextStyle,
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.search, color: Colors.black38),
-            hintText: searchFieldHintText,
-            border: InputBorder.none,
+            hintText: headerTheme.searchFieldHintText,
+            hintStyle: headerTheme.searchFieldHintTextStyle,
+            border: headerTheme.searchFieldInputBorder,
           ),
         ),
       ),

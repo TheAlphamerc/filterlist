@@ -64,22 +64,14 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
     this.choiceChipBuilder,
     this.controlButtonTextStyle,
     this.applyButtonTextStyle,
-    this.headerTextStyle,
-    this.searchFieldTextStyle,
     this.headerCloseIcon,
-    this.hideHeaderAreaShadow = false,
-    this.headlineText = "Select",
-    this.searchFieldHintText = "Search here",
+    this.headlineText,
     this.hideSelectedTextCount = false,
     this.hideSearchField = false,
     this.hideCloseIcon = true,
     this.hideHeader = false,
-    this.hideHeaderText = false,
-    this.closeIconColor = Colors.black,
-    this.headerTextColor = Colors.black,
     this.applyButonTextBackgroundColor = Colors.blue,
     this.backgroundColor = Colors.white,
-    this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
     this.enableOnlySingleSelection = false,
     this.allButtonText = 'All',
     this.applyButtonText = 'Apply',
@@ -116,14 +108,11 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   /// The [selectedListData] is used to preselect the choice chips.
   /// It takes list of object and this list should be subset og [listData]
   final List<T>? selectedListData;
-  final Color? closeIconColor;
-  final Color? headerTextColor;
   final Color? backgroundColor;
   final Color? applyButonTextBackgroundColor;
-  final Color? searchFieldBackgroundColor;
 
-  final String headlineText;
-  final String searchFieldHintText;
+  final String? headlineText;
+
   final bool hideSelectedTextCount;
   final bool hideSearchField;
 
@@ -132,12 +121,6 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
 
   /// TextStyle for `Apply` button.
   final TextStyle? applyButtonTextStyle;
-
-  /// TextStyle for header text.
-  final TextStyle? headerTextStyle;
-
-  /// TextStyle for search field text.
-  final TextStyle? searchFieldTextStyle;
 
   /// if true then it hides close icon.
   final bool hideCloseIcon;
@@ -149,14 +132,6 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
 
   /// If true then it hide complete header section.
   final bool? hideHeader;
-
-  /// If true then it hides the header text.
-  final bool? hideHeaderText;
-
-  /// Hide header area shadow if value is true
-  ///
-  /// By default it is false
-  final bool? hideHeaderAreaShadow;
 
   /// if [enableOnlySingleSelection] is true then it disabled the multiple selection.
   /// and enabled the single selection model.
@@ -261,7 +236,24 @@ class _FilterListWidgetState<T extends Object>
         children: <Widget>[
           Column(
             children: <Widget>[
-              widget.hideHeader! ? SizedBox() : _header(),
+              widget.hideHeader!
+                  ? SizedBox()
+                  : Header(
+                      headlineText: widget.headlineText,
+                      hideSearchField: widget.hideSearchField,
+                      hideCloseIcon: widget.hideCloseIcon,
+                      headerCloseIcon: widget.headerCloseIcon,
+                      onSearch: (String value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            _listData = widget.listData;
+                            return;
+                          }
+                          _listData =
+                              widget.onItemSearch(widget.listData, value);
+                        });
+                      },
+                    ),
               widget.hideSelectedTextCount
                   ? SizedBox()
                   : Padding(
@@ -272,17 +264,19 @@ class _FilterListWidgetState<T extends Object>
                       ),
                     ),
               Expanded(
-                  child: Container(
-                padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    alignment: widget.wrapAlignment,
-                    crossAxisAlignment: widget.wrapCrossAxisAlignment,
-                    spacing: widget.wrapSpacing,
-                    children: _buildChoiceList(),
+                child: Container(
+                  padding:
+                      EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      alignment: widget.wrapAlignment,
+                      crossAxisAlignment: widget.wrapCrossAxisAlignment,
+                      spacing: widget.wrapSpacing,
+                      children: _buildChoiceList(),
+                    ),
                   ),
                 ),
-              )),
+              ),
             ],
           ),
           _controlButtonSection()
@@ -291,101 +285,8 @@ class _FilterListWidgetState<T extends Object>
     );
   }
 
-  Widget _header() {
-    return Container(
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        boxShadow: widget.hideHeaderAreaShadow == true
-            ? null
-            : <BoxShadow>[
-                BoxShadow(
-                  offset: Offset(0, 5),
-                  blurRadius: 15,
-                  color: Color(0x12000000),
-                )
-              ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Center(
-                    child: widget.hideHeaderText!
-                        ? Container()
-                        : Text(
-                            widget.headlineText,
-                            style: widget.headerTextStyle ??
-                                Theme.of(context).textTheme.headline4!.copyWith(
-                                    fontSize: 18,
-                                    color: widget.headerTextColor),
-                          ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    onTap: () {
-                      Navigator.pop(context, null);
-                    },
-                    child: widget.hideCloseIcon
-                        ? SizedBox()
-                        : widget.headerCloseIcon ??
-                            Container(
-                              height: 25,
-                              width: 25,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: widget.closeIconColor!),
-                                  shape: BoxShape.circle),
-                              child: Icon(
-                                Icons.close,
-                                color: widget.closeIconColor,
-                              ),
-                            ),
-                  ),
-                ),
-              ],
-            ),
-            widget.hideSearchField
-                ? SizedBox()
-                : SizedBox(
-                    height: 10,
-                  ),
-            widget.hideSearchField
-                ? SizedBox()
-                : SearchFieldWidget(
-                    searchFieldBackgroundColor:
-                        widget.searchFieldBackgroundColor,
-                    searchFieldHintText: widget.searchFieldHintText,
-                    searchFieldTextStyle: widget.searchFieldTextStyle,
-                    onChanged: (String value) {
-                      setState(() {
-                        if (value.isEmpty) {
-                          _listData = widget.listData;
-                          return;
-                        }
-                        _listData = widget.onItemSearch(widget.listData, value);
-                      });
-                    },
-                  )
-          ],
-        ),
-      ),
-    );
-  }
-
   List<Widget> _buildChoiceList() {
+    // final theme = FilterListTheme.of(context).choiceChipTheme;
     List<Widget> choices = [];
     _listData!.forEach(
       (item) {
@@ -533,21 +434,21 @@ class _FilterListWidgetState<T extends Object>
 
   @override
   Widget build(BuildContext context) {
-    return FilterListTheme(
-      data: widget.themeData ?? FilterListThemeData.light(context),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-          child: Container(
-            height: widget.height,
-            width: widget.width,
-            color: widget.backgroundColor,
-            child: Stack(
-              children: <Widget>[
-                _body(),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+        child: Container(
+          height: widget.height,
+          width: widget.width,
+          color: widget.backgroundColor,
+          child: Stack(
+            children: <Widget>[
+              FilterListTheme(
+                data: widget.themeData ?? FilterListThemeData.light(context),
+                child: _body(),
+              )
+            ],
           ),
         ),
       ),
