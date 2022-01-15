@@ -65,7 +65,7 @@ class ChoiceChipThemeData with Diagnosticable {
     this.selectedTextStyle = const TextStyle(color: Colors.white),
     this.textStyle,
     this.selectedBackgroundColor = Colors.blue,
-    this.backgroundColor,
+    this.backgroundColor = const Color(0xfff8f8f8),
     this.visualDensity,
     this.elevation,
     this.side,
@@ -73,7 +73,7 @@ class ChoiceChipThemeData with Diagnosticable {
     this.shadowColor = Colors.black,
     this.selectedShadowColor = Colors.black,
     this.padding,
-    this.labelPadding,
+    this.labelPadding = const EdgeInsets.symmetric(horizontal: 4.0),
     this.margin = const EdgeInsets.symmetric(horizontal: 10.0),
   });
 

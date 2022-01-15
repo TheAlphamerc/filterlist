@@ -2,6 +2,7 @@ library filter_list;
 
 import 'package:filter_list/src/theme/theme.dart';
 import 'package:filter_list/src/widget/choice_chip_widget.dart';
+import 'package:filter_list/src/widget/control_button_bar.dart';
 import 'package:filter_list/src/widget/header.dart';
 import 'package:flutter/material.dart';
 

@@ -31,14 +31,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void _openFilterDialog() async {
     await FilterListDialog.display<User>(
       context,
-      themeData: FilterListThemeData(context: context),
+      themeData: FilterListThemeData(
+        context: context,
+        controlButtonBarTheme: ControlButtonBarThemeData(
+          context,
+        ),
+      ),
       listData: userList,
       selectedListData: selectedUserList,
       height: 480,
-      wrapSpacing: 20,
-      buttonSpacing: 30,
-      headlineText: "Select Users",
-      searchFieldHintText: "Search Here",
+      wrapSpacing: 0,
+      buttonSpacing: 0,
       choiceChipLabel: (item) {
         return item!.name;
       },
@@ -174,10 +177,12 @@ class FilterPage extends StatelessWidget {
         child: FilterListWidget<User>(
           themeData: FilterListThemeData(
             context: context,
+            choiceChipTheme: ChoiceChipThemeData(
+              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            ),
           ),
           listData: userList,
           selectedListData: selectedUserList,
-          hideHeaderText: true,
           onApplyButtonClick: (list) {
             Navigator.pop(context, list);
           },
@@ -238,6 +243,46 @@ List<User> userList = [
   User(name: "Catherine ", avatar: "user.png"),
   User(name: "Stepanida  ", avatar: "user.png"),
   User(name: "Carolina ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Emelyan ", avatar: "user.png"),
+  User(name: "Catherine ", avatar: "user.png"),
+  User(name: "Stepanida  ", avatar: "user.png"),
+  User(name: "Carolina ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Emelyan ", avatar: "user.png"),
+  User(name: "Catherine ", avatar: "user.png"),
+  User(name: "Stepanida  ", avatar: "user.png"),
+  User(name: "Carolina ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Emelyan ", avatar: "user.png"),
+  User(name: "Catherine ", avatar: "user.png"),
+  User(name: "Stepanida  ", avatar: "user.png"),
+  User(name: "Carolina ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Emelyan ", avatar: "user.png"),
+  User(name: "Catherine ", avatar: "user.png"),
+  User(name: "Stepanida  ", avatar: "user.png"),
+  User(name: "Carolina ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Nail  ", avatar: "user.png"),
   User(name: "Nail  ", avatar: "user.png"),
 ];
 

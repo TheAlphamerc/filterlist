@@ -72,11 +72,6 @@ class HeaderThemeData with Diagnosticable {
     this.searchFieldBorderRadius = 100,
     this.searchFieldHintText = 'Search here...',
     this.searchFieldHintTextStyle,
-    this.shadowColor = Colors.black,
-    this.selectedShadowColor = Colors.black,
-    this.padding,
-    this.labelPadding,
-    this.margin = const EdgeInsets.symmetric(horizontal: 10.0),
   });
 
   factory HeaderThemeData.light(BuildContext context) => HeaderThemeData(
@@ -88,11 +83,6 @@ class HeaderThemeData with Diagnosticable {
         backgroundColor: Colors.white,
         searchFieldInputBorder: InputBorder.none,
         searchFieldBorderRadius: 100,
-        selectedShadowColor: Colors.black,
-        shadowColor: Colors.black,
-        padding: const EdgeInsets.all(4),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        margin: const EdgeInsets.symmetric(horizontal: 10.0),
         boxShadow: <BoxShadow>[
           BoxShadow(
             offset: Offset(0, 5),
@@ -143,30 +133,6 @@ class HeaderThemeData with Diagnosticable {
   /// The [TextStyle] for search field hint text
   final TextStyle? searchFieldHintTextStyle;
 
-  /// Color of the chip's shadow when the searchFieldBorderRadius is greater than 0.
-  ///
-  /// The default is [Colors.black].
-  final Color? shadowColor;
-
-  /// Color of the chip's shadow when the searchFieldBorderRadius is greater than 0 and the chip is selected.
-  ///
-  ///The default is [Colors.black].
-  final Color? selectedShadowColor;
-
-  /// The padding between the contents of the chip and the outside [searchFieldHintTextStyle].
-  ///
-  /// Defaults to 4 logical pixels on all sides.
-
-  final EdgeInsetsGeometry? padding;
-
-  /// The padding around the [label] widget.
-  ///
-  /// By default, this is 4 logical pixels at the beginning and the end of the label, and zero on top and bottom.
-  final EdgeInsetsGeometry? labelPadding;
-
-  /// The margin around choice chip
-  final EdgeInsetsGeometry margin;
-
   /// Creates a copy of this theme, but with the given fields replaced with
   /// the new values.
   HeaderThemeData copyWith({
@@ -200,11 +166,6 @@ class HeaderThemeData with Diagnosticable {
       searchFieldHintText: searchFieldHintText ?? this.searchFieldHintText,
       searchFieldHintTextStyle:
           searchFieldHintTextStyle ?? this.searchFieldHintTextStyle,
-      shadowColor: shadowColor ?? this.shadowColor,
-      selectedShadowColor: selectedShadowColor ?? this.selectedShadowColor,
-      padding: padding ?? this.padding,
-      labelPadding: labelPadding ?? this.labelPadding,
-      margin: margin ?? this.margin,
     );
   }
 
@@ -227,12 +188,6 @@ class HeaderThemeData with Diagnosticable {
       searchFieldBorderRadius: a.searchFieldBorderRadius,
       searchFieldHintText: a.searchFieldHintText,
       searchFieldHintTextStyle: a.searchFieldHintTextStyle,
-      shadowColor: Color.lerp(a.shadowColor, b.shadowColor, t),
-      selectedShadowColor:
-          Color.lerp(a.selectedShadowColor, b.selectedShadowColor, t),
-      padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t),
-      labelPadding: EdgeInsetsGeometry.lerp(a.labelPadding, b.labelPadding, t),
-      margin: EdgeInsetsGeometry.lerp(a.margin, b.margin, t)!,
     );
   }
 
@@ -249,11 +204,6 @@ class HeaderThemeData with Diagnosticable {
           searchFieldBorderRadius == other.searchFieldBorderRadius &&
           searchFieldHintText == other.searchFieldHintText &&
           searchFieldHintTextStyle == other.searchFieldHintTextStyle &&
-          shadowColor == other.shadowColor &&
-          selectedShadowColor == other.selectedShadowColor &&
-          padding == other.padding &&
-          labelPadding == other.labelPadding &&
-          margin == other.margin &&
           backgroundColor == other.backgroundColor;
 
   @override
@@ -266,11 +216,6 @@ class HeaderThemeData with Diagnosticable {
       searchFieldBorderRadius.hashCode ^
       searchFieldHintText.hashCode ^
       searchFieldHintTextStyle.hashCode ^
-      shadowColor.hashCode ^
-      selectedShadowColor.hashCode ^
-      padding.hashCode ^
-      labelPadding.hashCode ^
-      margin.hashCode ^
       backgroundColor.hashCode;
 
   @override
@@ -290,13 +235,6 @@ class HeaderThemeData with Diagnosticable {
         'searchFieldHintText', searchFieldHintText));
     properties.add(DiagnosticsProperty<TextStyle>(
         'searchFieldHintTextStyle', searchFieldHintTextStyle));
-    properties.add(DiagnosticsProperty<Color>('shadowColor', shadowColor));
-    properties.add(
-        DiagnosticsProperty<Color>('selectedShadowColor', selectedShadowColor));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('labelPadding', labelPadding));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin));
     properties
         .add(DiagnosticsProperty<Color>('backgroundColor', backgroundColor));
   }

@@ -1,4 +1,5 @@
 import 'package:filter_list/src/theme/choice_chip_theme.dart';
+import 'package:filter_list/src/theme/control_button_bar_theme.dart';
 import 'package:filter_list/src/theme/header_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class FilterListThemeData with Diagnosticable {
     IconThemeData? primaryIconTheme,
     ChoiceChipThemeData? choiceChipTheme,
     HeaderThemeData? headerTheme,
+    ControlButtonBarThemeData? controlButtonBarTheme,
   }) {
     // Use the given brightness, or a default
     final _brightness = brightness ?? Brightness.light;
@@ -57,11 +59,15 @@ class FilterListThemeData with Diagnosticable {
 
     headerTheme = headerTheme ?? HeaderThemeData.light(context);
 
+    controlButtonBarTheme =
+        controlButtonBarTheme ?? ControlButtonBarThemeData.light(context);
+
     return FilterListThemeData.raw(
       brightness: _brightness,
       primaryIconTheme: primaryIconTheme,
       choiceChipTheme: choiceChipTheme,
       headerTheme: headerTheme,
+      controlBarButtonTheme: controlButtonBarTheme,
     );
   }
 
@@ -74,12 +80,12 @@ class FilterListThemeData with Diagnosticable {
       FilterListThemeData(brightness: Brightness.dark, context: context);
 
   /// Raw [FilterListThemeData] initialization.
-  const FilterListThemeData.raw({
-    required this.brightness,
-    required this.primaryIconTheme,
-    required this.choiceChipTheme,
-    required this.headerTheme,
-  });
+  const FilterListThemeData.raw(
+      {required this.brightness,
+      required this.primaryIconTheme,
+      required this.choiceChipTheme,
+      required this.headerTheme,
+      required this.controlBarButtonTheme});
 
   /// The [Brightness] of this theme.
   final Brightness brightness;
@@ -93,6 +99,9 @@ class FilterListThemeData with Diagnosticable {
   /// {@macro header_theme}
   final HeaderThemeData headerTheme;
 
+  /// {@macro control_button_theme}
+  final ControlButtonBarThemeData controlBarButtonTheme;
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -102,6 +111,8 @@ class FilterListThemeData with Diagnosticable {
           'primaryIconTheme', primaryIconTheme))
       ..add(DiagnosticsProperty<ChoiceChipThemeData>(
           'choiceChipTheme', choiceChipTheme))
-      ..add(DiagnosticsProperty<HeaderThemeData>('headerTheme', headerTheme));
+      ..add(DiagnosticsProperty<HeaderThemeData>('headerTheme', headerTheme))
+      ..add(DiagnosticsProperty<ControlButtonBarThemeData>(
+          'controlBarButtonTheme', controlBarButtonTheme));
   }
 }

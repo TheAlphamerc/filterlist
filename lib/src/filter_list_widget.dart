@@ -279,7 +279,31 @@ class _FilterListWidgetState<T extends Object>
               ),
             ],
           ),
-          _controlButtonSection()
+
+          /// Bottom section for control buttons
+          ControlButtonBar(
+            allButtonText: widget.allButtonText,
+            applyButtonText: widget.applyButtonText,
+            resetButtonText: widget.resetButtonText,
+            enableOnlySingleSelection: widget.enableOnlySingleSelection ?? true,
+            onAllButtonClick: () {
+              setState(() {
+                _selectedListData = List.from(_listData!);
+              });
+            },
+            onResetButtonClick: () {
+              setState(() {
+                _selectedListData = <T>[];
+              });
+            },
+            onApplyButtonClick: () {
+              if (widget.onApplyButtonClick != null) {
+                widget.onApplyButtonClick!(_selectedListData);
+              } else {
+                Navigator.pop(context, _selectedListData);
+              }
+            },
+          )
         ],
       ),
     );
@@ -330,106 +354,6 @@ class _FilterListWidgetState<T extends Object>
       ),
     );
     return choices;
-  }
-
-  Widget _controlButton(
-      {required String choiceChipLabel,
-      Function? onPressed,
-      Color backgroundColor = Colors.transparent,
-      double elevation = 0,
-      TextStyle? textStyle,
-      double? radius}) {
-    return TextButton(
-      style: ButtonStyle(
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(radius ?? 25)),
-          )),
-          backgroundColor: MaterialStateProperty.all(backgroundColor),
-          elevation: MaterialStateProperty.all(elevation),
-          foregroundColor:
-              MaterialStateProperty.all(Theme.of(context).buttonColor)),
-      onPressed: onPressed as void Function()?,
-      clipBehavior: Clip.antiAlias,
-      child: Text(
-        choiceChipLabel,
-        style: textStyle,
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
-  /// Bottom section for control buttons
-  Widget _controlButtonSection() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 45,
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        alignment: Alignment.center,
-        child: Container(
-          decoration: widget.controlContainerDecoration,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _controlButton(
-                  choiceChipLabel: '${widget.allButtonText}',
-                  onPressed: widget.enableOnlySingleSelection!
-                      ? null
-                      : () {
-                          setState(() {
-                            _selectedListData = List.from(_listData!);
-                          });
-                        },
-                  // textColor:
-                  textStyle: widget.controlButtonTextStyle ??
-                      Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 20,
-                          color: widget.enableOnlySingleSelection!
-                              ? Theme.of(context).dividerColor
-                              : Theme.of(context).primaryColor),
-                  radius: widget.buttonRadius),
-              SizedBox(
-                width: widget.buttonSpacing ?? 0,
-              ),
-              _controlButton(
-                  choiceChipLabel: '${widget.resetButtonText}',
-                  onPressed: () {
-                    setState(() {
-                      _selectedListData.clear();
-                    });
-                  },
-                  textStyle: widget.controlButtonTextStyle ??
-                      Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 20, color: Theme.of(context).primaryColor),
-                  radius: widget.buttonRadius),
-              SizedBox(
-                width: widget.buttonSpacing ?? 0,
-              ),
-              _controlButton(
-                  choiceChipLabel: '${widget.applyButtonText}',
-                  onPressed: () {
-                    if (widget.onApplyButtonClick != null) {
-                      widget.onApplyButtonClick!(_selectedListData);
-                    } else {
-                      Navigator.pop(context, _selectedListData);
-                    }
-                  },
-                  elevation: 5,
-                  backgroundColor: widget.applyButonTextBackgroundColor!,
-                  textStyle: widget.applyButtonTextStyle ??
-                      Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 20,
-                          color: widget.enableOnlySingleSelection!
-                              ? Theme.of(context).dividerColor
-                              : Theme.of(context).buttonColor),
-                  radius: widget.buttonRadius),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   @override
