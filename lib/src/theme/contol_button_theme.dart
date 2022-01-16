@@ -70,16 +70,16 @@ class ControlButtonThemeData with Diagnosticable {
     this.primaryButtonTextStyle =
         const TextStyle(fontSize: 16, color: Colors.white),
     this.primaryButtonBackgroundColor = const Color(0xFF84B0F1),
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
     this.borderRadius = 25,
     this.boxShadow,
     this.elevation,
-    this.padding: EdgeInsets.zero,
+    this.padding: const EdgeInsets.symmetric(horizontal: 16),
   });
 
   factory ControlButtonThemeData.light(BuildContext context) =>
       ControlButtonThemeData(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: 16),
         textStyle: TextStyle(fontSize: 16, color: Colors.black87),
         primaryButtonTextStyle: TextStyle(fontSize: 16, color: Colors.white),
         primaryButtonBackgroundColor: Color(0xFF84B0F1),

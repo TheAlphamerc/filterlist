@@ -168,9 +168,6 @@ class FilterListDialog {
     /// Background color of dialog box.
     Color backgroundColor = Colors.white,
 
-    /// Background color for Apply button.
-    Color applyButonTextBackgroundColor = Colors.blue,
-
     /// TextStyle for [All] and [Reset] button text.
     TextStyle? controlButtonTextStyle,
 
@@ -191,25 +188,6 @@ class FilterListDialog {
 
     /// Selected items count text
     String? selectedItemsText = 'selected items',
-
-    /// Control container box decoration
-    BoxDecoration? controlContainerDecoration = const BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(Radius.circular(25)),
-      boxShadow: <BoxShadow>[
-        BoxShadow(
-          offset: Offset(0, 5),
-          blurRadius: 15,
-          color: Color(0x12000000),
-        )
-      ],
-    ),
-
-    /// Button radius
-    double? buttonRadius,
-
-    /// Spacing between control buttons
-    double? buttonSpacing,
 
     /// The amount of padding added to [MediaQueryData.viewInsets] on the outside of the dialog.
     /// This defines the minimum space between the screen's edges and the dialog.
@@ -283,14 +261,10 @@ class FilterListDialog {
               applyButtonTextStyle: applyButtonTextStyle,
               controlButtonTextStyle: controlButtonTextStyle,
               enableOnlySingleSelection: enableOnlySingleSelection,
-              applyButonTextBackgroundColor: applyButonTextBackgroundColor,
               selectedItemsText: selectedItemsText,
               applyButtonText: applyButtonText,
               resetButtonText: resetButtonText,
               allButtonText: allButtonText,
-              buttonRadius: buttonRadius,
-              controlContainerDecoration: controlContainerDecoration,
-              buttonSpacing: buttonSpacing,
               validateRemoveItem: validateRemoveItem,
               wrapAlignment: wrapAlignment,
               wrapCrossAxisAlignment: wrapCrossAxisAlignment,

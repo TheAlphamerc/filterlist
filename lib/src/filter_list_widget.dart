@@ -10,7 +10,7 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
-/// {@macro arguments}
+/// {@template arguments}
 ///
 /// ### This example shows how to use [FilterListWidget]
 ///  ``` dart
@@ -47,6 +47,7 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 ///    },
 ///   )
 /// ```
+/// {@endtemplate}
 class FilterListWidget<T extends Object> extends StatefulWidget {
   const FilterListWidget({
     Key? key,
@@ -70,26 +71,12 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
     this.hideSearchField = false,
     this.hideCloseIcon = true,
     this.hideHeader = false,
-    this.applyButonTextBackgroundColor = Colors.blue,
     this.backgroundColor = Colors.white,
     this.enableOnlySingleSelection = false,
     this.allButtonText = 'All',
     this.applyButtonText = 'Apply',
     this.resetButtonText = 'Reset',
     this.selectedItemsText = 'selected items',
-    this.controlContainerDecoration = const BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(Radius.circular(25)),
-      boxShadow: <BoxShadow>[
-        BoxShadow(
-          offset: Offset(0, 5),
-          blurRadius: 15,
-          color: Color(0x12000000),
-        )
-      ],
-    ),
-    this.buttonRadius,
-    this.buttonSpacing,
     this.wrapAlignment = WrapAlignment.start,
     this.wrapCrossAxisAlignment = WrapCrossAlignment.start,
     this.wrapSpacing = 0.0,
@@ -109,7 +96,6 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   /// It takes list of object and this list should be subset og [listData]
   final List<T>? selectedListData;
   final Color? backgroundColor;
-  final Color? applyButonTextBackgroundColor;
 
   final String? headlineText;
 
@@ -168,28 +154,6 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
 
   /// Selected items count text
   final String? selectedItemsText;
-
-  /// Control button actions container styling
-  /// ``` dart
-  ///  const BoxDecoration(
-  ///   color: Colors.white,
-  ///   borderRadius: BorderRadius.all(Radius.circular(25)),
-  ///   boxShadow: <BoxShadow>[
-  ///     BoxShadow(
-  ///       offset: Offset(0, 5),
-  ///       blurRadius: 15,
-  ///       color: Color(0x12000000),
-  ///     )
-  ///   ],
-  /// ),
-  /// ```
-  final BoxDecoration? controlContainerDecoration;
-
-  /// Control button radius
-  final double? buttonRadius;
-
-  /// Spacing between control buttons
-  final double? buttonSpacing;
 
   /// How the choice chip within a run should be placed in the main axis.
   /// For example, if [wrapSpacing] is [WrapAlignment.center], the choice chip in each run are grouped together in the center of their run in the main axis.

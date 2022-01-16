@@ -51,7 +51,7 @@ class ControlButtonBarThemeData with Diagnosticable {
     BuildContext context, {
     double? height,
     double? buttonSpacing,
-    BoxDecoration? controlContainerDecoration,
+    BoxDecoration? decoration,
     ControlButtonThemeData? controlButtonTheme,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
@@ -59,23 +59,23 @@ class ControlButtonBarThemeData with Diagnosticable {
     controlButtonTheme ??= ControlButtonThemeData.light(context);
     height ??= 50;
     margin ??= EdgeInsets.symmetric(horizontal: 10, vertical: 10);
-    padding ??= EdgeInsets.zero;
+    padding ??= EdgeInsets.symmetric(horizontal: 10);
     buttonSpacing ??= 0;
-    controlContainerDecoration ??= const BoxDecoration(
+    decoration ??= const BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(25)),
       boxShadow: <BoxShadow>[
         BoxShadow(
           offset: Offset(0, 5),
           blurRadius: 15,
-          color: Color(0x12000000),
+          color: Color(0x27000000),
         )
       ],
     );
     return ControlButtonBarThemeData.raw(
       controlButtonTheme: controlButtonTheme,
       buttonSpacing: buttonSpacing,
-      controlContainerDecoration: controlContainerDecoration,
+      controlContainerDecoration: decoration,
       margin: margin,
       padding: padding,
       height: height,
@@ -88,7 +88,7 @@ class ControlButtonBarThemeData with Diagnosticable {
     this.buttonSpacing = 0,
     this.height = 50,
     this.margin = const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-    this.padding = const EdgeInsets.all(0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.controlContainerDecoration = const BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -110,7 +110,7 @@ class ControlButtonBarThemeData with Diagnosticable {
         buttonSpacing: 0,
         height: 50,
         controlButtonTheme: ControlButtonThemeData.light(context),
-        controlContainerDecoration: const BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(25)),
           boxShadow: <BoxShadow>[
@@ -123,7 +123,22 @@ class ControlButtonBarThemeData with Diagnosticable {
         ),
       );
 
+  /// {@template control_container_decoration}
   /// The box decoration of the control button bar container.
+  /// ``` dart
+  ///  const BoxDecoration(
+  ///   color: Colors.white,
+  ///   borderRadius: BorderRadius.all(Radius.circular(25)),
+  ///   boxShadow: <BoxShadow>[
+  ///     BoxShadow(
+  ///       offset: Offset(0, 5),
+  ///       blurRadius: 15,
+  ///       color: Color(0x12000000),
+  ///     )
+  ///   ],
+  /// ),
+  /// ```
+  /// {@endtemplate}
   final BoxDecoration? controlContainerDecoration;
 
   /// Theme for control button

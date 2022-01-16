@@ -14,6 +14,9 @@
   - Removed `searchFieldTextStyle` option
   - Removed `headerTextStyle` option
   - Removed `searchFieldHintText` option
+  - Removed `applyButonTextBackgroundColor` option
+  - Removed `buttonRadius` option
+  - Removed `buttonSpacing` option
 
 - Add `FilterListTheme` for filter list widget theme
 - Add `ChoiceChipTheme` for choice chip theme.

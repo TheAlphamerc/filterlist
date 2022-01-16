@@ -41,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedListData: selectedUserList,
       height: 480,
       wrapSpacing: 0,
-      buttonSpacing: 0,
       choiceChipLabel: (item) {
         return item!.name;
       },
@@ -177,8 +176,8 @@ class FilterPage extends StatelessWidget {
         child: FilterListWidget<User>(
           themeData: FilterListThemeData(
             context: context,
-            choiceChipTheme: ChoiceChipThemeData(
-              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            controlButtonBarTheme: ControlButtonBarThemeData(
+              context,
             ),
           ),
           listData: userList,
