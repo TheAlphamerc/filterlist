@@ -1,8 +1,10 @@
+import 'package:filter_list/src/state/filter_state.dart';
+import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/theme/theme.dart';
 import 'package:filter_list/src/widget/control_button.dart';
 import 'package:flutter/material.dart';
 
-class ControlButtonBar extends StatelessWidget {
+class ControlButtonBar<T> extends StatelessWidget {
   const ControlButtonBar({
     Key? key,
     this.enableOnlySingleSelection = false,
@@ -10,16 +12,12 @@ class ControlButtonBar extends StatelessWidget {
     this.resetButtonText,
     this.applyButtonText,
     this.onApplyButtonClick,
-    this.onResetButtonClick,
-    this.onAllButtonClick,
   }) : super(key: key);
   final bool enableOnlySingleSelection;
   final String? allButtonText;
   final String? resetButtonText;
   final String? applyButtonText;
   final VoidCallback? onApplyButtonClick;
-  final VoidCallback? onResetButtonClick;
-  final VoidCallback? onAllButtonClick;
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +39,41 @@ class ControlButtonBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    ContorlButton(
-                      choiceChipLabel: '$allButtonText',
-                      onPressed: onAllButtonClick,
-                    ),
-                    SizedBox(width: theme.buttonSpacing),
+                    /* All Button */
+                    if (!enableOnlySingleSelection) ...[
+                      ContorlButton(
+                        choiceChipLabel: '$allButtonText',
+                        onPressed: () {
+                          final state = StateProvider.of<FilterState<T>>(
+                            context,
+                            rebuildOnChange: true,
+                          );
+                          state.selctedItems = state.items;
+                        },
+                      ),
+                      SizedBox(width: theme.buttonSpacing),
+
+                      /* Reset Button */
+                    ],
                     ContorlButton(
                       choiceChipLabel: '$resetButtonText',
-                      onPressed: onResetButtonClick,
+                      onPressed: () {
+                        final state = StateProvider.of<FilterState<T>>(
+                          context,
+                          rebuildOnChange: true,
+                        );
+                        state.selctedItems = [];
+                      },
                     ),
                     SizedBox(width: theme.buttonSpacing),
+
+                    /* Apply Button */
                     ContorlButton(
                       choiceChipLabel: '$applyButtonText',
                       primaryButton: true,
-                      onPressed: onApplyButtonClick,
+                      onPressed: () {
+                        onApplyButtonClick?.call();
+                      },
                     ),
                   ],
                 ),

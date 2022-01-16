@@ -1,10 +1,10 @@
 part of 'filter_list_dialog.dart';
 
 typedef ValidateSelectedItem<T> = bool Function(List<T>? list, T item);
-typedef OnApplyButtonClick<T> = Function(List<T>? list);
+typedef OnApplyButtonClick<T> = void Function(List<T>? list);
 typedef ChoiceChipBuilder<T> = Widget Function(
     BuildContext context, T? item, bool? iselected);
-typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String text);
+typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String query);
 typedef LabelDelegate<T> = String? Function(T?);
 typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
@@ -48,23 +48,18 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 ///   )
 /// ```
 /// {@endtemplate}
-class FilterListWidget<T extends Object> extends StatefulWidget {
+class FilterListWidget<T extends Object> extends StatelessWidget {
   const FilterListWidget({
     Key? key,
     this.themeData,
-    this.height,
-    this.width,
     this.listData,
     required this.validateSelectedItem,
     this.validateRemoveItem,
     required this.choiceChipLabel,
     required this.onItemSearch,
     this.selectedListData,
-    this.borderRadius = 20,
     this.onApplyButtonClick,
     this.choiceChipBuilder,
-    this.controlButtonTextStyle,
-    this.applyButtonTextStyle,
     this.headerCloseIcon,
     this.headlineText,
     this.hideSelectedTextCount = false,
@@ -77,17 +72,10 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
     this.applyButtonText = 'Apply',
     this.resetButtonText = 'Reset',
     this.selectedItemsText = 'selected items',
-    this.wrapAlignment = WrapAlignment.start,
-    this.wrapCrossAxisAlignment = WrapCrossAlignment.start,
-    this.wrapSpacing = 0.0,
   }) : super(key: key);
 
   /// Filter theme
   final FilterListThemeData? themeData;
-
-  final double? height;
-  final double? width;
-  final double borderRadius;
 
   /// Pass list containing all data which neeeds to filter
   final List<T>? listData;
@@ -101,12 +89,6 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
 
   final bool hideSelectedTextCount;
   final bool hideSearchField;
-
-  /// TextStyle for `All` and `Reset` button text.
-  final TextStyle? controlButtonTextStyle;
-
-  /// TextStyle for `Apply` button.
-  final TextStyle? applyButtonTextStyle;
 
   /// if true then it hides close icon.
   final bool hideCloseIcon;
@@ -123,7 +105,7 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   /// and enabled the single selection model.
   ///
   /// Defautl value is `false`
-  final bool? enableOnlySingleSelection;
+  final bool enableOnlySingleSelection;
 
   /// The `onApplyButtonClick` is a callback which return list of all selected items on apply button click.  if no item is selected then it will return empty list.
   final OnApplyButtonClick<T>? onApplyButtonClick;
@@ -155,116 +137,65 @@ class FilterListWidget<T extends Object> extends StatefulWidget {
   /// Selected items count text
   final String? selectedItemsText;
 
-  /// How the choice chip within a run should be placed in the main axis.
-  /// For example, if [wrapSpacing] is [WrapAlignment.center], the choice chip in each run are grouped together in the center of their run in the main axis.
-  ///
-  /// Defaults to [WrapAlignment.start].
-  final WrapAlignment wrapAlignment;
-
-  /// How the choice chip within a run should be aligned relative to each other in the cross axis.
-  ///For example, if this is set to [WrapCrossAlignment.end], and the [direction] is [Axis.horizontal], then the choice chip within each run will have their bottom edges aligned to the bottom edge of the run.
-  ///
-  ///Defaults to [WrapCrossAlignment.start].
-  final WrapCrossAlignment wrapCrossAxisAlignment;
-
-  ///How much space to place between choice chip in a run in the main axis.
-  ///For example, if [wrapSpacing] is 10.0, the choice chip will be spaced at least 10.0 logical pixels apart in the main axis.
-  ///If there is additional free space in a run (e.g., because the wrap has a minimum size that is not filled or because some runs are longer than others), the additional free space will be allocated according to the [alignment].
-  ///
-  ///Defaults to 0.0.
-  final double wrapSpacing;
-
-  @override
-  _FilterListWidgetState<T> createState() => _FilterListWidgetState<T>();
-}
-
-class _FilterListWidgetState<T extends Object>
-    extends State<FilterListWidget<T>> {
-  List<T>? _listData;
-  List<T> _selectedListData = <T>[];
-
-  @override
-  void initState() {
-    _listData = widget.listData == null ? <T>[] : List.from(widget.listData!);
-    _selectedListData = widget.selectedListData == null
-        ? <T>[]
-        : List<T>.from(widget.selectedListData!);
-    super.initState();
-  }
-
-  bool showApplyButton = false;
-
-  Widget _body() {
+  Widget _body(BuildContext context) {
+    final theme = FilterListTheme.of(context);
     return Container(
+      color: theme.backgroundColor,
       child: Stack(
         children: <Widget>[
           Column(
             children: <Widget>[
-              widget.hideHeader!
+              hideHeader!
                   ? SizedBox()
                   : Header(
-                      headlineText: widget.headlineText,
-                      hideSearchField: widget.hideSearchField,
-                      hideCloseIcon: widget.hideCloseIcon,
-                      headerCloseIcon: widget.headerCloseIcon,
+                      headlineText: headlineText,
+                      hideSearchField: hideSearchField,
+                      hideCloseIcon: hideCloseIcon,
+                      headerCloseIcon: headerCloseIcon,
                       onSearch: (String value) {
-                        setState(() {
-                          if (value.isEmpty) {
-                            _listData = widget.listData;
-                            return;
-                          }
-                          _listData =
-                              widget.onItemSearch(widget.listData, value);
-                        });
+                        if (value.isEmpty) {
+                          FilterState.of<T>(context).items = listData;
+                          return;
+                        }
+                        FilterState.of<T>(context).items =
+                            onItemSearch(listData, value);
                       },
                     ),
-              widget.hideSelectedTextCount
+              hideSelectedTextCount
                   ? SizedBox()
                   : Padding(
                       padding: EdgeInsets.only(top: 5),
-                      child: Text(
-                        '${_selectedListData.length} ${widget.selectedItemsText}',
-                        style: Theme.of(context).textTheme.caption,
+                      child: ChangeNotifierProvider<FilterState<T>>(
+                        builder: (context, state, child) => Text(
+                          '${state.selctedItemsCount} $selectedItemsText',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
                       ),
                     ),
               Expanded(
-                child: Container(
-                  padding:
-                      EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
-                  child: SingleChildScrollView(
-                    child: Wrap(
-                      alignment: widget.wrapAlignment,
-                      crossAxisAlignment: widget.wrapCrossAxisAlignment,
-                      spacing: widget.wrapSpacing,
-                      children: _buildChoiceList(),
-                    ),
-                  ),
+                child: ChoiceList<T>(
+                  choiceChipBuilder: choiceChipBuilder,
+                  choiceChipLabel: choiceChipLabel,
+                  enableOnlySingleSelection: enableOnlySingleSelection,
+                  validateSelectedItem: validateSelectedItem,
+                  validateRemoveItem: validateRemoveItem,
                 ),
               ),
             ],
           ),
 
-          /// Bottom section for control buttons
-          ControlButtonBar(
-            allButtonText: widget.allButtonText,
-            applyButtonText: widget.applyButtonText,
-            resetButtonText: widget.resetButtonText,
-            enableOnlySingleSelection: widget.enableOnlySingleSelection ?? true,
-            onAllButtonClick: () {
-              setState(() {
-                _selectedListData = List.from(_listData!);
-              });
-            },
-            onResetButtonClick: () {
-              setState(() {
-                _selectedListData = <T>[];
-              });
-            },
+          // /// Bottom section for control buttons
+          ControlButtonBar<T>(
+            allButtonText: allButtonText,
+            applyButtonText: applyButtonText,
+            resetButtonText: resetButtonText,
+            enableOnlySingleSelection: enableOnlySingleSelection,
             onApplyButtonClick: () {
-              if (widget.onApplyButtonClick != null) {
-                widget.onApplyButtonClick!(_selectedListData);
+              final selctedItems = FilterState.of<T>(context).selctedItems;
+              if (onApplyButtonClick != null) {
+                onApplyButtonClick!.call(selctedItems);
               } else {
-                Navigator.pop(context, _selectedListData);
+                Navigator.pop(context, selctedItems);
               }
             },
           )
@@ -273,71 +204,29 @@ class _FilterListWidgetState<T extends Object>
     );
   }
 
-  List<Widget> _buildChoiceList() {
-    // final theme = FilterListTheme.of(context).choiceChipTheme;
-    List<Widget> choices = [];
-    _listData!.forEach(
-      (item) {
-        var selectedText = widget.validateSelectedItem(_selectedListData, item);
-        choices.add(
-          ChoiceChipWidget(
-            choiceChipBuilder: widget.choiceChipBuilder,
-            item: item,
-            onSelected: (value) {
-              setState(
-                () {
-                  if (widget.enableOnlySingleSelection!) {
-                    _selectedListData.clear();
-                    _selectedListData.add(item);
-                  } else {
-                    if (selectedText) {
-                      if (widget.validateRemoveItem != null) {
-                        var shouldDelete =
-                            widget.validateRemoveItem!(_selectedListData, item);
-                        _selectedListData = shouldDelete;
-                      } else {
-                        _selectedListData.remove(item);
-                      }
-                    } else {
-                      _selectedListData.add(item);
-                    }
-                  }
-                },
-              );
-            },
-            selected: selectedText,
-            text: widget.choiceChipLabel(item),
-          ),
-        );
-      },
-    );
-    choices.add(
-      SizedBox(
-        height: 70,
-        width: MediaQuery.of(context).size.width,
-      ),
-    );
-    return choices;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-        child: Container(
-          height: widget.height,
-          width: widget.width,
-          color: widget.backgroundColor,
-          child: Stack(
-            children: <Widget>[
-              FilterListTheme(
-                data: widget.themeData ?? FilterListThemeData.light(context),
-                child: _body(),
-              )
-            ],
-          ),
+    return StateProvider<FilterState<T>>(
+      value: FilterState<T>(
+        allItems: listData,
+        selctedItems: selectedListData,
+      ),
+      child: FilterListTheme(
+        theme: themeData ?? FilterListThemeData.light(context),
+        child: Builder(
+          builder: (BuildContext innerContext) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: ClipRRect(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    FilterListTheme.of(innerContext).borderRadius,
+                  ),
+                ),
+                child: _body(innerContext),
+              ),
+            );
+          },
         ),
       ),
     );

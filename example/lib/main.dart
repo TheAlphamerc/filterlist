@@ -40,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
       listData: userList,
       selectedListData: selectedUserList,
       height: 480,
-      wrapSpacing: 0,
       choiceChipLabel: (item) {
         return item!.name;
       },
@@ -48,14 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
         return list!.contains(val);
       },
 
-      onItemSearch: (list, text) {
+      onItemSearch: (list, query) {
         if (list != null) {
           if (list.any((element) =>
-              element.name!.toLowerCase().contains(text.toLowerCase()))) {
+              element.name!.toLowerCase().contains(query.toLowerCase()))) {
             /// return list which contains matches
             return list
                 .where((element) =>
-                    element.name!.toLowerCase().contains(text.toLowerCase()))
+                    element.name!.toLowerCase().contains(query.toLowerCase()))
                 .toList();
           }
         }
@@ -178,8 +177,10 @@ class FilterPage extends StatelessWidget {
             context: context,
             controlButtonBarTheme: ControlButtonBarThemeData(
               context,
+              buttonSpacing: 20,
             ),
           ),
+          // enableOnlySingleSelection: true,
           listData: userList,
           selectedListData: selectedUserList,
           onApplyButtonClick: (list) {

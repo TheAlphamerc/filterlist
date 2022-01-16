@@ -1,7 +1,9 @@
 library filter_list;
 
+import 'package:filter_list/src/state/filter_state.dart';
+import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/theme/theme.dart';
-import 'package:filter_list/src/widget/choice_chip_widget.dart';
+import 'package:filter_list/src/widget/choice_list.dart';
 import 'package:filter_list/src/widget/control_button_bar.dart';
 import 'package:filter_list/src/widget/header.dart';
 import 'package:flutter/material.dart';
@@ -168,15 +170,6 @@ class FilterListDialog {
     /// Background color of dialog box.
     Color backgroundColor = Colors.white,
 
-    /// TextStyle for [All] and [Reset] button text.
-    TextStyle? controlButtonTextStyle,
-
-    /// TextStyle for [Apply] button.
-    TextStyle? applyButtonTextStyle,
-
-    /// TextStyle for header text.
-    TextStyle? headerTextStyle,
-
     /// Apply Button Label
     String? applyButtonText = 'Apply',
 
@@ -198,25 +191,6 @@ class FilterListDialog {
 
     /// The `choiceChipBuilder` is a builder to design custom choice chip.
     ChoiceChipBuilder? choiceChipBuilder,
-
-    /// How the choice chip within a run should be placed in the main axis.
-    /// For example, if [wrapSpacing] is [WrapAlignment.center], the choice chip in each run are grouped together in the center of their run in the main axis.
-    ///
-    /// Defaults to [WrapAlignment.start].
-    WrapAlignment wrapAlignment = WrapAlignment.start,
-
-    /// How the choice chip within a run should be aligned relative to each other in the cross axis.
-    ///For example, if this is set to [WrapCrossAlignment.end], and the [direction] is [Axis.horizontal], then the choice chip within each run will have their bottom edges aligned to the bottom edge of the run.
-    ///
-    ///Defaults to [WrapCrossAlignment.start].
-    WrapCrossAlignment wrapCrossAxisAlignment = WrapCrossAlignment.start,
-
-    ///How much space to place between choice chip in a run in the main axis.
-    ///For example, if [wrapSpacing] is 10.0, the choice chip will be spaced at least 10.0 logical pixels apart in the main axis.
-    ///If there is additional free space in a run (e.g., because the wrap has a minimum size that is not filled or because some runs are longer than others), the additional free space will be allocated according to the [alignment].
-    ///
-    ///Defaults to 0.0.
-    double wrapSpacing = 0.0,
   }) async {
     if (height == null) {
       height = MediaQuery.of(context).size.height * .8;
@@ -243,10 +217,7 @@ class FilterListDialog {
               themeData: themeData,
               listData: listData,
               choiceChipLabel: choiceChipLabel,
-              width: width,
-              height: height,
               hideHeader: hideheader,
-              borderRadius: borderRadius,
               headlineText: headlineText,
               onItemSearch: onItemSearch,
               backgroundColor: backgroundColor,
@@ -258,17 +229,12 @@ class FilterListDialog {
               headerCloseIcon: headerCloseIcon,
               hideSearchField: hideSearchField,
               choiceChipBuilder: choiceChipBuilder,
-              applyButtonTextStyle: applyButtonTextStyle,
-              controlButtonTextStyle: controlButtonTextStyle,
               enableOnlySingleSelection: enableOnlySingleSelection,
               selectedItemsText: selectedItemsText,
               applyButtonText: applyButtonText,
               resetButtonText: resetButtonText,
               allButtonText: allButtonText,
               validateRemoveItem: validateRemoveItem,
-              wrapAlignment: wrapAlignment,
-              wrapCrossAxisAlignment: wrapCrossAxisAlignment,
-              wrapSpacing: wrapSpacing,
             ),
           ),
         );

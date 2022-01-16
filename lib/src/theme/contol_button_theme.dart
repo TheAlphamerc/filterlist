@@ -66,10 +66,13 @@ class ControlButtonTheme extends InheritedTheme {
 class ControlButtonThemeData with Diagnosticable {
   /// Builds a [ControlButtonThemeData].
   const ControlButtonThemeData({
-    this.textStyle = const TextStyle(fontSize: 16, color: Colors.black87),
+    this.textStyle = const TextStyle(
+      fontSize: 16,
+      color: Color(0xFF649BEC),
+    ),
     this.primaryButtonTextStyle =
         const TextStyle(fontSize: 16, color: Colors.white),
-    this.primaryButtonBackgroundColor = const Color(0xFF84B0F1),
+    this.primaryButtonBackgroundColor = const Color(0xFF649BEC),
     this.backgroundColor = Colors.white,
     this.borderRadius = 25,
     this.boxShadow,
@@ -80,9 +83,12 @@ class ControlButtonThemeData with Diagnosticable {
   factory ControlButtonThemeData.light(BuildContext context) =>
       ControlButtonThemeData(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        textStyle: TextStyle(fontSize: 16, color: Colors.black87),
+        textStyle: TextStyle(
+          fontSize: 16,
+          color: const Color(0xFF649BEC),
+        ),
         primaryButtonTextStyle: TextStyle(fontSize: 16, color: Colors.white),
-        primaryButtonBackgroundColor: Color(0xFF84B0F1),
+        primaryButtonBackgroundColor: Color(0xFF649BEC),
         backgroundColor: Colors.white,
         borderRadius: 40,
         boxShadow: <BoxShadow>[
@@ -102,9 +108,13 @@ class ControlButtonThemeData with Diagnosticable {
   final double borderRadius;
 
   /// TextStyle for control button text.
+  ///
+  /// TextStyle for [All] and [Reset] button text.
   final TextStyle? textStyle;
 
   /// TextStyle for primary control button text.
+  ///
+  /// TextStyle for [Apply] button.
   final TextStyle? primaryButtonTextStyle;
 
   /// The background color of the primary button.

@@ -17,6 +17,13 @@
   - Removed `applyButonTextBackgroundColor` option
   - Removed `buttonRadius` option
   - Removed `buttonSpacing` option
+  - Removed `controlButtonTextStyle` option
+  - Removed `applyButtonTextStyle` option
+  - Removed `applyButtonText` option
+  - Removed `wrapAlignment` option
+  - Removed `wrapCrossAxisAlignment` option
+  - Removed `wrapSpacing` option
+  - Removed `borderRadius` option
 
 - Add `FilterListTheme` for filter list widget theme
 - Add `ChoiceChipTheme` for choice chip theme.

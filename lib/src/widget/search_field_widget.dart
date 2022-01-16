@@ -1,7 +1,7 @@
 import 'package:filter_list/src/theme/filter_list_theme.dart';
 import 'package:flutter/material.dart';
 
-class SearchFieldWidget extends StatelessWidget {
+class SearchFieldWidget<T> extends StatelessWidget {
   final ValueChanged<String> onChanged;
   const SearchFieldWidget({
     Key? key,

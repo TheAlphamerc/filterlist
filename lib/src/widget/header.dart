@@ -75,11 +75,7 @@ class Header extends StatelessWidget {
                 ),
               ],
             ),
-            hideSearchField
-                ? SizedBox()
-                : SizedBox(
-                    height: 10,
-                  ),
+            hideSearchField ? SizedBox() : SizedBox(height: 10),
             hideSearchField
                 ? SizedBox()
                 : SearchFieldWidget(onChanged: onSearch)

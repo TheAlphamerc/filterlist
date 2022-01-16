@@ -64,7 +64,7 @@ class ChoiceChipThemeData with Diagnosticable {
   const ChoiceChipThemeData({
     this.selectedTextStyle = const TextStyle(color: Colors.white),
     this.textStyle,
-    this.selectedBackgroundColor = Colors.blue,
+    this.selectedBackgroundColor = const Color(0xFF649BEC),
     this.backgroundColor = const Color(0xfff8f8f8),
     this.visualDensity,
     this.elevation,
@@ -82,7 +82,7 @@ class ChoiceChipThemeData with Diagnosticable {
         selectedTextStyle:
             TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         textStyle: TextStyle(color: Colors.black),
-        selectedBackgroundColor: Colors.blue,
+        selectedBackgroundColor: const Color(0xFF649BEC),
         backgroundColor: const Color(0xfff8f8f8),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevation: 0,
@@ -101,7 +101,7 @@ class ChoiceChipThemeData with Diagnosticable {
 
   /// Color to be used for the selected, selected chip's background.
   ///
-  /// The default is [Colors.blue].
+  /// The default is [const Color(0xFF649BEC)].
   final Color? selectedBackgroundColor;
 
   /// Color to be used for the unselected, unselected chip's background.
