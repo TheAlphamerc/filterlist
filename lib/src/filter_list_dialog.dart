@@ -191,6 +191,9 @@ class FilterListDialog {
 
     /// The `choiceChipBuilder` is a builder to design custom choice chip.
     ChoiceChipBuilder? choiceChipBuilder,
+
+    /// {@macro control_buttons}
+    List<ContolButtonType>? controlButtons,
   }) async {
     if (height == null) {
       height = MediaQuery.of(context).size.height * .8;
@@ -235,6 +238,8 @@ class FilterListDialog {
               resetButtonText: resetButtonText,
               allButtonText: allButtonText,
               validateRemoveItem: validateRemoveItem,
+              controlButtons: controlButtons ??
+                  [ContolButtonType.All, ContolButtonType.Reset],
             ),
           ),
         );

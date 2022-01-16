@@ -8,6 +8,8 @@ typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String query);
 typedef LabelDelegate<T> = String? Function(T?);
 typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
+enum ContolButtonType { All, Reset }
+
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
 /// {@template arguments}
@@ -72,6 +74,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     this.applyButtonText = 'Apply',
     this.resetButtonText = 'Reset',
     this.selectedItemsText = 'selected items',
+    this.controlButtons = const [ContolButtonType.All, ContolButtonType.Reset],
   }) : super(key: key);
 
   /// Filter theme
@@ -137,6 +140,19 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// Selected items count text
   final String? selectedItemsText;
 
+  /// {@template control_buttons}
+  /// control buttons to show on bottom of dialog along with 'Apply' button.
+  ///
+  /// If `ContolButtonType.All` is passed then it will show 'All' and 'Apply' button.
+  ///
+  /// If `ContolButtonType.Reset` is passed then it will show 'Reset' and 'Apply' button.
+  ///
+  /// Default value is `[ContolButton.All, ContolButton.Reset]`
+  ///
+  /// If `enableOnlySingleSelection` is true then it will hide 'All' button.
+  /// {@endtemplate}
+  final List<ContolButtonType> controlButtons;
+
   Widget _body(BuildContext context) {
     final theme = FilterListTheme.of(context);
     return Container(
@@ -186,6 +202,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
 
           // /// Bottom section for control buttons
           ControlButtonBar<T>(
+            controlButtons: controlButtons,
             allButtonText: allButtonText,
             applyButtonText: applyButtonText,
             resetButtonText: resetButtonText,

@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       validateSelectedItem: (list, val) {
         return list!.contains(val);
       },
-
+      controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
       onItemSearch: (list, query) {
         if (list != null) {
           if (list.any((element) =>
@@ -180,8 +180,9 @@ class FilterPage extends StatelessWidget {
               buttonSpacing: 20,
             ),
           ),
-          // enableOnlySingleSelection: true,
+          enableOnlySingleSelection: true,
           listData: userList,
+          controlButtons: [ContolButtonType.All],
           selectedListData: selectedUserList,
           onApplyButtonClick: (list) {
             Navigator.pop(context, list);
@@ -244,46 +245,9 @@ List<User> userList = [
   User(name: "Stepanida  ", avatar: "user.png"),
   User(name: "Carolina ", avatar: "user.png"),
   User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Emelyan ", avatar: "user.png"),
-  User(name: "Catherine ", avatar: "user.png"),
-  User(name: "Stepanida  ", avatar: "user.png"),
-  User(name: "Carolina ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Emelyan ", avatar: "user.png"),
-  User(name: "Catherine ", avatar: "user.png"),
-  User(name: "Stepanida  ", avatar: "user.png"),
-  User(name: "Carolina ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Emelyan ", avatar: "user.png"),
-  User(name: "Catherine ", avatar: "user.png"),
-  User(name: "Stepanida  ", avatar: "user.png"),
-  User(name: "Carolina ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Emelyan ", avatar: "user.png"),
-  User(name: "Catherine ", avatar: "user.png"),
-  User(name: "Stepanida  ", avatar: "user.png"),
-  User(name: "Carolina ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
+  User(name: "Kamil ", avatar: "user.png"),
+  User(name: "Mariana ", avatar: "user.png"),
+  User(name: "Katerina ", avatar: "user.png"),
 ];
 
 /// Another exmaple of [FilterListWidget] to filter list of strings
