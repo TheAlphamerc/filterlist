@@ -91,6 +91,7 @@ part 'filter_list_widget.dart';
 ///        });
 ///  }
 /// ```
+/// {@macro control_buttons}
 
 class FilterListDialog {
   static Future display<T extends Object>(
@@ -119,7 +120,7 @@ class FilterListDialog {
     /// When text change in search text field then return list containing that text value.
     ///
     ///Check if list has value which matches to text.
-    required ItemSearchDelegate<T> onItemSearch,
+    required SearchPredict<T> onItemSearch,
 
     /// Return list of all selected items
     required OnApplyButtonClick<T> onApplyButtonClick,

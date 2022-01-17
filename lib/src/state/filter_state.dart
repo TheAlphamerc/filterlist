@@ -55,6 +55,12 @@ class FilterState<K> extends ListenableState {
     notifyListeners();
   }
 
+  // perform filter operation
+  void filter(bool Function(K) filter) {
+    _items = _items!.where(filter).toList();
+    notifyListeners();
+  }
+
   // Clear selected list
   void clearSelectedList() {
     _selctedItems!.clear();

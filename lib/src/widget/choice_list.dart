@@ -20,7 +20,7 @@ class ChoiceList<T> extends StatelessWidget {
   final ValidateRemoveItem<T>? validateRemoveItem;
 
   List<Widget> _buildChoiceList(BuildContext context) {
-    // final theme = FilterListTheme.of(context).choiceChipTheme;
+    final theme = FilterListTheme.of(context).controlBarButtonTheme;
     final state = StateProvider.of<FilterState<T>>(context);
     final items = state.items;
     final selectedListData = state.selctedItems;
@@ -61,7 +61,7 @@ class ChoiceList<T> extends StatelessWidget {
     );
     choices.add(
       SizedBox(
-        height: 70,
+        height: theme.height + 20,
         width: MediaQuery.of(context).size.width,
       ),
     );

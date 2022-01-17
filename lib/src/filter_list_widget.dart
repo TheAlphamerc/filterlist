@@ -4,7 +4,8 @@ typedef ValidateSelectedItem<T> = bool Function(List<T>? list, T item);
 typedef OnApplyButtonClick<T> = void Function(List<T>? list);
 typedef ChoiceChipBuilder<T> = Widget Function(
     BuildContext context, T? item, bool? iselected);
-typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String query);
+// typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String query);
+typedef SearchPredict<T> = bool Function(T item, String query);
 typedef LabelDelegate<T> = String? Function(T?);
 typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
@@ -120,7 +121,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   final ValidateRemoveItem<T>? validateRemoveItem;
 
   /// The `onItemSearch` is delagate which filter the list on the basis of search field text.
-  final ItemSearchDelegate<T> onItemSearch; /*required*/
+  final SearchPredict<T> onItemSearch; /*required*/
 
   /// The `choiceChipLabel` is callback which required [String] value to display text on choice chip.
   final LabelDelegate<T> choiceChipLabel; /*required*/
@@ -173,8 +174,8 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                           FilterState.of<T>(context).items = listData;
                           return;
                         }
-                        FilterState.of<T>(context).items =
-                            onItemSearch(listData, value);
+                        FilterState.of<T>(context)
+                            .filter((item) => onItemSearch(item, value));
                       },
                     ),
               hideSelectedTextCount
