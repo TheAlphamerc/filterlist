@@ -32,6 +32,7 @@
 - Add `ControlButtonBarTheme` for control button bar theme
 - Add `ControlButtonTheme` for control button theme
 - Add `controlButtons` option to display/hide control buttons (All, Reset)
+- Add `FilterListDelegate.show` delegate to search/filter data in new screen
 
 
 ## [1.0.0] 21 May 2021

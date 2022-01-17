@@ -28,6 +28,34 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
+  void openFilterDelegate() async {
+    await FilterListDelegate.show<String>(
+      context: context,
+      list: ['Jon', 'Abraham', 'John', 'Peter', 'Paul', 'Mary', 'Jane'],
+      onItemSearch: (user, query) {
+        return user.toLowerCase().contains(query.toLowerCase());
+      },
+      tileLabel: (user) => user,
+      emptySearchChild: Center(child: Text('No user found')),
+      enableOnlySingleSelection: true,
+      searchFieldHint: 'Search Here..',
+      // suggestionBuilder: (context, user, isSelected) {
+      //   return ListTile(
+      //     title: Text(user.name!),
+      //     leading: CircleAvatar(
+      //       backgroundColor: Colors.blue,
+      //     ),
+      //     selected: isSelected,
+      //   );
+      // },
+      onApplyButtonClick: (list) {
+        setState(() {
+          // selectedUserList = list;
+        });
+      },
+    );
+  }
+
   void _openFilterDialog() async {
     await FilterListDialog.display<User>(
       context,
@@ -40,26 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
       listData: userList,
       selectedListData: selectedUserList,
       height: 480,
-      choiceChipLabel: (item) {
-        return item!.name;
-      },
-      validateSelectedItem: (list, val) {
-        return list!.contains(val);
-      },
+      choiceChipLabel: (item) => item!.name,
+      validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
-      onItemSearch: (list, query) {
-        if (list != null) {
-          if (list.any((element) =>
-              element.name!.toLowerCase().contains(query.toLowerCase()))) {
-            /// return list which contains matches
-            return list
-                .where((element) =>
-                    element.name!.toLowerCase().contains(query.toLowerCase()))
-                .toList();
-          }
-        }
-
-        return [];
+      onItemSearch: (user, query) {
+        /// When search query change in search bar then this method will be called
+        ///
+        /// Check if items contains query
+        return user.name!.toLowerCase().contains(query.toLowerCase());
       },
 
       onApplyButtonClick: (list) {
@@ -133,6 +149,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: MaterialStateProperty.all(Colors.blue)),
               // color: Colors.blue,
             ),
+            TextButton(
+              onPressed: openFilterDelegate,
+              child: Text(
+                "Filter Delegate",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
+              // color: Colors.blue,
+            ),
           ],
         ),
       ),
@@ -180,9 +206,9 @@ class FilterPage extends StatelessWidget {
               buttonSpacing: 20,
             ),
           ),
-          enableOnlySingleSelection: true,
+
           listData: userList,
-          controlButtons: [ContolButtonType.All],
+          controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
           selectedListData: selectedUserList,
           onApplyButtonClick: (list) {
             Navigator.pop(context, list);
@@ -206,19 +232,11 @@ class FilterPage extends StatelessWidget {
             ///  identify if item is selected or not
             return list!.contains(val);
           },
-          onItemSearch: (list, text) {
-            /// When text change in search text field then return list containing that text value
+          onItemSearch: (user, query) {
+            /// When search query change in search bar then this method will be called
             ///
-            ///Check if list has value which matchs to text
-            if (list!.any((element) =>
-                element.name!.toLowerCase().contains(text.toLowerCase()))) {
-              /// return list which contains matches
-              return list
-                  .where((element) =>
-                      element.name!.toLowerCase().contains(text.toLowerCase()))
-                  .toList();
-            }
-            return [];
+            /// Check if items contains query
+            return user.name!.toLowerCase().contains(query.toLowerCase());
           },
         ),
       ),

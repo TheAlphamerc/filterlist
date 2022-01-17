@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 part 'filter_list_widget.dart';
 
-/// The [FilterListDialog.display()] is a [Dialog] with some filter utilities and callbacks which helps in single/multiple selection from list of data.
+/// The [FilterListDialog.display] is a [Dialog] with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
 /// {@template arguments}
 /// The [listData] should be list of dynamic data which neeeds to filter.
@@ -24,18 +24,6 @@ part 'filter_list_widget.dart';
 /// [onItemSearch] filter the list on the basis of search field text. It expose search api to permform search operation accoding to requirement.
 /// When text change in search text field then return a list of element which contains specific text. if no element found then it should return empty list.
 ///
-/// ```dart
-///    onItemSearch: (list, text) {
-///     if (list.any((element) =>
-///         element.toLowerCase().contains(text.toLowerCase()))) {
-///       /// return list which contains matches
-///       return list
-///           .where((element) =>
-///               element.toLowerCase().contains(text.toLowerCase()))
-///           .toList();
-///     }
-///   },
-/// ```
 ///
 /// The [choiceChipBuilder] is a builder to design custom choice chip.
 ///
