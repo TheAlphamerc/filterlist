@@ -1,17 +1,13 @@
 
-## filter_list Plugin 
-[![Codemagic build status](https://api.codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/status_badge.svg)](https://codemagic.io/apps/5e5f9812018eb900168eef48/5e5f9812018eb900168eef47/latest_build)
-![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter_plugin_filter_list) 
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
-![GitHub](https://img.shields.io/github/license/TheAlphamerc/flutter_plugin_filter_list) 
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Thealphamerc/flutter_plugin_filter_list.svg)](https://github.com/Thealphamerc/flutter_plugin_filter_list)
-[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=https://github.com/FTheAlphamerc/flutter_plugin_filter_list) 
-![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
-
+## filter_list  
 [![pub package](https://img.shields.io/pub/v/filter_list?color=blue)](https://pub.dev/packages/filter_list) 
 [![Likes](https://badges.bar/filter_list/likes)](https://pub.dev/packages/flutter_plugin_filter_list/score)
 [![Popularity](https://badges.bar/filter_list/popularity)](https://pub.dev/packages/filter_list/score)
 [![Pub points](https://badges.bar/flutter_week_view/pub%20points)](https://pub.dev/packages/filter_list/score)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FTheAlphamerc%2Fflutter_plugin_filter_list&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+[![GitHub stars](https://img.shields.io/github/stars/Thealphamerc/flutter_plugin_filter_list?style=social)](https://github.com/login?return_to=https://github.com/FTheAlphamerc/flutter_plugin_filter_list) 
+![GitHub forks](https://img.shields.io/github/forks/TheAlphamerc/flutter_plugin_filter_list?style=social)
+
 
 FilterList is a flutter package which provide utility to search/filter on the basis of single/multiple selection from provided dynamic list.
 
@@ -19,7 +15,7 @@ FilterList is a flutter package which provide utility to search/filter on the ba
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Data flow
-* Invoke method `FilterListDialog.display()` to display filter dialog.
+* Invoke method `FilterListDialog.display()` to display filterf filter dialog.
 * Make selection from list.
 * Click `All` button to select all text from list.
 * Click `Reset` button to make all text unselected.
@@ -35,7 +31,7 @@ FilterList is a flutter package which provide utility to search/filter on the ba
 ```yaml
 
 dependencies:
-  filter_list: ^0.0.9
+  filter_list: ^<latest version>
 
 ```
 
@@ -49,163 +45,110 @@ import package:filter_list/filter_list.dart';
 ### 3. How to use FilterList
 
 
-#### Create a list of Strings
-```dart
-  List<String> countList = [
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Tweleve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-    "Twenty"
-  ];
-  List<String>? selectedCountList = [];
-```
-#### Create a function and call `FilterListDialog.display()` on button clicked
-```dart
-  void _openFilterDialog() async {
-    await FilterListDialog.display<String>(
-      context,
-      listData: countList,
-      selectedListData: selectedCountList,
-      height: 480,
-      headlineText: "Select Count",
-      searchFieldHintText: "Search Here",
-      choiceChipLabel: (item) {
-        return item;
-      },
-      validateSelectedItem: (list, val) {
-          return list!.contains(val);
-      },
-      onItemSearch: (list, text) {
-          if (list!.any((element) =>
-              element.toLowerCase().contains(text.toLowerCase()))) {
-            return list!
-                .where((element) =>
-                    element.toLowerCase().contains(text.toLowerCase()))
-                .toList();
-          }
-          else{
-            return [];
-          }
-        },
-      onApplyButtonClick: (list) {
-        if (list != null) {
-          setState(() {
-            selectedCountList = List.from(list);
-          });
-        }
-        Navigator.pop(context);
-      });
-  }
-```
-#### Call `_openFilterDialog` function on `floatingActionButton` pressed to display filter dialog
-
-```dart
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openFilterDialog,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ),
-        body: selectedCountList == null || selectedCountList!.length == 0
-            ? Center(
-                child: Text('No text selected'),
-              )
-            : ListView.separated(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(selectedCountList![index]!),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: selectedCountList!.length));
-  }
-```
-#### How to use `FilterListWidget`.
-
-```dart
+#### Create a list of Strings / dynamic object
+``` dart
 class User {
   final String? name;
   final String? avatar;
   User({this.name, this.avatar});
 }
 
+/// Creating a global list for example purpose.
+/// Generally it should be within bussiness logic class or where ever you want
+List<User> userList = [
+ User(name: "Jon", avatar: ""),
+  User(name: "Lindsey ", avatar: ""),
+  User(name: "Valarie ", avatar: ""),
+  User(name: "Elyse ", avatar: ""),
+  User(name: "Ethel ", avatar: ""),
+  User(name: "Emelyan ", avatar: ""),
+  User(name: "Catherine ", avatar: ""),
+  User(name: "Stepanida  ", avatar: ""),
+  User(name: "Carolina ", avatar: ""),
+  User(name: "Nail  ", avatar: ""),
+  User(name: "Kamil ", avatar: ""),
+  User(name: "Mariana ", avatar: ""),
+  User(name: "Katerina ", avatar: ""),
+];
+```
 
+#### Create a function and call `FilterListDialog.display()` 
+```dart
+  void openFilterDialog() async {
+    await FilterListDialog.display<User>(
+      context,
+      listData: userList,
+      selectedListData: selectedUserList,
+      choiceChipLabel: (user) => user!.name,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      onItemSearch: (user, query) {
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedUserList = List.from(list!);
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+```
+#### Call `openFilterDialog` function on button tap to display filter dialog
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: openFilterDialog,
+        child: Icon(Icons.add),
+      ),
+      body: selectedUserList == null || selectedUserList!.length == 0
+          ? Center(child: Text('No user selected'))
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(selectedUserList![index].name!),
+                );
+              },
+              itemCount: selectedUserList!.length,
+            ),
+    );
+  }
+```
+
+#### How to use `FilterListWidget`.
+Below is a example of using `FilterListWidget` with minimal code however there is a lot more inside the widget for you to fully customize the widget.
+
+```dart
 
 class FilterPage extends StatelessWidget {
-  FilterPage({Key? key}) : super(key: key);
-  List<User> userList = [
-    User(name: "Jon", avatar: ""),
-    User(name: "Ethel ", avatar: ""),
-    User(name: "Elyse ", avatar: ""),
-    User(name: "Nail  ", avatar: ""),
-    User(name: "Valarie ", avatar: ""),
-    User(name: "Lindsey ", avatar: ""),
-    User(name: "Emelyan ", avatar: ""),
-    User(name: "Carolina ", avatar: ""),
-    User(name: "Catherine ", avatar: ""),
-    User(name: "Stepanida  ", avatar: ""),
-  ];
+  const FilterPage({Key? key, this.selectedUserList})
+      : super(key: key);
+  final List<User>? selectedUserList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Filter List Widget Example "),
-      ),
-      body: SafeArea(
-        child: FilterListWidget<User>(
-          listData: userList,
-          hideHeaderText: true,
-          onApplyButtonClick: (list) {
-            if (list != null) {
-              print("Selected items count: ${list!.length}");
-            }
-          },
-          label: (item) {
-            /// Used to print text on chip
-            return item!.name;
-          },
-          validateSelectedItem: (list, val) {
-            ///  identify if item is selected or not
-            return list!.contains(val);
-          },
-          onItemSearch: (list, text) {
-            /// When text change in search text field then return list containing that text value
-            ///
-            ///Check if list has value which matchs to text
-            if (list!.any((element) =>
-                element.name.toLowerCase().contains(text.toLowerCase()))) {
-              /// return list which contains matches
-              return list!
-                  .where((element) =>
-                      element.name.toLowerCase().contains(text.toLowerCase()))
-                  .toList();
-            }
-            else{
-              return [];
-            }
-          },
-        ),
+      body: FilterListWidget<User>(
+        listData: userList,
+        selectedListData: selectedUserList,
+        onApplyButtonClick: (list) {
+          // do something with list ..
+        },
+        choiceChipLabel: (item) {
+          /// Used to display text on chip
+          return item!.name;
+        },
+        validateSelectedItem: (list, val) {
+          ///  identify if item is selected or not
+          return list!.contains(val);
+        },
+        onItemSearch: (user, query) {
+          /// When search query change in search bar then this method will be called
+          ///
+          /// Check if items contains query
+          return user.name!.toLowerCase().contains(query.toLowerCase());
+        },
       ),
     );
   }
@@ -240,29 +183,13 @@ Customised control button |Customised selected text |Customised unselected text 
 | :-------- | :------- | :------------------------- |
 | height | `double` | Set height of filter dialog.|
 | width  | `double` | Set width of filter dialog.|
-| borderRadius|`double` | Set border radius of filter dialog. |
 | hideCloseIcon|`bool`|Hide close Icon.|
 | hideheader|`bool`|Hide complete header section from filter dialog.|
-| hideHeaderAreaShadow|`bool`|Hide header area shadow if value is true.|
 | headerCloseIcon|`Widget`|Widget to close the dialog.|
-| hideHeaderText|`bool`|If `true` then it will hide the header text|
 | hideSelectedTextCount|`bool`|Hide selected text count.|
 | hideSearchField|`bool`|Hide search text field.|
-| searchFieldHintText|`String`|Set hint text in search field.|
 | headlineText|`String`|Set header text of filter dialog.|
-| closeIconColor|`Color`| Set color of close Icon.|
-| headerTextColor|`Color`|Set color of header text.|
 | backgroundColor|`Color`|Set background color of filter color|
-| searchFieldBackgroundColor|`Color`|Set background color of Search field.|
-| unselectedTextbackGroundColor|`Color`|Set background color of unselected text field.|
-| selectedTextBackgroundColor|`Color`|Set background color of selected text field. |
-| applyButonTextBackgroundColor|`Color`|Set background color of apply button.|
-| applyButtonTextStyle|`TextStyle`| TextStyle for `Apply` button|
-| selectedChipTextStyle|`TextStyle`|TextStyle for chip when selected |
-| unselectedChipTextStyle|`TextStyle`|TextStyle for chip when not selected|
-| controlButtonTextStyle|`TextStyle`| TextStyle for `All` and `Reset` button text|
-| headerTextStyle|`TextStyle`| TextStyle for header text|
-| searchFieldTextStyle|`TextStyle`|TextStyle for search field tex|
 | listData|`List<T>()`|Populate filter dialog with text list. |
 | selectedListData|` List<T>()`|Marked selected text in filter dialog.|
 | choiceChipLabel|`String Function(T item)`| Display text on choice chip.|
@@ -270,18 +197,18 @@ Customised control button |Customised selected text |Customised unselected text 
 | onItemSearch|`List<T> Function(List<T>? list, String text)`| Perform search operation and returns filtered list|
 | choiceChipBuilder|`Widget Function(BuildContext context, T? item, bool? iselected)`|The choiceChipBuilder is a builder to design custom choice chip.|
 | onApplyButtonClick|`Function(List<T> list)`|Returns list of items when apply button is clicked|
-| ValidateRemoveItem|`List<T> Function(List<T>? list, T item)`| Function Delegate responsible for delete item from list |
-| applyButtonText|`String`| Apply button text to customize or translate |
+| validateRemoveItem|`List<T> Function(List<T>? list, T item)`| Function Delegate responsible for delete item from list |
 | resetButtonText|`String`| Reset button text to customize or translate |
 | allButtonText|`String`| All button text to customize or translate |
 | selectedItemsText|`String`| Selected items text to customize or translate |
-| controlContainerDecoration|`BoxDecoration`| Customize the bottom area of the dialog, where the buttons are placed |
-| buttonRadius|`double`| Button border radius |
-| buttonSpacing|`double`| Space between bottom control buttons |
-| insetPadding| `EdgeInsets`| The amount of padding added to [MediaQueryData.viewInsets] on the outside of the dialog.|
-| wrapAlignment | `WrapAlignment`| Controls the choice chips alignment in main axis.|
-| wrapCrossAxisAlignment | `wrapSpacing`| Controls the choice chip within a run should be aligned relative to each other in the cross axis.|
-| wrapSpacing | `WrapAlignment`| controls the space to place between choice chip in a run in the main axis.|
+| controlButtons|`List<ContolButtonType>`| configure which control button needs to be display on bottom of dialog along with 'Apply' button.|
+| insetPadding| `EdgeInsets`| The amount of padding added to the outside of the dialog.|
+| themeData|`FilterListThemeData`| Configure theme of filter dialog and widget.|
+| choiceChipTheme|`ChoiceChipThemeData`| Configure theme of choice chip.|
+| controlButtonBarTheme|`ControlButtonBarThemeData`| Configure theme of control button bar|
+| controlButtonTheme|`ControlButtonThemeData`| Configure theme of control button.|
+| headerTheme|`HeaderThemeData`| Configure theme of filter header.|
+
 
 > `T` can be a String or any user defined Model 
   
