@@ -31,6 +31,18 @@ class ChoiceChipWidget<T> extends StatelessWidget {
         : FilterListTheme.of(context).choiceChipTheme.backgroundColor;
   }
 
+  OutlinedBorder? getShape(context) {
+    return selected!
+        ? FilterListTheme.of(context).choiceChipTheme.selectedShape
+        : FilterListTheme.of(context).choiceChipTheme.shape;
+  }
+
+  BorderSide? getSide(BuildContext context) {
+    return selected!
+        ? FilterListTheme.of(context).choiceChipTheme.selectedSide
+        : FilterListTheme.of(context).choiceChipTheme.side;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = FilterListTheme.of(context).choiceChipTheme;
@@ -52,8 +64,8 @@ class ChoiceChipWidget<T> extends StatelessWidget {
               selected: selected!,
               onSelected: onSelected,
               elevation: theme.elevation,
-              side: theme.side,
-              shape: theme.shape,
+              side: getSide(context),
+              shape: getShape(context),
               shadowColor: theme.shadowColor,
               selectedShadowColor: theme.selectedShadowColor,
             ),

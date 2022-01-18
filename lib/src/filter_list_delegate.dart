@@ -1,4 +1,5 @@
 import 'package:filter_list/src/filter_list_dialog.dart';
+import 'package:filter_list/src/theme/filter_list_delegate_theme.dart';
 import 'package:flutter/material.dart';
 
 typedef SuggestionBuilder<T> = Widget Function(
@@ -52,7 +53,9 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   final SearchPredict<T> onItemSearch;
   final AppbarBottom? buildAppbarBottom;
   final bool enableOnlySingleSelection;
+  final bool hideClearSearchIcon;
   final OnApplyButtonClick<T> onApplyButtonClick;
+  final String applyButtonText;
 
   /// Search field hint text
   final String? searchFieldHint;
@@ -60,6 +63,10 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   /// Widget built when there's no item in [items] that
   /// matches current query.
   final Widget? emptySearchChild;
+
+  final ButtonStyle? applyButtonStyle;
+
+  final FilterListDelegateThemeData? theme;
   FilterListDelegate({
     required this.listData,
     required this.onItemSearch,
@@ -72,6 +79,10 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     this.searchFieldStyle,
     this.buildAppbarBottom,
     this.emptySearchChild,
+    this.theme,
+    this.applyButtonStyle,
+    this.hideClearSearchIcon = false,
+    this.applyButtonText = 'Apply',
   })  : assert(searchFieldStyle == null || searchFieldDecorationTheme == null,
             'You can\'t set both searchFieldStyle and searchFieldDecorationTheme at the same time.'),
         assert(tileLabel == null || suggestionBuilder == null,
@@ -87,11 +98,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.search,
             searchFieldStyle: searchFieldStyle,
-            searchFieldDecorationTheme: searchFieldDecorationTheme ??
-                InputDecorationTheme(
-                  hintStyle: TextStyle(fontSize: 14, color: Colors.black87),
-                  border: InputBorder.none,
-                )) {
+            searchFieldDecorationTheme: searchFieldDecorationTheme) {
     templist = listData;
   }
 
@@ -117,34 +124,38 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   ///      },
   ///    );
   /// ```
-  static Future<T?>? show<T>(
-      {required BuildContext context,
-      required List<T> list,
-      LabelDelegate<T>? tileLabel,
-      required SearchPredict<T> onItemSearch,
-      required OnApplyButtonClick<T> onApplyButtonClick,
-      SuggestionBuilder<T>? suggestionBuilder,
-      String? searchFieldHint,
-      InputDecorationTheme? searchFieldDecorationTheme,
-      TextStyle? searchFieldStyle,
-      AppbarBottom? buildAppbarBottom,
-      bool enableOnlySingleSelection = false,
-      Widget? emptySearchChild}) async {
+  static Future<T?>? show<T>({
+    required BuildContext context,
+    required List<T> list,
+    LabelDelegate<T>? tileLabel,
+    required SearchPredict<T> onItemSearch,
+    required OnApplyButtonClick<T> onApplyButtonClick,
+    SuggestionBuilder<T>? suggestionBuilder,
+    String? searchFieldHint,
+    InputDecorationTheme? searchFieldDecorationTheme,
+    TextStyle? searchFieldStyle,
+    AppbarBottom? buildAppbarBottom,
+    bool enableOnlySingleSelection = false,
+    Widget? emptySearchChild,
+    FilterListDelegateThemeData? theme,
+    ButtonStyle? applyButtonStyle,
+  }) async {
     var selectedItem = await showSearch(
       context: context,
       delegate: FilterListDelegate(
-        listData: list,
-        tileLabel: tileLabel,
-        onItemSearch: onItemSearch,
-        onApplyButtonClick: onApplyButtonClick,
-        searchFieldHint: searchFieldHint,
-        suggestionBuilder: suggestionBuilder,
-        searchFieldDecorationTheme: searchFieldDecorationTheme,
-        searchFieldStyle: searchFieldStyle,
-        buildAppbarBottom: buildAppbarBottom,
-        enableOnlySingleSelection: enableOnlySingleSelection,
-        emptySearchChild: emptySearchChild,
-      ),
+          listData: list,
+          tileLabel: tileLabel,
+          onItemSearch: onItemSearch,
+          onApplyButtonClick: onApplyButtonClick,
+          searchFieldHint: searchFieldHint,
+          suggestionBuilder: suggestionBuilder,
+          searchFieldDecorationTheme: searchFieldDecorationTheme,
+          searchFieldStyle: searchFieldStyle,
+          buildAppbarBottom: buildAppbarBottom,
+          enableOnlySingleSelection: enableOnlySingleSelection,
+          emptySearchChild: emptySearchChild,
+          theme: theme,
+          applyButtonStyle: applyButtonStyle),
     );
 
     return Future.value(selectedItem);
@@ -153,22 +164,35 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      AnimatedOpacity(
-        opacity: query.isNotEmpty ? 1.0 : 0.0,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOutCubic,
-        child: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () => query = '',
+      if (hideClearSearchIcon == false)
+        AnimatedOpacity(
+          opacity: query.isNotEmpty ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubic,
+          child: SizedBox(
+            width: 25,
+            height: 25,
+            child: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () => query = '',
+            ),
+          ),
         ),
-      ),
       if (!enableOnlySingleSelection)
-        TextButton(
-            onPressed: () {
-              onApplyButtonClick(selectedItems);
-              close(context, null);
-            },
-            child: Text('Done'))
+        Container(
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(right: 10),
+          child: TextButtonTheme(
+            data: TextButtonThemeData(style: applyButtonStyle),
+            child: TextButton(
+              onPressed: () {
+                onApplyButtonClick(selectedItems);
+                close(context, null);
+              },
+              child: Text(applyButtonText),
+            ),
+          ),
+        )
     ];
   }
 
@@ -188,55 +212,63 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     return _result(context);
   }
 
-  Widget _result(BuildContext context) {
-    return ListView.builder(
-      itemCount: templist.length,
-      itemBuilder: (context, index) {
-        final item = templist[index];
-        if (suggestionBuilder != null) {
-          return GestureDetector(
-            onTap: () => onItemSelect(context, item),
-            child: suggestionBuilder!(
-              context,
-              item,
-              isSelected(item),
-            ),
-          );
-        } else {
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: enableOnlySingleSelection
-                ? ListTile(
-                    onTap: () => onItemSelect(context, item),
-                    tileColor: Theme.of(context).cardColor,
-                    selectedTileColor: Theme.of(context).selectedRowColor,
-                    selected: isSelected(item),
-                    title: _title(context, item),
-                  )
-                : CheckboxListTile(
-                    tileColor: Theme.of(context).cardColor,
-                    value: isSelected(item),
-                    selected: isSelected(item),
-                    onChanged: (value) => onItemSelect(context, item),
-                    title: _title(context, item),
+  Widget _result(BuildContext ctx) {
+    return FilterListDelegateTheme(
+      theme: theme ?? FilterListDelegateThemeData(),
+      child: Builder(
+        builder: (BuildContext innerContext) {
+          return ListView.builder(
+            itemCount: templist.length,
+            itemBuilder: (context, index) {
+              final theme = FilterListDelegateTheme.of(innerContext);
+              final item = templist[index];
+              if (suggestionBuilder != null) {
+                return GestureDetector(
+                  onTap: () => onItemSelect(context, item),
+                  child: suggestionBuilder!(
+                    context,
+                    item,
+                    isSelected(item),
                   ),
+                );
+              } else {
+                return Container(
+                  margin: theme.tileMargin,
+                  decoration: BoxDecoration(
+                    boxShadow: theme.tileshadow,
+                    border: theme.tileBorder,
+                  ),
+                  child: enableOnlySingleSelection
+                      ? ListTileTheme(
+                          data: theme.listTileTheme,
+                          child: ListTile(
+                            onTap: () => onItemSelect(context, item),
+                            selected: isSelected(item),
+                            title: _title(context, item, theme.tileTextStyle),
+                          ),
+                        )
+                      : ListTileTheme(
+                          data: theme.listTileTheme,
+                          child: CheckboxListTile(
+                            value: isSelected(item),
+                            selected: isSelected(item),
+                            onChanged: (value) => onItemSelect(context, item),
+                            title: _title(context, item, theme.tileTextStyle),
+                          ),
+                        ),
+                );
+              }
+            },
           );
-        }
-      },
+        },
+      ),
     );
   }
 
-  Widget _title(BuildContext context, T item) {
+  Widget _title(BuildContext context, T item, TextStyle style) {
     return Text(
       tileLabel!(item) ?? '',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: Colors.black87,
-      ),
+      style: style,
       textAlign: TextAlign.start,
     );
   }

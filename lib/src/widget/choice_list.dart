@@ -70,9 +70,9 @@ class ChoiceList<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = FilterListTheme.of(context);
+    final theme = FilterListTheme.of(context);
     return Container(
-      padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+      padding: EdgeInsets.only(top: 10, left: 5, right: 5),
       child: SingleChildScrollView(
         child: ChangeNotifierProvider<FilterState<T>>(
           rebuildOnChange: true,
@@ -82,6 +82,9 @@ class ChoiceList<T> extends StatelessWidget {
             Widget? child,
           ) {
             return Wrap(
+              alignment: theme.wrapAlignment,
+              crossAxisAlignment: theme.wrapCrossAxisAlignment,
+              runSpacing: theme.wrapSpacing,
               children: _buildChoiceList(context),
             );
           },

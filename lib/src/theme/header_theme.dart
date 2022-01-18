@@ -62,10 +62,15 @@ class HeaderTheme extends InheritedTheme {
 class HeaderThemeData with Diagnosticable {
   /// Builds a [HeaderThemeData].
   const HeaderThemeData({
-    this.headerTextStyle = const TextStyle(color: Colors.white),
+    this.headerTextStyle = const TextStyle(
+      fontSize: 18,
+      color: Colors.black54,
+      fontWeight: FontWeight.bold,
+    ),
     this.searchFieldTextStyle,
     this.searchFieldBackgroundColor = const Color(0xfff5f5f5),
-    this.closeIconColor = Colors.black,
+    this.closeIconColor = Colors.black54,
+    this.searchFieldIconColor = Colors.black54,
     this.backgroundColor,
     this.searchFieldInputBorder = InputBorder.none,
     this.boxShadow,
@@ -74,12 +79,16 @@ class HeaderThemeData with Diagnosticable {
     this.searchFieldHintTextStyle,
   });
 
-  factory HeaderThemeData.light(BuildContext context) => HeaderThemeData(
-        headerTextStyle:
-            Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
+  factory HeaderThemeData.light() => HeaderThemeData(
+        headerTextStyle: const TextStyle(
+          fontSize: 18,
+          color: Colors.black54,
+          fontWeight: FontWeight.bold,
+        ),
         searchFieldTextStyle: TextStyle(fontSize: 18, color: Colors.black87),
         searchFieldBackgroundColor: const Color(0xfff5f5f5),
-        closeIconColor: Colors.black,
+        closeIconColor: Colors.black54,
+        searchFieldIconColor: Colors.black54,
         backgroundColor: Colors.white,
         searchFieldInputBorder: InputBorder.none,
         searchFieldBorderRadius: 100,
@@ -90,6 +99,13 @@ class HeaderThemeData with Diagnosticable {
             color: Color(0x12000000),
           )
         ],
+      );
+  factory HeaderThemeData.dark() => HeaderThemeData(
+        backgroundColor: Color(0xff19355D),
+        searchFieldBackgroundColor: Color(0xff101e31),
+        searchFieldHintTextStyle: TextStyle(color: Color(0xff8A9AAA)),
+        searchFieldIconColor: Color(0xff8A9AAA),
+        searchFieldTextStyle: TextStyle(color: Color(0xff8A9AAA)),
       );
 
   /// TextStyle for the header text.
@@ -107,6 +123,9 @@ class HeaderThemeData with Diagnosticable {
   ///
   /// The default is black.
   final Color closeIconColor;
+
+  /// The search icon color for the search field.
+  final Color? searchFieldIconColor;
 
   /// Background color of the header.
   ///
@@ -151,6 +170,7 @@ class HeaderThemeData with Diagnosticable {
     Color? backgroundColor,
     Color? searchFieldBackgroundColor,
     Color? closeIconColor,
+    Color? searchFieldIconColor,
   }) {
     return HeaderThemeData(
       headerTextStyle: selectedChipTextStyle ?? this.headerTextStyle,
@@ -159,6 +179,7 @@ class HeaderThemeData with Diagnosticable {
       searchFieldBackgroundColor:
           searchFieldBackgroundColor ?? this.searchFieldBackgroundColor,
       closeIconColor: closeIconColor ?? this.closeIconColor,
+      searchFieldIconColor: searchFieldIconColor ?? this.searchFieldIconColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       boxShadow: boxShadow ?? this.boxShadow,
       searchFieldBorderRadius:
@@ -183,6 +204,8 @@ class HeaderThemeData with Diagnosticable {
           TextStyle.lerp(a.searchFieldTextStyle, b.searchFieldTextStyle, t),
       searchFieldBackgroundColor: a.searchFieldBackgroundColor,
       closeIconColor: Color.lerp(a.closeIconColor, b.closeIconColor, t)!,
+      searchFieldIconColor:
+          Color.lerp(a.searchFieldIconColor, b.searchFieldIconColor, t),
       backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
       boxShadow: a.boxShadow,
       searchFieldBorderRadius: a.searchFieldBorderRadius,
@@ -200,6 +223,7 @@ class HeaderThemeData with Diagnosticable {
           searchFieldTextStyle == other.searchFieldTextStyle &&
           searchFieldBackgroundColor == other.searchFieldBackgroundColor &&
           closeIconColor == other.closeIconColor &&
+          searchFieldIconColor == other.searchFieldIconColor &&
           boxShadow == other.boxShadow &&
           searchFieldBorderRadius == other.searchFieldBorderRadius &&
           searchFieldHintText == other.searchFieldHintText &&
@@ -212,6 +236,7 @@ class HeaderThemeData with Diagnosticable {
       searchFieldTextStyle.hashCode ^
       searchFieldBackgroundColor.hashCode ^
       closeIconColor.hashCode ^
+      searchFieldIconColor.hashCode ^
       boxShadow.hashCode ^
       searchFieldBorderRadius.hashCode ^
       searchFieldHintText.hashCode ^
@@ -237,5 +262,7 @@ class HeaderThemeData with Diagnosticable {
         'searchFieldHintTextStyle', searchFieldHintTextStyle));
     properties
         .add(DiagnosticsProperty<Color>('backgroundColor', backgroundColor));
+    properties.add(DiagnosticsProperty<Color>(
+        'searchFieldIconColor', searchFieldIconColor));
   }
 }

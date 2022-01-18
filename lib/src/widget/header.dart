@@ -25,7 +25,7 @@ class Header extends StatelessWidget {
       decoration: BoxDecoration(
           color: headerTheme.backgroundColor, boxShadow: headerTheme.boxShadow),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: const EdgeInsets.fromLTRB(8, 8, 0, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -34,7 +34,7 @@ class Header extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: const SizedBox.shrink(),
+                  child: const SizedBox(),
                 ),
                 Expanded(
                   flex: 6,
@@ -68,6 +68,7 @@ class Header extends StatelessWidget {
                               ),
                               child: Icon(
                                 Icons.close,
+                                size: 16,
                                 color: headerTheme.closeIconColor,
                               ),
                             ),
@@ -75,10 +76,12 @@ class Header extends StatelessWidget {
                 ),
               ],
             ),
-            hideSearchField ? SizedBox() : SizedBox(height: 10),
-            hideSearchField
-                ? SizedBox()
-                : SearchFieldWidget(onChanged: onSearch)
+            if (!hideSearchField) ...[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: SearchFieldWidget(onChanged: onSearch),
+              ),
+            ]
           ],
         ),
       ),

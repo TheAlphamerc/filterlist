@@ -235,14 +235,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
           builder: (BuildContext innerContext) {
             return Scaffold(
               backgroundColor: Colors.transparent,
-              body: ClipRRect(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    FilterListTheme.of(innerContext).borderRadius,
-                  ),
-                ),
-                child: _body(innerContext),
-              ),
+              body: _body(innerContext),
             );
           },
         ),

@@ -38,7 +38,11 @@ class ControlButtonBar<T> extends StatelessWidget {
               margin: theme.margin,
               alignment: Alignment.bottomCenter,
               child: Container(
-                decoration: theme.controlContainerDecoration,
+                decoration: theme.controlContainerDecoration!.copyWith(
+                  color: theme.controlContainerDecoration!.color == null
+                      ? theme.backgroundColor
+                      : theme.controlContainerDecoration!.color,
+                ),
                 padding: theme.padding,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

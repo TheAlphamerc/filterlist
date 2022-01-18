@@ -29,15 +29,27 @@ class _MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
   void openFilterDelegate() async {
-    await FilterListDelegate.show<String>(
+    await FilterListDelegate.show<User>(
       context: context,
-      list: ['Jon', 'Abraham', 'John', 'Peter', 'Paul', 'Mary', 'Jane'],
+      list: userList,
+      theme: FilterListDelegateThemeData(
+        listTileTheme: ListTileThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          tileColor: Colors.white,
+          selectedColor: Colors.red,
+          selectedTileColor: Color(0xFF649BEC).withOpacity(.5),
+          textColor: Colors.blue,
+        ),
+      ),
+      // enableOnlySingleSelection: true,
       onItemSearch: (user, query) {
-        return user.toLowerCase().contains(query.toLowerCase());
+        return user.name!.toLowerCase().contains(query.toLowerCase());
       },
-      tileLabel: (user) => user,
+      tileLabel: (user) => user!.name,
       emptySearchChild: Center(child: Text('No user found')),
-      enableOnlySingleSelection: true,
+      // enableOnlySingleSelection: true,
       searchFieldHint: 'Search Here..',
       // suggestionBuilder: (context, user, isSelected) {
       //   return ListTile(
@@ -50,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // },
       onApplyButtonClick: (list) {
         setState(() {
-          // selectedUserList = list;
+          selectedUserList = list;
         });
       },
     );
@@ -59,15 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void _openFilterDialog() async {
     await FilterListDialog.display<User>(
       context,
-      themeData: FilterListThemeData(
-        context: context,
-        controlButtonBarTheme: ControlButtonBarThemeData(
-          context,
-        ),
-      ),
+      hideSelectedTextCount: true,
+      themeData: FilterListThemeData.light(context),
+      headlineText: 'Select Users',
+      height: 500,
       listData: userList,
       selectedListData: selectedUserList,
-      height: 480,
       choiceChipLabel: (item) => item!.name,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
@@ -199,14 +208,8 @@ class FilterPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: FilterListWidget<User>(
-          themeData: FilterListThemeData(
-            context: context,
-            controlButtonBarTheme: ControlButtonBarThemeData(
-              context,
-              buttonSpacing: 20,
-            ),
-          ),
-
+          themeData: FilterListThemeData.light(context),
+          hideSelectedTextCount: true,
           listData: userList,
           controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
           selectedListData: selectedUserList,
@@ -253,21 +256,47 @@ class User {
 /// Creating a global list for example purpose.
 /// Generally it should be within data class or where ever you want
 List<User> userList = [
-  User(name: "Jon", avatar: "user.png"),
-  User(name: "Lindsey ", avatar: "user.png"),
-  User(name: "Valarie ", avatar: "user.png"),
-  User(name: "Elyse ", avatar: "user.png"),
-  User(name: "Ethel ", avatar: "user.png"),
-  User(name: "Emelyan ", avatar: "user.png"),
-  User(name: "Catherine ", avatar: "user.png"),
-  User(name: "Stepanida  ", avatar: "user.png"),
-  User(name: "Carolina ", avatar: "user.png"),
-  User(name: "Nail  ", avatar: "user.png"),
-  User(name: "Kamil ", avatar: "user.png"),
-  User(name: "Mariana ", avatar: "user.png"),
-  User(name: "Katerina ", avatar: "user.png"),
+  User(name: "Abigail", avatar: "user.png"),
+  User(name: "Audrey", avatar: "user.png"),
+  User(name: "Ava", avatar: "user.png"),
+  User(name: "Bella", avatar: "user.png"),
+  User(name: "Bernadette", avatar: "user.png"),
+  User(name: "Carol", avatar: "user.png"),
+  User(name: "Claire", avatar: "user.png"),
+  User(name: "Deirdre", avatar: "user.png"),
+  User(name: "Donna", avatar: "user.png"),
+  User(name: "Dorothy", avatar: "user.png"),
+  User(name: "Faith", avatar: "user.png"),
+  User(name: "Gabrielle", avatar: "user.png"),
+  User(name: "Grace", avatar: "user.png"),
+  User(name: "Hannah", avatar: "user.png"),
+  User(name: "Heather", avatar: "user.png"),
+  User(name: "Irene", avatar: "user.png"),
+  User(name: "Jan", avatar: "user.png"),
+  User(name: "Jane", avatar: "user.png"),
+  User(name: "Julia", avatar: "user.png"),
+  User(name: "Kylie", avatar: "user.png"),
+  User(name: "Lauren", avatar: "user.png"),
+  User(name: "Leah", avatar: "user.png"),
+  User(name: "Lisa", avatar: "user.png"),
+  User(name: "Melanie", avatar: "user.png"),
+  User(name: "Natalie", avatar: "user.png"),
+  User(name: "Olivia", avatar: "user.png"),
+  User(name: "Penelope", avatar: "user.png"),
+  User(name: "Rachel", avatar: "user.png"),
+  User(name: "Ruth", avatar: "user.png"),
+  User(name: "Sally", avatar: "user.png"),
+  User(name: "Samantha", avatar: "user.png"),
+  User(name: "Sarah", avatar: "user.png"),
+  User(name: "Theresa", avatar: "user.png"),
+  User(name: "Una", avatar: "user.png"),
+  User(name: "Vanessa", avatar: "user.png"),
+  User(name: "Victoria", avatar: "user.png"),
+  User(name: "Wanda", avatar: "user.png"),
+  User(name: "Wendy", avatar: "user.png"),
+  User(name: "Yvonne", avatar: "user.png"),
+  User(name: "Zoe", avatar: "user.png"),
 ];
-
 /// Another exmaple of [FilterListWidget] to filter list of strings
 ///
 /// FilterListWidget<String>(

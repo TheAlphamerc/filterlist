@@ -73,15 +73,14 @@ class ControlButtonThemeData with Diagnosticable {
     this.primaryButtonTextStyle =
         const TextStyle(fontSize: 16, color: Colors.white),
     this.primaryButtonBackgroundColor = const Color(0xFF649BEC),
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = Colors.transparent,
     this.borderRadius = 25,
     this.boxShadow,
     this.elevation,
     this.padding: const EdgeInsets.symmetric(horizontal: 16),
   });
 
-  factory ControlButtonThemeData.light(BuildContext context) =>
-      ControlButtonThemeData(
+  factory ControlButtonThemeData.light() => ControlButtonThemeData(
         padding: EdgeInsets.symmetric(horizontal: 16),
         textStyle: TextStyle(
           fontSize: 16,
@@ -89,7 +88,7 @@ class ControlButtonThemeData with Diagnosticable {
         ),
         primaryButtonTextStyle: TextStyle(fontSize: 16, color: Colors.white),
         primaryButtonBackgroundColor: Color(0xFF649BEC),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         borderRadius: 40,
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -99,6 +98,18 @@ class ControlButtonThemeData with Diagnosticable {
           )
         ],
         elevation: 0,
+      );
+  factory ControlButtonThemeData.dark() => ControlButtonThemeData(
+        primaryButtonBackgroundColor: Color(0xff3E77C8),
+        // backgroundColor: ,
+        textStyle: TextStyle(
+          color: Color(0xFFEABE75),
+        ),
+        primaryButtonTextStyle: TextStyle(
+          color: Color(
+            0xffFFBC00,
+          ),
+        ),
       );
 
   /// Control button elevation

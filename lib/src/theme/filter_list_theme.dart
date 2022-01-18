@@ -40,7 +40,7 @@ class FilterListThemeData with Diagnosticable {
   /// Builds a [FilterListThemeData] with default values, if none are given.
   factory FilterListThemeData({
     required BuildContext context,
-    Brightness? brightness,
+    // Brightness? brightness,
     ChoiceChipThemeData? choiceChipTheme,
     HeaderThemeData? headerTheme,
     ControlButtonBarThemeData? controlButtonBarTheme,
@@ -51,22 +51,22 @@ class FilterListThemeData with Diagnosticable {
     Color? backgroundColor,
   }) {
     // Use the given brightness, or a default
-    final _brightness = brightness ?? Brightness.light;
+    // final _brightness = brightness ?? Brightness.light;
     // Determine dark or light
-    final isDark = _brightness == Brightness.dark;
+    // final isDark = _brightness == Brightness.dark;
 
     choiceChipTheme = choiceChipTheme ?? ChoiceChipThemeData.light(context);
 
-    headerTheme = headerTheme ?? HeaderThemeData.light(context);
+    headerTheme = headerTheme ?? HeaderThemeData.light();
 
     controlButtonBarTheme =
-        controlButtonBarTheme ?? ControlButtonBarThemeData.light(context);
+        controlButtonBarTheme ?? ControlButtonBarThemeData.light();
 
     /// Border radius of filter dialog
     borderRadius ??= 20;
 
     /// Background color of filter dialog
-    backgroundColor ??= isDark ? Colors.black : Colors.white;
+    backgroundColor ??= Colors.white;
 
     /// Wrap alignment of filter dialog
     wrapAlignment ??= WrapAlignment.start;
@@ -78,7 +78,7 @@ class FilterListThemeData with Diagnosticable {
     wrapSpacing ??= 0.0;
 
     return FilterListThemeData.raw(
-      brightness: _brightness,
+      // brightness: _brightness,
       choiceChipTheme: choiceChipTheme,
       headerTheme: headerTheme,
       controlBarButtonTheme: controlButtonBarTheme,
@@ -92,15 +92,23 @@ class FilterListThemeData with Diagnosticable {
 
   /// A default light theme.
   factory FilterListThemeData.light(BuildContext context) =>
-      FilterListThemeData(brightness: Brightness.light, context: context);
+      FilterListThemeData(context: context);
 
-  /// A default dark theme.
-  factory FilterListThemeData.dark(BuildContext context) =>
-      FilterListThemeData(brightness: Brightness.dark, context: context);
+  factory FilterListThemeData.dark(BuildContext context) => FilterListThemeData(
+        context: context,
+        backgroundColor: Color(0xff101e31),
+        headerTheme: HeaderThemeData.dark(),
+        choiceChipTheme: ChoiceChipThemeData.dark(),
+        controlButtonBarTheme: ControlButtonBarThemeData.dark(context),
+      );
+
+  // /// A default dark theme.
+  // factory FilterListThemeData.dark(BuildContext context) =>
+  //     FilterListThemeData(brightness: Brightness.dark, context: context);
 
   /// Raw [FilterListThemeData] initialization.
   const FilterListThemeData.raw({
-    required this.brightness,
+    // required this.brightness,
     required this.choiceChipTheme,
     required this.headerTheme,
     required this.controlBarButtonTheme,
@@ -111,8 +119,8 @@ class FilterListThemeData with Diagnosticable {
     required this.backgroundColor,
   });
 
-  /// The [Brightness] of this theme.
-  final Brightness brightness;
+  // /// The [Brightness] of this theme.
+  // final Brightness brightness;
 
   /// Border radius of the filter dialog
   final double borderRadius;
@@ -152,7 +160,7 @@ class FilterListThemeData with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<Brightness>('brightness', brightness))
+      // ..add(EnumProperty<Brightness>('brightness', brightness))
       ..add(DiagnosticsProperty<double>('borderRadius', borderRadius))
       ..add(DiagnosticsProperty<Color>('backgroundColor', backgroundColor))
       ..add(DiagnosticsProperty<ChoiceChipThemeData>(

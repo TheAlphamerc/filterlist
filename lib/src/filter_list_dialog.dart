@@ -185,7 +185,7 @@ class FilterListDialog {
     List<ContolButtonType>? controlButtons,
   }) async {
     if (height == null) {
-      height = MediaQuery.of(context).size.height * .8;
+      height = MediaQuery.of(context).size.height * .5;
     }
     if (width == null) {
       width = MediaQuery.of(context).size.width;
@@ -205,30 +205,35 @@ class FilterListDialog {
             height: height,
             width: width,
             color: Colors.transparent,
-            child: FilterListWidget(
-              themeData: themeData,
-              listData: listData,
-              choiceChipLabel: choiceChipLabel,
-              hideHeader: hideheader,
-              headlineText: headlineText,
-              onItemSearch: onItemSearch,
-              backgroundColor: backgroundColor,
-              selectedListData: selectedListData,
-              onApplyButtonClick: onApplyButtonClick,
-              validateSelectedItem: validateSelectedItem,
-              hideSelectedTextCount: hideSelectedTextCount,
-              hideCloseIcon: hideCloseIcon,
-              headerCloseIcon: headerCloseIcon,
-              hideSearchField: hideSearchField,
-              choiceChipBuilder: choiceChipBuilder,
-              enableOnlySingleSelection: enableOnlySingleSelection,
-              selectedItemsText: selectedItemsText,
-              applyButtonText: applyButtonText,
-              resetButtonText: resetButtonText,
-              allButtonText: allButtonText,
-              validateRemoveItem: validateRemoveItem,
-              controlButtons: controlButtons ??
-                  [ContolButtonType.All, ContolButtonType.Reset],
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(themeData?.borderRadius ?? 20),
+              ),
+              child: FilterListWidget(
+                themeData: themeData,
+                listData: listData,
+                choiceChipLabel: choiceChipLabel,
+                hideHeader: hideheader,
+                headlineText: headlineText,
+                onItemSearch: onItemSearch,
+                backgroundColor: backgroundColor,
+                selectedListData: selectedListData,
+                onApplyButtonClick: onApplyButtonClick,
+                validateSelectedItem: validateSelectedItem,
+                hideSelectedTextCount: hideSelectedTextCount,
+                hideCloseIcon: hideCloseIcon,
+                headerCloseIcon: headerCloseIcon,
+                hideSearchField: hideSearchField,
+                choiceChipBuilder: choiceChipBuilder,
+                enableOnlySingleSelection: enableOnlySingleSelection,
+                selectedItemsText: selectedItemsText,
+                applyButtonText: applyButtonText,
+                resetButtonText: resetButtonText,
+                allButtonText: allButtonText,
+                validateRemoveItem: validateRemoveItem,
+                controlButtons: controlButtons ??
+                    [ContolButtonType.All, ContolButtonType.Reset],
+              ),
             ),
           ),
         );

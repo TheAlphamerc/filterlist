@@ -69,7 +69,9 @@ class ChoiceChipThemeData with Diagnosticable {
     this.visualDensity,
     this.elevation,
     this.side,
+    this.selectedSide,
     this.shape,
+    this.selectedShape,
     this.shadowColor = Colors.black,
     this.selectedShadowColor = Colors.black,
     this.padding,
@@ -91,6 +93,25 @@ class ChoiceChipThemeData with Diagnosticable {
         padding: const EdgeInsets.all(4),
         labelPadding: const EdgeInsets.symmetric(horizontal: 4.0),
         margin: const EdgeInsets.symmetric(horizontal: 10.0),
+      );
+
+  factory ChoiceChipThemeData.dark() => ChoiceChipThemeData(
+        backgroundColor: Color(0xff4a70a7),
+        side: BorderSide(color: Color(0xff101e31)),
+        textStyle: TextStyle(
+          color: Color(0xff101e31),
+        ),
+        selectedTextStyle: TextStyle(
+          color: Color(0xFFE4B057),
+        ),
+        selectedSide: BorderSide(color: Color(0xffFFBC00)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        selectedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        selectedBackgroundColor: Color(0xff3E77C8),
       );
 
   /// TextStyle for chip when selected.
@@ -126,10 +147,18 @@ class ChoiceChipThemeData with Diagnosticable {
   /// Defaults to the border side in the ambient [ChipThemeData]. If the theme border side resolves to null, the default is the border side of [shape].
   final BorderSide? side;
 
+  /// The color and weight of the selected chip's outline.
+  ///
+  /// Defaults to the border side in the ambient [ChipThemeData]. If the theme border side resolves to null, the default is the border side of [shape].
+  final BorderSide? selectedSide;
+
   /// The [OutlinedBorder] to draw around the chip.
   ///
   /// Defaults to the shape in the ambient [ChipThemeData]. If the theme shape resolves to null, the default is [StadiumBorder].
   final OutlinedBorder? shape;
+
+  /// The [OutlinedBorder] to draw around selected the chip.
+  final OutlinedBorder? selectedShape;
 
   /// Color of the chip's shadow when the elevation is greater than 0.
   ///
@@ -165,7 +194,9 @@ class ChoiceChipThemeData with Diagnosticable {
     VisualDensity? visualDensity,
     double? elevation,
     BorderSide? side,
+    BorderSide? selectedSide,
     OutlinedBorder? shape,
+    OutlinedBorder? selecteShape,
     Color? shadowColor,
     Color? selectedShadowColor,
     EdgeInsetsGeometry? padding,
@@ -181,7 +212,9 @@ class ChoiceChipThemeData with Diagnosticable {
       visualDensity: visualDensity ?? this.visualDensity,
       elevation: elevation ?? this.elevation,
       side: side ?? this.side,
+      selectedSide: selectedSide ?? this.selectedSide,
       shape: shape ?? this.shape,
+      selectedShape: selecteShape ?? this.selectedShape,
       shadowColor: shadowColor ?? this.shadowColor,
       selectedShadowColor: selectedShadowColor ?? this.selectedShadowColor,
       padding: padding ?? this.padding,
@@ -207,7 +240,9 @@ class ChoiceChipThemeData with Diagnosticable {
       visualDensity: VisualDensity.lerp(a.visualDensity!, b.visualDensity!, t),
       elevation: a.elevation,
       side: BorderSide.lerp(a.side!, b.side!, t),
+      selectedSide: BorderSide.lerp(a.selectedSide!, b.selectedSide!, t),
       shape: a.shape,
+      selectedShape: a.selectedShape,
       shadowColor: Color.lerp(a.shadowColor, b.shadowColor, t),
       selectedShadowColor:
           Color.lerp(a.selectedShadowColor, b.selectedShadowColor, t),
@@ -229,7 +264,9 @@ class ChoiceChipThemeData with Diagnosticable {
           visualDensity == other.visualDensity &&
           elevation == other.elevation &&
           side == other.side &&
+          selectedSide == other.selectedSide &&
           shape == other.shape &&
+          selectedShape == other.selectedShape &&
           shadowColor == other.shadowColor &&
           selectedShadowColor == other.selectedShadowColor &&
           padding == other.padding &&
@@ -245,7 +282,9 @@ class ChoiceChipThemeData with Diagnosticable {
       visualDensity.hashCode ^
       elevation.hashCode ^
       side.hashCode ^
+      selectedSide.hashCode ^
       shape.hashCode ^
+      selectedShape.hashCode ^
       shadowColor.hashCode ^
       selectedShadowColor.hashCode ^
       padding.hashCode ^
@@ -265,7 +304,12 @@ class ChoiceChipThemeData with Diagnosticable {
         DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
     properties.add(DiagnosticsProperty<double>('elevation', elevation));
     properties.add(DiagnosticsProperty<BorderSide>('side', side));
+    properties
+        .add(DiagnosticsProperty<BorderSide>('selectedSide', selectedSide));
     properties.add(DiagnosticsProperty<OutlinedBorder>('shape', shape));
+    properties.add(
+        DiagnosticsProperty<OutlinedBorder>('selectedShape', selectedShape));
+
     properties.add(DiagnosticsProperty<Color>('shadowColor', shadowColor));
     properties.add(
         DiagnosticsProperty<Color>('selectedShadowColor', selectedShadowColor));

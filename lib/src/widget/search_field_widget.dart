@@ -24,7 +24,8 @@ class SearchFieldWidget<T> extends StatelessWidget {
           onChanged: onChanged,
           style: headerTheme.searchFieldTextStyle,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.black38),
+            prefixIcon:
+                Icon(Icons.search, color: headerTheme.searchFieldIconColor),
             hintText: headerTheme.searchFieldHintText,
             hintStyle: headerTheme.searchFieldHintTextStyle,
             border: headerTheme.searchFieldInputBorder,
