@@ -168,22 +168,35 @@ Create a function and call `FilterListDelegate.open()` on button tap.
 ## Screenshots
 
 
-No selected text from list |  FilterListDialog        |  Make selection           |  Selected text from list
+Empty screen |  FilterListDialog        |  Selected chip           |  Result from dialog
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_1.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_2.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_3.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_4.jpg?raw=true)|
+<img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/1.jpeg" width="300">| <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/2.jpeg" width="300"> | <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/3.jpeg" width="300"> | <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/4.jpeg" width="300">
 
-Hidden close Icon    |  Hidden text field     |  Hidden header text    |  Hidden full header
+### Customized Dialog  Header
+  |  |   |  |
+:-------------------------:|:-------------------------:|:-------------------------:|
+<img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/6.jpeg" width="300">| <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/7.jpeg" width="300"> | <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/8.jpeg" width="300"> | 
+
+### Customized Choice chip
+|  |  |   |  |
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_5.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_6.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_7.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_8.jpg?raw=true)|
-
-Customised control button |Customised selected text |Customised unselected text  |Customised text field background color
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_9.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_10.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_12.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_11.jpg?raw=true)|
+<img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/9.jpg" width="300">| <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/10.jpeg" width="300"> | <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/11.jpg" width="300"> | <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/12.jpeg" width="300">
 
 
- Customised Choice chip|Customised Choice chip |FilterListWidget|FilterListWidget 
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_15.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_17.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_14.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_16.jpg?raw=true)|
+ ### FilterListWidget
+|  Default| Customized |  customized  |
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/screenshots/13.jpeg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/screenshots/15.jpeg?raw=true)|![](https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/16.jpeg)|
+
+### FilterListDelegate
+| Single selection | Multiple selection  |Multiple selection
+|:-:|:-:|:-:|
+![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/screenshots/17.jpeg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/screenshots/18.jpeg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/screenshots/19.jpeg?raw=true)|
+
+
+| Search through list  | Customized Tile  |
+|:-:|:-:|
+<img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/20.jpeg" width="300"> </img>| </a> <img src="https://raw.githubusercontent.com/TheAlphamerc/flutter_plugin_filter_list/screenshots/21.jpeg" width="300"></img></a>
 
 
 
