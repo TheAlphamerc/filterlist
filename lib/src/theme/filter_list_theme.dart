@@ -38,8 +38,8 @@ class FilterListTheme extends InheritedWidget {
 /// particular widget subtree.
 class FilterListThemeData with Diagnosticable {
   /// Builds a [FilterListThemeData] with default values, if none are given.
-  factory FilterListThemeData({
-    required BuildContext context,
+  factory FilterListThemeData(
+    BuildContext context, {
     // Brightness? brightness,
     ChoiceChipThemeData? choiceChipTheme,
     HeaderThemeData? headerTheme,
@@ -92,10 +92,10 @@ class FilterListThemeData with Diagnosticable {
 
   /// A default light theme.
   factory FilterListThemeData.light(BuildContext context) =>
-      FilterListThemeData(context: context);
+      FilterListThemeData(context);
 
   factory FilterListThemeData.dark(BuildContext context) => FilterListThemeData(
-        context: context,
+        context,
         backgroundColor: Color(0xff101e31),
         headerTheme: HeaderThemeData.dark(),
         choiceChipTheme: ChoiceChipThemeData.dark(),

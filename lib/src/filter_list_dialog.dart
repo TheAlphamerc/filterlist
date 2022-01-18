@@ -15,7 +15,7 @@ part 'filter_list_widget.dart';
 /// {@template arguments}
 /// The [listData] should be list of dynamic data which neeeds to filter.
 ///
-/// The [selectedListData] should be subset of [listData]. The list passed to [selectedListData] should available in [listData].
+/// The [selectedListData] should be sublist of [listData]. The list passed to [selectedListData] should available in [listData].
 ///
 /// The [choiceChipLabel] is a callback which required [String] value in return. It used this value to display text on choice chip.
 ///

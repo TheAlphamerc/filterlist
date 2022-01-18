@@ -32,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await FilterListDelegate.show<User>(
       context: context,
       list: userList,
+      selectedListData: selectedUserList,
       theme: FilterListDelegateThemeData(
         listTileTheme: ListTileThemeData(
           shape: RoundedRectangleBorder(
@@ -72,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await FilterListDialog.display<User>(
       context,
       hideSelectedTextCount: true,
-      themeData: FilterListThemeData.light(context),
+      themeData: FilterListThemeData(context),
       headlineText: 'Select Users',
       height: 500,
       listData: userList,
@@ -165,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(color: Colors.white),
               ),
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
               // color: Colors.blue,
             ),
           ],
@@ -176,18 +178,19 @@ class _MyHomePageState extends State<MyHomePage> {
           selectedUserList == null || selectedUserList!.length == 0
               ? Expanded(
                   child: Center(
-                    child: Text('No text selected'),
+                    child: Text('No user selected'),
                   ),
                 )
               : Expanded(
                   child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(selectedUserList![index].name!),
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(),
-                      itemCount: selectedUserList!.length),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(selectedUserList![index].name!),
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider(),
+                    itemCount: selectedUserList!.length,
+                  ),
                 ),
         ],
       ),
@@ -208,7 +211,7 @@ class FilterPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: FilterListWidget<User>(
-          themeData: FilterListThemeData.light(context),
+          themeData: FilterListThemeData(context),
           hideSelectedTextCount: true,
           listData: userList,
           controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
@@ -298,36 +301,34 @@ List<User> userList = [
   User(name: "Zoe", avatar: "user.png"),
 ];
 /// Another exmaple of [FilterListWidget] to filter list of strings
-///
-/// FilterListWidget<String>(
-///   listData: ["One", "Two", "Three", "Four","five","Six","Seven","Eight","Nine","Ten"],
-///   selectedListData: ["One", "Three", "Four","Eight","Nine"],
-///   hideHeaderText: true,
-///   height: MediaQuery.of(context).size.height,
-///   // hideHeaderText: true,
-///   onApplyButtonClick: (list) {
-///     Navigator.pop(context, list);
-///   },
-///   choiceChipLabel: (item) {
-///     /// Used to print text on chip
-///     return item;
-///   },
-///   validateSelectedItem: (list, val) {
-///     ///  identify if item is selected or not
-///     return list!.contains(val);
-///   },
-///   onItemSearch: (list, text) {
-///     /// When text change in search text field then return list containing that text value
-///     ///
-///     ///Check if list has value which matchs to text
-///     if (list!.any((element) =>
-///         element.toLowerCase().contains(text.toLowerCase()))) {
-///       /// return list which contains matches
-///       return list
-///           .where((element) =>
-///               element.toLowerCase().contains(text.toLowerCase()))
-///           .toList();
-///     }
-///     return [];
-///   },
-/// )
+/*
+ FilterListWidget<String>(
+    listData: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten"
+    ],
+    selectedListData: ["One", "Three", "Four", "Eight", "Nine"],
+    onApplyButtonClick: (list) {
+      Navigator.pop(context, list);
+    },
+    choiceChipLabel: (item) {
+      /// Used to print text on chip
+      return item;
+    },
+    validateSelectedItem: (list, val) {
+      ///  identify if item is selected or not
+      return list!.contains(val);
+    },
+    onItemSearch: (text, query) {
+      return text.toLowerCase().contains(query.toLowerCase());
+    },
+  )
+*/

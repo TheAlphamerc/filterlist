@@ -1,39 +1,43 @@
-## [1.0.1] - coming soon
+## [1.0.1] - 18 Jan 2022
 
 - 🚨 Breaking change
 
-  - Removed `selectedChipTextStyle` option
-  - Removed `unselectedChipTextStyle` option
-  - Removed `selectedTextBackgroundColor` option
-  - Removed `unselectedTextbackGroundColor` option
-  - Removed `hideHeaderText` option
-  - Removed `closeIconColor` option
-  - Removed `hideHeaderAreaShadow` option
-  - Removed `headerTextColor` option
-  - Removed `searchFieldBackgroundColor` option
-  - Removed `searchFieldTextStyle` option
-  - Removed `headerTextStyle` option
-  - Removed `searchFieldHintText` option
-  - Removed `applyButonTextBackgroundColor` option
-  - Removed `buttonRadius` option
-  - Removed `buttonSpacing` option
-  - Removed `controlButtonTextStyle` option
-  - Removed `applyButtonTextStyle` option
-  - Removed `applyButtonText` option
-  - Removed `wrapAlignment` option
-  - Removed `wrapCrossAxisAlignment` option
-  - Removed `wrapSpacing` option
-  - Removed `borderRadius` option
-  - Replace `ItemSearchDelegate<T>` with `SearchPredict<T>` method
+  - Removed `selectedChipTextStyle` parameter
+  - Removed `unselectedChipTextStyle` parameter
+  - Removed `selectedTextBackgroundColor` parameter
+  - Removed `unselectedTextbackGroundColor` parameter
+  - Removed `hideHeaderText` parameter
+  - Removed `closeIconColor` parameter
+  - Removed `hideHeaderAreaShadow` parameter
+  - Removed `headerTextColor` parameter
+  - Removed `searchFieldBackgroundColor` parameter
+  - Removed `searchFieldTextStyle` parameter
+  - Removed `headerTextStyle` parameter
+  - Removed `searchFieldHintText` parameter
+  - Removed `applyButonTextBackgroundColor` parameter
+  - Removed `buttonRadius` parameter
+  - Removed `buttonSpacing` parameter
+  - Removed `controlButtonTextStyle` parameter
+  - Removed `applyButtonTextStyle` parameter
+  - Removed `applyButtonText` parameter
+  - Removed `wrapAlignment` parameter
+  - Removed `wrapCrossAxisAlignment` parameter
+  - Removed `wrapSpacing` parameter
+  - Removed `borderRadius` parameter
 
-- Add `FilterListTheme` for filter list widget theme
-- Add `ChoiceChipTheme` for choice chip theme.
-- Add `HeaderTheme` for Header widget theme
-- Add `ControlButtonBarTheme` for control button bar theme
-- Add `ControlButtonTheme` for control button theme
-- Add `controlButtons` option to display/hide control buttons (All, Reset)
-- Add `FilterListDelegate.show` delegate to search/filter data in new screen
-- Add `FilterListDelegateTheme` for filter list delegate theme
+  > Above removed parameters are moved to the newly created theme parameter 
+
+  - Replace `ItemSearchDelegate<T>` with `SearchPredict<T>` method
+- Added Theme
+  - `FilterListTheme` for filter list widget theme
+  - `ChoiceChipTheme` for choice chip theme.
+  - `HeaderTheme` for Header widget theme
+  - `ControlButtonBarTheme` for control button bar theme
+  - `ControlButtonTheme` for control button theme
+  - `FilterListDelegateTheme` for filter list delegate theme
+  - `controlButtons` parameter to display/hide control buttons (All, Reset)
+- Added `FilterListDelegate.show` delegate to search/filter data in new screen
+
 
 
 ## [1.0.0] 21 May 2021
@@ -93,9 +97,9 @@
 - Added pop-up height
 
 - Added pop-up width
-- Added header hide option
-- Added search field hide option
-- Added cross icon hide option
+- Added header hide parameter
+- Added search field hide parameter
+- Added cross icon hide parameter
 
 ## [0.0.2] - 02 Mar 2020
 

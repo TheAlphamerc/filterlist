@@ -7,9 +7,9 @@ typedef SuggestionBuilder<T> = Widget Function(
 typedef AppbarBottom = PreferredSizeWidget Function(BuildContext context);
 
 /// The [FilterListDelegate.show] implement a search view, using [SearchDelegate]
-/// {@template list_data}
 /// The [listData] should be list of [T] which neeeds to filter.
-/// {@endtemplate}
+///
+/// the `selectedListData` should be sublist of [listData].
 ///
 /// The [tileLabel] is a callback which required [String] value in return. It used this value to display text on choice chip.
 ///
@@ -65,10 +65,12 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   final Widget? emptySearchChild;
 
   final ButtonStyle? applyButtonStyle;
+  final List<T>? selectedListData;
 
   final FilterListDelegateThemeData? theme;
   FilterListDelegate({
     required this.listData,
+    this.selectedListData,
     required this.onItemSearch,
     required this.onApplyButtonClick,
     this.tileLabel,
@@ -100,6 +102,9 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
             searchFieldStyle: searchFieldStyle,
             searchFieldDecorationTheme: searchFieldDecorationTheme) {
     templist = listData;
+    if (selectedListData != null) {
+      selectedItems = selectedListData;
+    }
   }
 
   List<T>? selectedItems;
@@ -107,6 +112,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   bool isSelected(T item) =>
       selectedItems != null && selectedItems!.contains(item);
 
+  /// Shows a full screen search page and returns the search result selected by the user when the page is closed.
   /// Open search view page that implement [SearchDelegate]
   ///  ``` dart
   /// await FilterListDelegate.show<String>(
@@ -127,6 +133,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   static Future<T?>? show<T>({
     required BuildContext context,
     required List<T> list,
+    List<T>? selectedListData,
     LabelDelegate<T>? tileLabel,
     required SearchPredict<T> onItemSearch,
     required OnApplyButtonClick<T> onApplyButtonClick,
@@ -143,19 +150,21 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     var selectedItem = await showSearch(
       context: context,
       delegate: FilterListDelegate(
-          listData: list,
-          tileLabel: tileLabel,
-          onItemSearch: onItemSearch,
-          onApplyButtonClick: onApplyButtonClick,
-          searchFieldHint: searchFieldHint,
-          suggestionBuilder: suggestionBuilder,
-          searchFieldDecorationTheme: searchFieldDecorationTheme,
-          searchFieldStyle: searchFieldStyle,
-          buildAppbarBottom: buildAppbarBottom,
-          enableOnlySingleSelection: enableOnlySingleSelection,
-          emptySearchChild: emptySearchChild,
-          theme: theme,
-          applyButtonStyle: applyButtonStyle),
+        listData: list,
+        selectedListData: selectedListData,
+        tileLabel: tileLabel,
+        onItemSearch: onItemSearch,
+        onApplyButtonClick: onApplyButtonClick,
+        searchFieldHint: searchFieldHint,
+        suggestionBuilder: suggestionBuilder,
+        searchFieldDecorationTheme: searchFieldDecorationTheme,
+        searchFieldStyle: searchFieldStyle,
+        buildAppbarBottom: buildAppbarBottom,
+        enableOnlySingleSelection: enableOnlySingleSelection,
+        emptySearchChild: emptySearchChild,
+        theme: theme,
+        applyButtonStyle: applyButtonStyle,
+      ),
     );
 
     return Future.value(selectedItem);
