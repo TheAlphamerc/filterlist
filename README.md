@@ -11,41 +11,23 @@
 
 FilterList is a flutter package which provide utility to search/filter on the basis of single/multiple selection from provided dynamic list.
 
-## Download Demo App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
+### Download Demo App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
 <a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
-## Data flow
-* Invoke method `FilterListDialog.display()` to display filterf filter dialog.
-* Make selection from list.
-* Click `All` button to select all text from list.
-* Click `Reset` button to make all text unselected.
-* Click `Apply` buton to return selected list of strings.
-* On `close` icon clicked it close dialog and return null value.
-* Without making any selection `Apply` button is pressed it will return empty list of items.
-
 ## Getting Started
-### 1. Add library to your pubspec.yaml
-
-
-
+1. Add library to your pubspec.yaml
 ```yaml
 
 dependencies:
-  filter_list: ^<latest version>
+  filter_list: ^<latest_version>
 
 ```
-
-### 2. Import library in dart file
-
+2. Import library in dart file
 ```dart
 import package:filter_list/filter_list.dart';
 ```
 
-
-### 3. How to use FilterList
-
-
-#### Create a list of Strings / dynamic object
+3. Create a list of Strings / dynamic object
 ``` dart
 class User {
   final String? name;
@@ -53,8 +35,6 @@ class User {
   User({this.name, this.avatar});
 }
 
-/// Creating a global list for example purpose.
-/// Generally it should be within bussiness logic class or where ever you want
 List<User> userList = [
  User(name: "Jon", avatar: ""),
   User(name: "Lindsey ", avatar: ""),
@@ -72,7 +52,15 @@ List<User> userList = [
 ];
 ```
 
-#### Create a function and call `FilterListDialog.display()` 
+## Filter list offer 3 ways to filter data from list
+- FilterListDialog
+- FilterListWidget
+- FilterListDelegate
+
+Below is a example of using filter list widgets with minimal code however there is a lot more inside the widget for you to fully customize the widget.
+
+##  How to use FilterListDialog
+#### 1. Create a function and call `FilterListDialog.display`  
 ```dart
   void openFilterDialog() async {
     await FilterListDialog.display<User>(
@@ -93,7 +81,9 @@ List<User> userList = [
     );
   }
 ```
-#### Call `openFilterDialog` function on button tap to display filter dialog
+>If `Apply` button is pressed without making any selection  it will return empty list of items.
+
+#### 2. Call `openFilterDialog` function on button tap to display filter dialog
 
 ```dart
 @override
@@ -117,9 +107,8 @@ List<User> userList = [
   }
 ```
 
-#### How to use `FilterListWidget`.
-Below is a example of using `FilterListWidget` with minimal code however there is a lot more inside the widget for you to fully customize the widget.
 
+## How to use `FilterListWidget`.
 ```dart
 
 class FilterPage extends StatelessWidget {
@@ -154,10 +143,32 @@ class FilterPage extends StatelessWidget {
   }
 }
 ```
+
+## How to use `FilterListDelegate`.
+Create a function and call `FilterListDelegate.open()` on button tap.
+
+``` dart
+ void openFilterDelegate() async {
+   await FilterListDelegate.open<User>(
+      context: context,
+      list: userList,
+      onItemSearch: (user, query) {
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+      tileLabel: (user) => user!.name,
+      emptySearchChild: Center(child: Text('No user found')),
+      searchFieldHint: 'Search Here..',
+      onApplyButtonClick: (list) {
+        // Do something with selected list
+      },
+    );
+  }
+```
+
 ## Screenshots
 
 
-No selected text from list |  FilterList widget        |  Make selection           |  Selected text from list
+No selected text from list |  FilterListDialog        |  Make selection           |  Selected text from list
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_1.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_2.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_3.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_plugin_filter_list/blob/master/screenshots/screenshot_4.jpg?raw=true)|
 
