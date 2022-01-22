@@ -12,7 +12,7 @@
 FilterList is a flutter package which provide utility to search/filter on the basis of single/multiple selection from provided dynamic list.
 
 ### Download Demo App ![GitHub All Releases](https://img.shields.io/github/downloads/Thealphamerc/flutter_plugin_filter_list/total?color=green)
-<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v0.0.5/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
+<a href="https://github.com/TheAlphamerc/flutter_plugin_filter_list/releases/download/v1.0.1/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
 ## Getting Started
 1. Add library to your pubspec.yaml
