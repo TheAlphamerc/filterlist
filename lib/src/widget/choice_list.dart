@@ -23,42 +23,40 @@ class ChoiceList<T> extends StatelessWidget {
     final theme = FilterListTheme.of(context).controlBarButtonTheme;
     final state = StateProvider.of<FilterState<T>>(context);
     final items = state.items;
-    final selectedListData = state.selctedItems;
+    final selectedListData = state.selectedItems;
     if (items == null || items.isEmpty) {
       return const <Widget>[];
     }
-    List<Widget> choices = [];
-    items.forEach(
-      (item) {
-        var selected = validateSelectedItem(selectedListData, item);
-        choices.add(
-          ChoiceChipWidget(
-            choiceChipBuilder: choiceChipBuilder,
-            item: item,
-            onSelected: (value) {
-              if (enableOnlySingleSelection) {
-                state.clearSelectedList();
-                state.addSelectedItem(item);
-              } else {
-                if (selected) {
-                  if (validateRemoveItem != null) {
-                    var shouldDelete =
-                        validateRemoveItem!(selectedListData, item);
-                    state.selctedItems = shouldDelete;
-                  } else {
-                    state.removeSelectedItem(item);
-                  }
+    final List<Widget> choices = [];
+    for (final item in items) {
+      final selected = validateSelectedItem(selectedListData, item);
+      choices.add(
+        ChoiceChipWidget(
+          choiceChipBuilder: choiceChipBuilder,
+          item: item,
+          onSelected: (value) {
+            if (enableOnlySingleSelection) {
+              state.clearSelectedList();
+              state.addSelectedItem(item);
+            } else {
+              if (selected) {
+                if (validateRemoveItem != null) {
+                  final shouldDelete =
+                      validateRemoveItem!(selectedListData, item);
+                  state.selectedItems = shouldDelete;
                 } else {
-                  state.addSelectedItem(item);
+                  state.removeSelectedItem(item);
                 }
+              } else {
+                state.addSelectedItem(item);
               }
-            },
-            selected: selected,
-            text: choiceChipLabel!(item),
-          ),
-        );
-      },
-    );
+            }
+          },
+          selected: selected,
+          text: choiceChipLabel!(item),
+        ),
+      );
+    }
     choices.add(
       SizedBox(
         height: theme.height + 20,
@@ -72,10 +70,9 @@ class ChoiceList<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = FilterListTheme.of(context);
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 5, right: 5),
+      padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
       child: SingleChildScrollView(
         child: ChangeNotifierProvider<FilterState<T>>(
-          rebuildOnChange: true,
           builder: (
             BuildContext context,
             FilterState<T> state,

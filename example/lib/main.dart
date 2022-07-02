@@ -12,13 +12,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Filter list example'),
+      home: const MyHomePage(title: 'Filter list example'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
+  const MyHomePage({Key? key, this.title}) : super(key: key);
   final String? title;
 
   @override
@@ -28,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
-  void openFilterDelegate() async {
+  Future<void> openFilterDelegate() async {
     await FilterListDelegate.show<User>(
       context: context,
       list: userList,
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           tileColor: Colors.white,
           selectedColor: Colors.red,
-          selectedTileColor: Color(0xFF649BEC).withOpacity(.5),
+          selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
           textColor: Colors.blue,
         ),
       ),
@@ -49,18 +49,18 @@ class _MyHomePageState extends State<MyHomePage> {
         return user.name!.toLowerCase().contains(query.toLowerCase());
       },
       tileLabel: (user) => user!.name,
-      emptySearchChild: Center(child: Text('No user found')),
+      emptySearchChild: const Center(child: Text('No user found')),
       // enableOnlySingleSelection: true,
       searchFieldHint: 'Search Here..',
-      // suggestionBuilder: (context, user, isSelected) {
-      //   return ListTile(
-      //     title: Text(user.name!),
-      //     leading: CircleAvatar(
-      //       backgroundColor: Colors.blue,
-      //     ),
-      //     selected: isSelected,
-      //   );
-      // },
+      /*suggestionBuilder: (context, user, isSelected) {
+        return ListTile(
+          title: Text(user.name!),
+          leading: const CircleAvatar(
+            backgroundColor: Colors.blue,
+          ),
+          selected: isSelected,
+        );
+      },*/
       onApplyButtonClick: (list) {
         setState(() {
           selectedUserList = list;
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _openFilterDialog() async {
+  Future<void> _openFilterDialog() async {
     await FilterListDialog.display<User>(
       context,
       hideSelectedTextCount: true,
@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedListData: selectedUserList,
       choiceChipLabel: (item) => item!.name,
       validateSelectedItem: (list, val) => list!.contains(val),
-      controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
+      controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
       onItemSearch: (user, query) {
         /// When search query change in search bar then this method will be called
         ///
@@ -96,10 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
       },
 
       /// uncomment below code to create custom choice chip
-      /*choiceChipBuilder: (context, item, isSelected) {
+      /* choiceChipBuilder: (context, item, isSelected) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
               border: Border.all(
             color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
@@ -107,10 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Text(
             item.name,
             style: TextStyle(
-                color: isSelected ? Colors.blue[300] : Colors.grey[300]),
+                color: isSelected ? Colors.blue[300] : Colors.grey[500]),
           ),
         );
-      },*/
+      }, */
     );
   }
 
@@ -127,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             TextButton(
               onPressed: () async {
-                var list = await Navigator.push(
+                final list = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => FilterPage(
@@ -142,31 +142,33 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }
               },
-              child: Text(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+              child: const Text(
                 "Filter Page",
                 style: TextStyle(color: Colors.white),
               ),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
             ),
             TextButton(
               onPressed: _openFilterDialog,
-              child: Text(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+              child: const Text(
                 "Filter Dialog",
                 style: TextStyle(color: Colors.white),
               ),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
               // color: Colors.blue,
             ),
             TextButton(
               onPressed: openFilterDelegate,
-              child: Text(
-                "Filter Delegate",
-                style: TextStyle(color: Colors.white),
-              ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+              child: const Text(
+                "Filter Delegate",
+                style: TextStyle(color: Colors.white),
               ),
               // color: Colors.blue,
             ),
@@ -175,23 +177,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: <Widget>[
-          selectedUserList == null || selectedUserList!.length == 0
-              ? Expanded(
-                  child: Center(
-                    child: Text('No user selected'),
-                  ),
-                )
-              : Expanded(
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(selectedUserList![index].name!),
-                      );
-                    },
-                    separatorBuilder: (context, index) => Divider(),
-                    itemCount: selectedUserList!.length,
-                  ),
-                ),
+          if (selectedUserList == null || selectedUserList!.isEmpty)
+            const Expanded(
+              child: Center(
+                child: Text('No user selected'),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(selectedUserList![index].name!),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: selectedUserList!.length,
+              ),
+            ),
         ],
       ),
     );
@@ -207,14 +210,13 @@ class FilterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Filter list Page"),
+        title: const Text("Filter list Page"),
       ),
       body: SafeArea(
         child: FilterListWidget<User>(
           themeData: FilterListThemeData(context),
           hideSelectedTextCount: true,
           listData: userList,
-          controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
           selectedListData: selectedUserList,
           onApplyButtonClick: (list) {
             Navigator.pop(context, list);
@@ -300,7 +302,7 @@ List<User> userList = [
   User(name: "Yvonne", avatar: "user.png"),
   User(name: "Zoe", avatar: "user.png"),
 ];
-/// Another exmaple of [FilterListWidget] to filter list of strings
+/// Another example of [FilterListWidget] to filter list of strings
 /*
  FilterListWidget<String>(
     listData: [

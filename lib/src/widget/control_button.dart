@@ -1,8 +1,8 @@
 import 'package:filter_list/src/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ContorlButton extends StatelessWidget {
-  const ContorlButton({
+class ControlButton extends StatelessWidget {
+  const ControlButton({
     Key? key,
     required this.choiceChipLabel,
     this.onPressed,

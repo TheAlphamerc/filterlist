@@ -13,15 +13,15 @@ part 'filter_list_widget.dart';
 /// The [FilterListDialog.display] is a [Dialog] with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
 /// {@template arguments}
-/// The [listData] should be list of dynamic data which neeeds to filter.
+/// The [listData] should be list of dynamic data which needs to filter.
 ///
-/// The [selectedListData] should be sublist of [listData]. The list passed to [selectedListData] should available in [listData].
+/// The [selectedListData] should be sub list of [listData]. The list passed to [selectedListData] should available in [listData].
 ///
 /// The [choiceChipLabel] is a callback which required [String] value in return. It used this value to display text on choice chip.
 ///
-/// The [validateSelectedItem] used to identifies weather a item is selecte or not.
+/// The [validateSelectedItem] used to identifies weather a item is selected or not.
 ///
-/// [onItemSearch] filter the list on the basis of search field text. It expose search api to permform search operation accoding to requirement.
+/// [onItemSearch] filter the list on the basis of search field text. It expose search api to perform search operation according to requirement.
 /// When text change in search text field then return a list of element which contains specific text. if no element found then it should return empty list.
 ///
 ///
@@ -54,16 +54,8 @@ part 'filter_list_widget.dart';
 ///        validateSelectedItem: (list, val) {
 ///          return list!.contains(val);
 ///        },
-///        onItemSearch: (list, text) {
-///          if (list!.any((element) =>
-///              element.toLowerCase().contains(text.toLowerCase()))) {
-///            /// return list which contains text matches
-///            return list
-///                .where((element) =>
-///                    element.toLowerCase().contains(text.toLowerCase()))
-///                .toList();
-///          }
-///          return [];
+///        onItemSearch: (data, query) {
+///          return data!.toLowerCase().contains(query.toLowerCase());
 ///        },
 ///        height: 480,
 ///        borderRadius: 20,
@@ -83,22 +75,22 @@ part 'filter_list_widget.dart';
 
 class FilterListDialog {
   static Future display<T extends Object>(
-    context, {
+    BuildContext context, {
 
     /// Filter theme
     FilterListThemeData? themeData,
 
-    /// Pass list containing all data which neeeds to filter.
+    /// Pass list containing all data which needs to filter.
     required List<T> listData,
 
     /// pass selected list of object
-    /// every object on selecteListData should be present in list data.
+    /// every object on selectedListData should be present in list data.
     List<T>? selectedListData,
 
     /// Display text on choice chip.
     required LabelDelegate<T> choiceChipLabel,
 
-    /// identifies weather a item is selecte or not.
+    /// identifies weather a item is selected or not.
     required ValidateSelectedItem<T> validateSelectedItem,
 
     /// The `validateRemoveItem` identifies if a item should be remove or not and returns the list filtered.
@@ -140,7 +132,7 @@ class FilterListDialog {
     final Widget? headerCloseIcon,
 
     /// Used to hide header.
-    bool hideheader = false,
+    bool hideHeader = false,
 
     /// The `barrierDismissible` argument is used to indicate whether tapping on the barrier will dismiss the dialog.
     ///
@@ -153,7 +145,7 @@ class FilterListDialog {
     /// if `enableOnlySingleSelection` is true then it disabled the multiple selection.
     /// and enabled the single selection model.
     ///
-    /// Defautl value is [false]
+    /// Default value is [false]
     bool enableOnlySingleSelection = false,
 
     /// Background color of dialog box.
@@ -182,14 +174,10 @@ class FilterListDialog {
     ChoiceChipBuilder? choiceChipBuilder,
 
     /// {@macro control_buttons}
-    List<ContolButtonType>? controlButtons,
+    List<ControlButtonType>? controlButtons,
   }) async {
-    if (height == null) {
-      height = MediaQuery.of(context).size.height * .5;
-    }
-    if (width == null) {
-      width = MediaQuery.of(context).size.width;
-    }
+    height ??= MediaQuery.of(context).size.height * .5;
+    width ??= MediaQuery.of(context).size.width;
     await showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
@@ -213,7 +201,7 @@ class FilterListDialog {
                 themeData: themeData,
                 listData: listData,
                 choiceChipLabel: choiceChipLabel,
-                hideHeader: hideheader,
+                hideHeader: hideHeader,
                 headlineText: headlineText,
                 onItemSearch: onItemSearch,
                 backgroundColor: backgroundColor,
@@ -232,7 +220,7 @@ class FilterListDialog {
                 allButtonText: allButtonText,
                 validateRemoveItem: validateRemoveItem,
                 controlButtons: controlButtons ??
-                    [ContolButtonType.All, ContolButtonType.Reset],
+                    [ControlButtonType.All, ControlButtonType.Reset],
               ),
             ),
           ),

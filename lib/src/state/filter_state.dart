@@ -2,9 +2,9 @@ import 'package:filter_list/src/state/provider.dart';
 import 'package:flutter/material.dart';
 
 class FilterState<K> extends ListenableState {
-  FilterState({List<K>? allItems, List<K>? selctedItems}) {
-    this.selctedItems = selctedItems;
-    this.items = allItems;
+  FilterState({List<K>? allItems, List<K>? selectedItems}) {
+    this.selectedItems = selectedItems;
+    items = allItems;
   }
 
   static FilterState<T> of<T>(BuildContext context) =>
@@ -24,33 +24,33 @@ class FilterState<K> extends ListenableState {
     notifyListeners();
   }
 
-  /// List of all selcted items
-  List<K>? _selctedItems;
-  List<K>? get selctedItems => _selctedItems;
-  set selctedItems(List<K>? value) {
-    if (value == selctedItems) {
+  /// List of all selected items
+  List<K>? _selectedItems;
+  List<K>? get selectedItems => _selectedItems;
+  set selectedItems(List<K>? value) {
+    if (value == selectedItems) {
       return;
     } else if (value == null) {
-      _selctedItems = [];
+      _selectedItems = [];
     } else {
-      _selctedItems = List<K>.from(value);
+      _selectedItems = List<K>.from(value);
     }
 
     notifyListeners();
   }
 
-  int get selctedItemsCount => selctedItems?.length ?? 0;
+  int get selectedItemsCount => selectedItems?.length ?? 0;
 
   // Add item in to selected list
   void addSelectedItem(K item) {
-    _selctedItems!.add(item);
+    _selectedItems!.add(item);
 
     notifyListeners();
   }
 
   // Remove item from selected list
   void removeSelectedItem(K item) {
-    _selctedItems!.remove(item);
+    _selectedItems!.remove(item);
 
     notifyListeners();
   }
@@ -63,7 +63,7 @@ class FilterState<K> extends ListenableState {
 
   // Clear selected list
   void clearSelectedList() {
-    _selctedItems!.clear();
+    _selectedItems!.clear();
 
     notifyListeners();
   }
@@ -74,8 +74,8 @@ class FilterState<K> extends ListenableState {
       other is FilterState<K> &&
           runtimeType == other.runtimeType &&
           _items == other.items &&
-          _selctedItems == other.selctedItems;
+          _selectedItems == other.selectedItems;
 
   @override
-  int get hashCode => _items.hashCode ^ _selctedItems.hashCode;
+  int get hashCode => _items.hashCode ^ _selectedItems.hashCode;
 }

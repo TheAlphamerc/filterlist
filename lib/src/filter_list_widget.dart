@@ -3,13 +3,13 @@ part of 'filter_list_dialog.dart';
 typedef ValidateSelectedItem<T> = bool Function(List<T>? list, T item);
 typedef OnApplyButtonClick<T> = void Function(List<T>? list);
 typedef ChoiceChipBuilder<T> = Widget Function(
-    BuildContext context, T? item, bool? iselected);
+    BuildContext context, T? item, bool? isSelected);
 // typedef ItemSearchDelegate<T> = List<T> Function(List<T>? list, String query);
 typedef SearchPredict<T> = bool Function(T item, String query);
 typedef LabelDelegate<T> = String? Function(T?);
 typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
-enum ContolButtonType { All, Reset }
+enum ControlButtonType { All, Reset }
 
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
@@ -37,7 +37,7 @@ enum ContolButtonType { All, Reset }
 ///    onItemSearch: (list, text) {
 ///      /// When text change in search text field then return list containing that text value
 ///      ///
-///      ///Check if list has value which matchs to text
+///      ///Check if list has value which match's to text
 ///      if (list!.any((element) =>
 ///          element.toLowerCase().contains(text.toLowerCase()))) {
 ///        /// return list which contains matches
@@ -75,13 +75,16 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     this.applyButtonText = 'Apply',
     this.resetButtonText = 'Reset',
     this.selectedItemsText = 'selected items',
-    this.controlButtons = const [ContolButtonType.All, ContolButtonType.Reset],
+    this.controlButtons = const [
+      ControlButtonType.All,
+      ControlButtonType.Reset
+    ],
   }) : super(key: key);
 
   /// Filter theme
   final FilterListThemeData? themeData;
 
-  /// Pass list containing all data which neeeds to filter
+  /// Pass list containing all data which needs to filter
   final List<T>? listData;
 
   /// The [selectedListData] is used to preselect the choice chips.
@@ -108,19 +111,19 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// if [enableOnlySingleSelection] is true then it disabled the multiple selection.
   /// and enabled the single selection model.
   ///
-  /// Defautl value is `false`
+  /// Default value is `false`
   final bool enableOnlySingleSelection;
 
   /// The `onApplyButtonClick` is a callback which return list of all selected items on apply button click.  if no item is selected then it will return empty list.
   final OnApplyButtonClick<T>? onApplyButtonClick;
 
-  /// The `validateSelectedItem` dentifies weather a item is selecte or not.
+  /// The `validateSelectedItem` identifies weather a item is selected or not.
   final ValidateSelectedItem<T> validateSelectedItem; /*required*/
 
   /// The `validateRemoveItem` identifies if a item should be remove or not and returns the list filtered.
   final ValidateRemoveItem<T>? validateRemoveItem;
 
-  /// The `onItemSearch` is delagate which filter the list on the basis of search field text.
+  /// The `onItemSearch` is delegate which filter the list on the basis of search field text.
   final SearchPredict<T> onItemSearch; /*required*/
 
   /// The `choiceChipLabel` is callback which required [String] value to display text on choice chip.
@@ -144,15 +147,15 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// {@template control_buttons}
   /// control buttons to show on bottom of dialog along with 'Apply' button.
   ///
-  /// If `ContolButtonType.All` is passed then it will show 'All' and 'Apply' button.
+  /// If `ControlButtonType.All` is passed then it will show 'All' and 'Apply' button.
   ///
-  /// If `ContolButtonType.Reset` is passed then it will show 'Reset' and 'Apply' button.
+  /// If `ControlButtonType.Reset` is passed then it will show 'Reset' and 'Apply' button.
   ///
-  /// Default value is `[ContolButton.All, ContolButton.Reset]`
+  /// Default value is `[ControlButton.All, ControlButton.Reset]`
   ///
   /// If `enableOnlySingleSelection` is true then it will hide 'All' button.
   /// {@endtemplate}
-  final List<ContolButtonType> controlButtons;
+  final List<ControlButtonType> controlButtons;
 
   Widget _body(BuildContext context) {
     final theme = FilterListTheme.of(context);
@@ -162,33 +165,35 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
-              hideHeader!
-                  ? SizedBox()
-                  : Header(
-                      headlineText: headlineText,
-                      hideSearchField: hideSearchField,
-                      hideCloseIcon: hideCloseIcon,
-                      headerCloseIcon: headerCloseIcon,
-                      onSearch: (String value) {
-                        if (value.isEmpty) {
-                          FilterState.of<T>(context).items = listData;
-                          return;
-                        }
-                        FilterState.of<T>(context)
-                            .filter((item) => onItemSearch(item, value));
-                      },
+              if (hideHeader!)
+                const SizedBox()
+              else
+                Header(
+                  headlineText: headlineText,
+                  hideSearchField: hideSearchField,
+                  hideCloseIcon: hideCloseIcon,
+                  headerCloseIcon: headerCloseIcon,
+                  onSearch: (String value) {
+                    if (value.isEmpty) {
+                      FilterState.of<T>(context).items = listData;
+                      return;
+                    }
+                    FilterState.of<T>(context)
+                        .filter((item) => onItemSearch(item, value));
+                  },
+                ),
+              if (hideSelectedTextCount)
+                const SizedBox()
+              else
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: ChangeNotifierProvider<FilterState<T>>(
+                    builder: (context, state, child) => Text(
+                      '${state.selectedItemsCount} $selectedItemsText',
+                      style: Theme.of(context).textTheme.caption,
                     ),
-              hideSelectedTextCount
-                  ? SizedBox()
-                  : Padding(
-                      padding: EdgeInsets.only(top: 5),
-                      child: ChangeNotifierProvider<FilterState<T>>(
-                        builder: (context, state, child) => Text(
-                          '${state.selctedItemsCount} $selectedItemsText',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ),
-                    ),
+                  ),
+                ),
               Expanded(
                 child: ChoiceList<T>(
                   choiceChipBuilder: choiceChipBuilder,
@@ -209,11 +214,11 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
             resetButtonText: resetButtonText,
             enableOnlySingleSelection: enableOnlySingleSelection,
             onApplyButtonClick: () {
-              final selctedItems = FilterState.of<T>(context).selctedItems;
+              final selectedItems = FilterState.of<T>(context).selectedItems;
               if (onApplyButtonClick != null) {
-                onApplyButtonClick!.call(selctedItems);
+                onApplyButtonClick!.call(selectedItems);
               } else {
-                Navigator.pop(context, selctedItems);
+                Navigator.pop(context, selectedItems);
               }
             },
           )
@@ -227,7 +232,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     return StateProvider<FilterState<T>>(
       value: FilterState<T>(
         allItems: listData,
-        selctedItems: selectedListData,
+        selectedItems: selectedListData,
       ),
       child: FilterListTheme(
         theme: themeData ?? FilterListThemeData.light(context),

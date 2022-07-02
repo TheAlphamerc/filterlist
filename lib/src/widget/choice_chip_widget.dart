@@ -31,7 +31,7 @@ class ChoiceChipWidget<T> extends StatelessWidget {
         : FilterListTheme.of(context).choiceChipTheme.backgroundColor;
   }
 
-  OutlinedBorder? getShape(context) {
+  OutlinedBorder? getShape(BuildContext context) {
     return selected!
         ? FilterListTheme.of(context).choiceChipTheme.selectedShape
         : FilterListTheme.of(context).choiceChipTheme.shape;

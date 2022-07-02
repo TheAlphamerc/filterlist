@@ -79,19 +79,9 @@ class HeaderThemeData with Diagnosticable {
     this.searchFieldHintTextStyle,
   });
 
-  factory HeaderThemeData.light() => HeaderThemeData(
-        headerTextStyle: const TextStyle(
-          fontSize: 18,
-          color: Colors.black54,
-          fontWeight: FontWeight.bold,
-        ),
+  factory HeaderThemeData.light() => const HeaderThemeData(
         searchFieldTextStyle: TextStyle(fontSize: 18, color: Colors.black87),
-        searchFieldBackgroundColor: const Color(0xfff5f5f5),
-        closeIconColor: Colors.black54,
-        searchFieldIconColor: Colors.black54,
         backgroundColor: Colors.white,
-        searchFieldInputBorder: InputBorder.none,
-        searchFieldBorderRadius: 100,
         boxShadow: <BoxShadow>[
           BoxShadow(
             offset: Offset(0, 5),
@@ -100,7 +90,7 @@ class HeaderThemeData with Diagnosticable {
           )
         ],
       );
-  factory HeaderThemeData.dark() => HeaderThemeData(
+  factory HeaderThemeData.dark() => const HeaderThemeData(
         backgroundColor: Color(0xff19355D),
         searchFieldBackgroundColor: Color(0xff101e31),
         searchFieldHintTextStyle: TextStyle(color: Color(0xff8A9AAA)),
@@ -157,7 +147,9 @@ class HeaderThemeData with Diagnosticable {
   HeaderThemeData copyWith({
     TextStyle? selectedChipTextStyle,
     TextStyle? unselectedChipTextStyle,
-    Color? unselectedTextbackGroundColor,
+    TextStyle? searchFieldTextStyle,
+    TextStyle? headerTextStyle,
+    Color? unselectedTextBackgroundColor,
     VisualDensity? visualDensity,
     double? searchFieldBorderRadius,
     String? searchFieldHintText,
@@ -173,9 +165,8 @@ class HeaderThemeData with Diagnosticable {
     Color? searchFieldIconColor,
   }) {
     return HeaderThemeData(
-      headerTextStyle: selectedChipTextStyle ?? this.headerTextStyle,
-      searchFieldTextStyle:
-          unselectedChipTextStyle ?? this.searchFieldTextStyle,
+      headerTextStyle: headerTextStyle ?? this.headerTextStyle,
+      searchFieldTextStyle: searchFieldTextStyle ?? this.searchFieldTextStyle,
       searchFieldBackgroundColor:
           searchFieldBackgroundColor ?? this.searchFieldBackgroundColor,
       closeIconColor: closeIconColor ?? this.closeIconColor,

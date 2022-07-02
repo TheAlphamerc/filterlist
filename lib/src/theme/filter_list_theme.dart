@@ -23,7 +23,7 @@ class FilterListTheme extends InheritedWidget {
   /// Retrieves the [FilterListThemeData] from the closest ancestor
   /// [FilterListTheme] widget.
   static FilterListThemeData of(BuildContext context) {
-    FilterListTheme? theme =
+    final FilterListTheme? theme =
         context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
     assert(
       theme != null,
@@ -60,7 +60,7 @@ class FilterListThemeData with Diagnosticable {
     headerTheme = headerTheme ?? HeaderThemeData.light();
 
     controlButtonBarTheme =
-        controlButtonBarTheme ?? ControlButtonBarThemeData.light();
+        controlButtonBarTheme ?? ControlButtonBarThemeData.light(context);
 
     /// Border radius of filter dialog
     borderRadius ??= 20;
@@ -96,15 +96,15 @@ class FilterListThemeData with Diagnosticable {
 
   factory FilterListThemeData.dark(BuildContext context) => FilterListThemeData(
         context,
-        backgroundColor: Color(0xff101e31),
+        backgroundColor: const Color(0xff101e31),
         headerTheme: HeaderThemeData.dark(),
         choiceChipTheme: ChoiceChipThemeData.dark(),
         controlButtonBarTheme: ControlButtonBarThemeData.dark(context),
+        borderRadius: 20,
+        wrapAlignment: WrapAlignment.start,
+        wrapCrossAxisAlignment: WrapCrossAlignment.start,
+        wrapSpacing: 0.0,
       );
-
-  // /// A default dark theme.
-  // factory FilterListThemeData.dark(BuildContext context) =>
-  //     FilterListThemeData(brightness: Brightness.dark, context: context);
 
   /// Raw [FilterListThemeData] initialization.
   const FilterListThemeData.raw({
@@ -155,6 +155,46 @@ class FilterListThemeData with Diagnosticable {
 
   /// {@macro control_button_theme}
   final ControlButtonBarThemeData controlBarButtonTheme;
+
+  FilterListThemeData copyWith({
+    Brightness? brightness,
+    ChoiceChipThemeData? choiceChipTheme,
+    HeaderThemeData? headerTheme,
+    ControlButtonBarThemeData? controlBarButtonTheme,
+    double? borderRadius,
+    WrapAlignment? wrapAlignment,
+    WrapCrossAlignment? wrapCrossAxisAlignment,
+    double? wrapSpacing,
+    Color? backgroundColor,
+  }) {
+    return FilterListThemeData.raw(
+      choiceChipTheme: choiceChipTheme ?? this.choiceChipTheme,
+      headerTheme: headerTheme ?? this.headerTheme,
+      controlBarButtonTheme:
+          controlBarButtonTheme ?? this.controlBarButtonTheme,
+      borderRadius: borderRadius ?? this.borderRadius,
+      wrapAlignment: wrapAlignment ?? this.wrapAlignment,
+      wrapCrossAxisAlignment:
+          wrapCrossAxisAlignment ?? this.wrapCrossAxisAlignment,
+      wrapSpacing: wrapSpacing ?? this.wrapSpacing,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+    );
+  }
+
+  FilterListThemeData lerp(
+      FilterListThemeData a, FilterListThemeData b, double t) {
+    return FilterListThemeData.raw(
+      // brightness: t < 0.5 ? other.brightness : brightness,
+      choiceChipTheme: choiceChipTheme,
+      headerTheme: headerTheme,
+      controlBarButtonTheme: controlBarButtonTheme,
+      borderRadius: a.borderRadius,
+      wrapAlignment: a.wrapAlignment,
+      wrapCrossAxisAlignment: a.wrapCrossAxisAlignment,
+      wrapSpacing: a.wrapSpacing,
+      backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
+    );
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

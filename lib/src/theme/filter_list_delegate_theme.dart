@@ -18,7 +18,7 @@ class FilterListDelegateTheme extends InheritedWidget {
   /// Retrieves the [FilterListDelegateThemeData] from the closest ancestor
   /// [FilterListDelegateTheme] widget.
   static FilterListDelegateThemeData of(BuildContext context) {
-    FilterListDelegateTheme? theme =
+    final FilterListDelegateTheme? theme =
         context.dependOnInheritedWidgetOfExactType<FilterListDelegateTheme>();
     assert(
       theme != null,
@@ -36,26 +36,25 @@ class FilterListDelegateThemeData with Diagnosticable {
   factory FilterListDelegateThemeData({
     ListTileThemeData? listTileTheme,
     BoxBorder? tileBorder,
-    List<BoxShadow>? tileshadow,
+    List<BoxShadow>? tileShadow,
     EdgeInsetsGeometry? tileMargin,
-    double? wrapSpacing,
     Color? tileColor,
     TextStyle? tileTextStyle,
   }) {
-    tileTextStyle = TextStyle(
+    tileTextStyle = const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       color: Colors.black,
     );
 
-    listTileTheme ??= ListTileThemeData();
+    listTileTheme ??= const ListTileThemeData();
 
-    tileMargin ??= EdgeInsets.symmetric(horizontal: 10, vertical: 8);
+    tileMargin ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 8);
 
     return FilterListDelegateThemeData.raw(
         listTileTheme: listTileTheme,
         tileBorder: tileBorder,
-        tileshadow: tileshadow,
+        tileShadow: tileShadow,
         tileMargin: tileMargin,
         tileColor: tileColor,
         tileTextStyle: tileTextStyle);
@@ -65,7 +64,7 @@ class FilterListDelegateThemeData with Diagnosticable {
   const FilterListDelegateThemeData.raw(
       {required this.listTileTheme,
       required this.tileBorder,
-      required this.tileshadow,
+      required this.tileShadow,
       required this.tileMargin,
       required this.tileColor,
       required this.tileTextStyle});
@@ -87,7 +86,25 @@ class FilterListDelegateThemeData with Diagnosticable {
   final BoxBorder? tileBorder;
 
   /// Defines the shadow of ListTile
-  final List<BoxShadow>? tileshadow;
+  final List<BoxShadow>? tileShadow;
+
+  FilterListDelegateThemeData copyWith({
+    ListTileThemeData? listTileTheme,
+    BoxBorder? tileBorder,
+    List<BoxShadow>? tileShadow,
+    EdgeInsetsGeometry? tileMargin,
+    Color? tileColor,
+    TextStyle? tileTextStyle,
+  }) {
+    return FilterListDelegateThemeData.raw(
+      listTileTheme: listTileTheme ?? this.listTileTheme,
+      tileBorder: tileBorder ?? this.tileBorder,
+      tileShadow: tileShadow ?? this.tileShadow,
+      tileMargin: tileMargin ?? this.tileMargin,
+      tileColor: tileColor ?? this.tileColor,
+      tileTextStyle: tileTextStyle ?? this.tileTextStyle,
+    );
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -97,11 +114,10 @@ class FilterListDelegateThemeData with Diagnosticable {
       ..add(DiagnosticsProperty<ListTileThemeData>(
           'listTileTheme', listTileTheme))
       ..add(DiagnosticsProperty<BoxBorder>('tileBorder', tileBorder))
-      ..add(DiagnosticsProperty<List<BoxShadow>>('tileshadow', tileshadow))
+      ..add(DiagnosticsProperty<List<BoxShadow>>('tileShadow', tileShadow))
       ..add(DiagnosticsProperty<EdgeInsetsGeometry>('tileMargin', tileMargin))
       ..add(DiagnosticsProperty<ListTileThemeData>(
           'listTileTheme', listTileTheme))
-      ..add(DiagnosticsProperty<BoxBorder>('tileBorder', tileBorder))
-      ..add(DiagnosticsProperty<List<BoxShadow>>('tileshadow', tileshadow));
+      ..add(DiagnosticsProperty<BoxBorder>('tileBorder', tileBorder));
   }
 }

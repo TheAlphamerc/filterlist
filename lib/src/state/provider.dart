@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 abstract class ListenableState extends Listenable {
-  final Set<VoidCallback> _listeners = Set<VoidCallback>();
+  final Set<VoidCallback> _listeners = <VoidCallback>{};
   int _version = 0;
   int _microtaskVersion = 0;
   @override
@@ -38,10 +38,11 @@ abstract class ListenableState extends Listenable {
 }
 
 class StateProvider<T extends ListenableState> extends StatelessWidget {
+  @override
   final Key? key;
   final T value;
   final Widget child;
-  StateProvider({this.key, required this.child, required this.value});
+  const StateProvider({this.key, required this.child, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class StateProvider<T extends ListenableState> extends StatelessWidget {
     BuildContext context, {
     bool rebuildOnChange = false,
   }) {
-    var widget = rebuildOnChange
+    final widget = rebuildOnChange
         ? context.dependOnInheritedWidgetOfExactType<Provider<T>>()
         : context
             .getElementForInheritedWidgetOfExactType<Provider<T>>()
@@ -74,11 +75,8 @@ class StateProvider<T extends ListenableState> extends StatelessWidget {
 
 class ChangeNotifierProvider<T extends ListenableState>
     extends StatelessWidget {
-  ChangeNotifierProvider(
-      {Key? key,
-      required this.builder,
-      this.child,
-      this.rebuildOnChange = true});
+  const ChangeNotifierProvider(
+      {required this.builder, this.child, this.rebuildOnChange = true});
   final Widget? child;
   final ValueWidgetBuilder<T> builder;
 
@@ -102,7 +100,7 @@ class Provider<T extends ListenableState> extends InheritedWidget {
     Key? key,
     required this.state,
     required Widget child,
-  })  : this.version = state._version,
+  })  : version = state._version,
         super(key: key, child: child);
 
   final T state;

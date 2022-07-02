@@ -32,9 +32,8 @@ class Header extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: const SizedBox(),
+                const Expanded(
+                  child: SizedBox(),
                 ),
                 Expanded(
                   flex: 6,
@@ -48,14 +47,13 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
                   child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                     onTap: () {
                       Navigator.pop(context, null);
                     },
                     child: hideCloseIcon
-                        ? SizedBox()
+                        ? const SizedBox()
                         : headerCloseIcon ??
                             Container(
                               height: 25,

@@ -83,35 +83,29 @@ class ChoiceChipThemeData with Diagnosticable {
       ChoiceChipThemeData(
         selectedTextStyle:
             TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        textStyle: TextStyle(color: Colors.black),
-        selectedBackgroundColor: const Color(0xFF649BEC),
-        backgroundColor: const Color(0xfff8f8f8),
+        textStyle: const TextStyle(color: Colors.black),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevation: 0,
-        selectedShadowColor: Colors.black,
-        shadowColor: Colors.black,
         padding: const EdgeInsets.all(4),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        margin: const EdgeInsets.symmetric(horizontal: 10.0),
       );
 
   factory ChoiceChipThemeData.dark() => ChoiceChipThemeData(
-        backgroundColor: Color(0xff4a70a7),
-        side: BorderSide(color: Color(0xff101e31)),
-        textStyle: TextStyle(
+        backgroundColor: const Color(0xff4a70a7),
+        side: const BorderSide(color: Color(0xff101e31)),
+        textStyle: const TextStyle(
           color: Color(0xff101e31),
         ),
-        selectedTextStyle: TextStyle(
+        selectedTextStyle: const TextStyle(
           color: Color(0xFFE4B057),
         ),
-        selectedSide: BorderSide(color: Color(0xffFFBC00)),
+        selectedSide: const BorderSide(color: Color(0xffFFBC00)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
         selectedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        selectedBackgroundColor: Color(0xff3E77C8),
+        selectedBackgroundColor: const Color(0xff3E77C8),
       );
 
   /// TextStyle for chip when selected.
@@ -187,16 +181,18 @@ class ChoiceChipThemeData with Diagnosticable {
   /// Creates a copy of this theme, but with the given fields replaced with
   /// the new values.
   ChoiceChipThemeData copyWith({
+    TextStyle? selectedTextStyle,
     TextStyle? selectedChipTextStyle,
-    TextStyle? unselectedChipTextStyle,
+    TextStyle? textStyle,
     Color? selectedTextBackgroundColor,
-    Color? unselectedTextbackGroundColor,
+    Color? selectedBackgroundColor,
+    Color? backgroundColor,
     VisualDensity? visualDensity,
     double? elevation,
     BorderSide? side,
     BorderSide? selectedSide,
     OutlinedBorder? shape,
-    OutlinedBorder? selecteShape,
+    OutlinedBorder? selectedShape,
     Color? shadowColor,
     Color? selectedShadowColor,
     EdgeInsetsGeometry? padding,
@@ -204,17 +200,17 @@ class ChoiceChipThemeData with Diagnosticable {
     EdgeInsetsGeometry? margin,
   }) {
     return ChoiceChipThemeData(
-      selectedTextStyle: selectedChipTextStyle ?? this.selectedTextStyle,
-      textStyle: unselectedChipTextStyle ?? this.textStyle,
+      selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
+      textStyle: textStyle ?? textStyle,
       selectedBackgroundColor:
-          selectedTextBackgroundColor ?? this.selectedBackgroundColor,
-      backgroundColor: unselectedTextbackGroundColor ?? this.backgroundColor,
+          selectedBackgroundColor ?? this.selectedBackgroundColor,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
       visualDensity: visualDensity ?? this.visualDensity,
       elevation: elevation ?? this.elevation,
       side: side ?? this.side,
       selectedSide: selectedSide ?? this.selectedSide,
       shape: shape ?? this.shape,
-      selectedShape: selecteShape ?? this.selectedShape,
+      selectedShape: selectedShape ?? this.selectedShape,
       shadowColor: shadowColor ?? this.shadowColor,
       selectedShadowColor: selectedShadowColor ?? this.selectedShadowColor,
       padding: padding ?? this.padding,
@@ -226,26 +222,25 @@ class ChoiceChipThemeData with Diagnosticable {
   /// Linearly interpolates between two [ChoiceChipThemeData].
   ///
   /// All the properties must be non-null.
+
   ChoiceChipThemeData lerp(
-    ChoiceChipThemeData a,
-    ChoiceChipThemeData b,
-    double t,
-  ) {
+      ChoiceChipThemeData a, ChoiceChipThemeData b, double t) {
     return ChoiceChipThemeData(
       selectedTextStyle:
           TextStyle.lerp(a.selectedTextStyle, b.selectedTextStyle, t),
       textStyle: TextStyle.lerp(a.textStyle, b.textStyle, t),
-      selectedBackgroundColor: a.selectedBackgroundColor,
+      selectedBackgroundColor:
+          Color.lerp(a.selectedBackgroundColor, b.selectedBackgroundColor, t),
       backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
       visualDensity: VisualDensity.lerp(a.visualDensity!, b.visualDensity!, t),
-      elevation: a.elevation,
-      side: BorderSide.lerp(a.side!, b.side!, t),
+      elevation: b.elevation,
+      side: BorderSide.lerp(side!, b.side!, t),
       selectedSide: BorderSide.lerp(a.selectedSide!, b.selectedSide!, t),
       shape: a.shape,
       selectedShape: a.selectedShape,
       shadowColor: Color.lerp(a.shadowColor, b.shadowColor, t),
       selectedShadowColor:
-          Color.lerp(a.selectedShadowColor, b.selectedShadowColor, t),
+          Color.lerp(selectedShadowColor, b.selectedShadowColor, t),
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t),
       labelPadding: EdgeInsetsGeometry.lerp(a.labelPadding, b.labelPadding, t),
       margin: EdgeInsetsGeometry.lerp(a.margin, b.margin, t)!,

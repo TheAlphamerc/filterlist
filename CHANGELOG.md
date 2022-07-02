@@ -1,33 +1,41 @@
+## [1.0.2] - 02 Jul 2022
+- Make compatible with Flutter 3.0.0
+- Add `applyButtonText` prop to change Apply button text in FilterListDelegate
+- Add copyWith method in `FilterListDelegateThemeData` to copy theme data
+- Add copyWith method in `FilterListThemeData` to copy theme data
+
+
 ## [1.0.1] - 18 Jan 2022
 
 - 🚨 Breaking change
 
-  - Removed `selectedChipTextStyle` parameter
-  - Removed `unselectedChipTextStyle` parameter
-  - Removed `selectedTextBackgroundColor` parameter
-  - Removed `unselectedTextbackGroundColor` parameter
-  - Removed `hideHeaderText` parameter
-  - Removed `closeIconColor` parameter
-  - Removed `hideHeaderAreaShadow` parameter
-  - Removed `headerTextColor` parameter
-  - Removed `searchFieldBackgroundColor` parameter
-  - Removed `searchFieldTextStyle` parameter
-  - Removed `headerTextStyle` parameter
-  - Removed `searchFieldHintText` parameter
-  - Removed `applyButonTextBackgroundColor` parameter
-  - Removed `buttonRadius` parameter
-  - Removed `buttonSpacing` parameter
-  - Removed `controlButtonTextStyle` parameter
-  - Removed `applyButtonTextStyle` parameter
-  - Removed `applyButtonText` parameter
-  - Removed `wrapAlignment` parameter
-  - Removed `wrapCrossAxisAlignment` parameter
-  - Removed `wrapSpacing` parameter
-  - Removed `borderRadius` parameter
+  - Removed `selectedChipTextStyle` prop
+  - Removed `unselectedChipTextStyle` prop
+  - Removed `selectedTextBackgroundColor` prop
+  - Removed `unselectedTextBackgroundColor` prop
+  - Removed `hideHeaderText` prop
+  - Removed `closeIconColor` prop
+  - Removed `hideHeaderAreaShadow` prop
+  - Removed `headerTextColor` prop
+  - Removed `searchFieldBackgroundColor` prop
+  - Removed `searchFieldTextStyle` prop
+  - Removed `headerTextStyle` prop
+  - Removed `searchFieldHintText` prop
+  - Removed `applyButonTextBackgroundColor` prop
+  - Removed `buttonRadius` prop
+  - Removed `buttonSpacing` prop
+  - Removed `controlButtonTextStyle` prop
+  - Removed `applyButtonTextStyle` prop
+  - Removed `applyButtonText` prop
+  - Removed `wrapAlignment` prop
+  - Removed `wrapCrossAxisAlignment` prop
+  - Removed `wrapSpacing` prop
+  - Removed `borderRadius` prop
 
-  > Above removed parameters are moved to the newly created theme parameter 
+  > Above removed parameters are moved to the newly created theme prop
 
   - Replace `ItemSearchDelegate<T>` with `SearchPredict<T>` method
+
 - Added Theme
   - `FilterListTheme` for filter list widget theme
   - `ChoiceChipTheme` for choice chip theme.
@@ -35,10 +43,8 @@
   - `ControlButtonBarTheme` for control button bar theme
   - `ControlButtonTheme` for control button theme
   - `FilterListDelegateTheme` for filter list delegate theme
-  - `controlButtons` parameter to display/hide control buttons (All, Reset)
+  - `controlButtons` prop to display/hide control buttons (All, Reset)
 - Added `FilterListDelegate.show` delegate to search/filter data in new screen
-
-
 
 ## [1.0.0] 21 May 2021
 
@@ -97,9 +103,9 @@
 - Added pop-up height
 
 - Added pop-up width
-- Added header hide parameter
-- Added search field hide parameter
-- Added cross icon hide parameter
+- Added header hide prop
+- Added search field hide prop
+- Added cross icon hide prop
 
 ## [0.0.2] - 02 Mar 2020
 

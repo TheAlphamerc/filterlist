@@ -47,7 +47,8 @@ class ControlButtonBarTheme extends InheritedWidget {
 /// [ControlButtonBar] widgets when used with [ControlButtonBarTheme] or with the overall
 /// {@endtemplate}
 class ControlButtonBarThemeData with Diagnosticable {
-  factory ControlButtonBarThemeData({
+  factory ControlButtonBarThemeData(
+    BuildContext context, {
     double? height,
     double? buttonSpacing,
     BoxDecoration? decoration,
@@ -56,10 +57,10 @@ class ControlButtonBarThemeData with Diagnosticable {
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
   }) {
-    controlButtonTheme ??= ControlButtonThemeData.light();
+    controlButtonTheme ??= ControlButtonThemeData.light(context);
     height ??= 50;
-    margin ??= EdgeInsets.symmetric(horizontal: 10, vertical: 10);
-    padding ??= EdgeInsets.symmetric(horizontal: 10);
+    margin ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 10);
+    padding ??= const EdgeInsets.symmetric(horizontal: 10);
     buttonSpacing ??= 0;
     // backgroundColor ??= decoration == null ? Colors.white : null;
     if (decoration == null) {
@@ -106,12 +107,14 @@ class ControlButtonBarThemeData with Diagnosticable {
     ),
   });
 
-  factory ControlButtonBarThemeData.light() => ControlButtonBarThemeData(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  factory ControlButtonBarThemeData.light(BuildContext context) =>
+      ControlButtonBarThemeData(
+        context,
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         padding: EdgeInsets.zero,
         buttonSpacing: 0,
         height: 50,
-        controlButtonTheme: ControlButtonThemeData.light(),
+        controlButtonTheme: ControlButtonThemeData.light(context),
         backgroundColor: Colors.white,
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -128,13 +131,14 @@ class ControlButtonBarThemeData with Diagnosticable {
 
   factory ControlButtonBarThemeData.dark(BuildContext context) =>
       ControlButtonBarThemeData(
+        context,
         buttonSpacing: 20,
-        backgroundColor: Color(0xff19355D),
+        backgroundColor: const Color(0xff19355D),
         decoration: BoxDecoration(
-          color: Color(0xff19355D),
+          color: const Color(0xff19355D),
           borderRadius: BorderRadius.circular(50),
         ),
-        controlButtonTheme: ControlButtonThemeData.dark(),
+        controlButtonTheme: ControlButtonThemeData.dark(context),
       );
 
   /// {@template control_container_decoration}
@@ -171,6 +175,27 @@ class ControlButtonBarThemeData with Diagnosticable {
 
   /// Background of the control button bar
   final Color? backgroundColor;
+
+  ControlButtonBarThemeData copyWith({
+    double? buttonSpacing,
+    double? height,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Color? backgroundColor,
+    BoxDecoration? controlContainerDecoration,
+    ControlButtonThemeData? controlButtonTheme,
+  }) {
+    return ControlButtonBarThemeData.raw(
+      controlButtonTheme: controlButtonTheme ?? this.controlButtonTheme,
+      buttonSpacing: buttonSpacing ?? this.buttonSpacing,
+      height: height ?? this.height,
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      controlContainerDecoration:
+          controlContainerDecoration ?? this.controlContainerDecoration,
+    );
+  }
 
   @override
   bool operator ==(Object other) =>

@@ -7,9 +7,9 @@ typedef SuggestionBuilder<T> = Widget Function(
 typedef AppbarBottom = PreferredSizeWidget Function(BuildContext context);
 
 /// The [FilterListDelegate.show] implement a search view, using [SearchDelegate]
-/// The [listData] should be list of [T] which neeeds to filter.
+/// The [listData] should be list of [T] which needs to filter.
 ///
-/// the `selectedListData` should be sublist of [listData].
+/// the `selectedListData` should be sub list of [listData].
 ///
 /// The [tileLabel] is a callback which required [String] value in return. It used this value to display text on choice chip.
 ///
@@ -20,7 +20,7 @@ typedef AppbarBottom = PreferredSizeWidget Function(BuildContext context);
 ///
 /// Only one of [searchFieldStyle] or [searchFieldDecorationTheme] can be non-null.
 ///
-/// [onItemSearch] filter the list on the basis of search field query. It expose search api to permform search operation  outside the package.
+/// [onItemSearch] filter the list on the basis of search field query. It expose search api to perform search operation  outside the package.
 ///
 /// The [onApplyButtonClick] is a callback which return list of all selected items on apply button click.  if no item is selected then it will return empty list.
 ///
@@ -45,10 +45,16 @@ typedef AppbarBottom = PreferredSizeWidget Function(BuildContext context);
 /// {@macro control_buttons}
 class FilterListDelegate<T> extends SearchDelegate<T?> {
   final List<T> listData;
-  late List<T> templist;
+  late List<T> tempList;
   final LabelDelegate<T>? tileLabel;
   final SuggestionBuilder<T>? suggestionBuilder;
+
+  @override
+  // ignore: overridden_fields
   final InputDecorationTheme? searchFieldDecorationTheme;
+
+  @override
+  // ignore: overridden_fields
   final TextStyle? searchFieldStyle;
   final SearchPredict<T> onItemSearch;
   final AppbarBottom? buildAppbarBottom;
@@ -86,14 +92,14 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     this.hideClearSearchIcon = false,
     this.applyButtonText = 'Apply',
   })  : assert(searchFieldStyle == null || searchFieldDecorationTheme == null,
-            'You can\'t set both searchFieldStyle and searchFieldDecorationTheme at the same time.'),
-        assert(tileLabel == null || suggestionBuilder == null,
-            '''\nYou can\'t set both tileLabel and suggestionBuilder at the same time.
+            "You can't set both searchFieldStyle and searchFieldDecorationTheme at the same time."),
+        assert(tileLabel == null || suggestionBuilder == null, '''
+\nYou can't set both tileLabel and suggestionBuilder at the same time.
                \n If you want to use tileLabel, you must not set suggestionBuilder.
                 \n If you want to use suggestionBuilder, you must not set tileLabel.
             '''),
-        assert(tileLabel != null || suggestionBuilder != null,
-            '''One of the tileLabel or suggestionBuilder is required
+        assert(tileLabel != null || suggestionBuilder != null, '''
+One of the tileLabel or suggestionBuilder is required
             '''),
         super(
             searchFieldLabel: searchFieldHint ?? "Search here..",
@@ -101,7 +107,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
             textInputAction: TextInputAction.search,
             searchFieldStyle: searchFieldStyle,
             searchFieldDecorationTheme: searchFieldDecorationTheme) {
-    templist = listData;
+    tempList = listData;
     if (selectedListData != null) {
       selectedItems = selectedListData;
     }
@@ -146,8 +152,9 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     Widget? emptySearchChild,
     FilterListDelegateThemeData? theme,
     ButtonStyle? applyButtonStyle,
+    String? applyButtonText = 'Apply',
   }) async {
-    var selectedItem = await showSearch(
+    final selectedItem = await showSearch(
       context: context,
       delegate: FilterListDelegate(
         listData: list,
@@ -164,6 +171,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
         emptySearchChild: emptySearchChild,
         theme: theme,
         applyButtonStyle: applyButtonStyle,
+        applyButtonText: applyButtonText!,
       ),
     );
 
@@ -176,13 +184,13 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
       if (hideClearSearchIcon == false)
         AnimatedOpacity(
           opacity: query.isNotEmpty ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOutCubic,
           child: SizedBox(
             width: 25,
             height: 25,
             child: IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () => query = '',
             ),
           ),
@@ -190,7 +198,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
       if (!enableOnlySingleSelection)
         Container(
           alignment: Alignment.center,
-          margin: EdgeInsets.only(right: 10),
+          margin: const EdgeInsets.only(right: 10),
           child: TextButtonTheme(
             data: TextButtonThemeData(style: applyButtonStyle),
             child: TextButton(
@@ -211,13 +219,13 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
       onPressed: () {
         close(context, null);
       },
-      icon: BackButtonIcon(),
+      icon: const BackButtonIcon(),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    templist = listData;
+    tempList = listData;
     return _result(context);
   }
 
@@ -227,10 +235,10 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
       child: Builder(
         builder: (BuildContext innerContext) {
           return ListView.builder(
-            itemCount: templist.length,
+            itemCount: tempList.length,
             itemBuilder: (context, index) {
               final theme = FilterListDelegateTheme.of(innerContext);
-              final item = templist[index];
+              final item = tempList[index];
               if (suggestionBuilder != null) {
                 return GestureDetector(
                   onTap: () => onItemSelect(context, item),
@@ -244,7 +252,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
                 return Container(
                   margin: theme.tileMargin,
                   decoration: BoxDecoration(
-                    boxShadow: theme.tileshadow,
+                    boxShadow: theme.tileShadow,
                     border: theme.tileBorder,
                   ),
                   child: enableOnlySingleSelection
@@ -287,9 +295,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
       onApplyButtonClick([item]);
       close(context, null);
     } else {
-      if (selectedItems == null) {
-        selectedItems = <T>[];
-      }
+      selectedItems ??= <T>[];
       if (selectedItems!.contains(item)) {
         selectedItems!.remove(item);
       } else {
@@ -303,9 +309,9 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    templist = listData.where((item) => onItemSearch(item, query)).toList();
-    if (templist.isEmpty) {
-      return emptySearchChild ?? SizedBox();
+    tempList = listData.where((item) => onItemSearch(item, query)).toList();
+    if (tempList.isEmpty) {
+      return emptySearchChild ?? const SizedBox();
     }
     return _result(context);
   }

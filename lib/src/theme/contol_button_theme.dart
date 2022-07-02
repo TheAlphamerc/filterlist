@@ -53,15 +53,15 @@ class ControlButtonTheme extends InheritedTheme {
 }
 
 /// {@template control_button_theme_data}
-/// A style that overrides the default appearance of [ContorlButton] and
-/// [ContorlButton] widgets when used with [ControlButtonTheme] or with the overall
+/// A style that overrides the default appearance of [ControlButton] and
+/// [ControlButton] widgets when used with [ControlButtonTheme] or with the overall
 /// [ControlButtonBarTheme]'s [ControlButtonBarThemeData.controlButtonTheme].
 ///
 /// See also:
 ///
 /// * [ControlButtonTheme], the theme which is configured with this class.
 /// * [ControlButtonBarThemeData.controlButtonTheme], which can be used to override
-/// the default style for [ContorlButton]
+/// the default style for [ControlButton]
 /// {@endtemplate}
 class ControlButtonThemeData with Diagnosticable {
   /// Builds a [ControlButtonThemeData].
@@ -72,44 +72,34 @@ class ControlButtonThemeData with Diagnosticable {
     ),
     this.primaryButtonTextStyle =
         const TextStyle(fontSize: 16, color: Colors.white),
-    this.primaryButtonBackgroundColor = const Color(0xFF649BEC),
+    this.primaryButtonBackgroundColor,
     this.backgroundColor = Colors.transparent,
     this.borderRadius = 25,
     this.boxShadow,
     this.elevation,
-    this.padding: const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
   });
 
-  factory ControlButtonThemeData.light() => ControlButtonThemeData(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        textStyle: TextStyle(
-          fontSize: 16,
-          color: const Color(0xFF649BEC),
-        ),
-        primaryButtonTextStyle: TextStyle(fontSize: 16, color: Colors.white),
-        primaryButtonBackgroundColor: Color(0xFF649BEC),
-        backgroundColor: Colors.transparent,
+  factory ControlButtonThemeData.light(BuildContext context) =>
+      ControlButtonThemeData(
         borderRadius: 40,
         boxShadow: <BoxShadow>[
-          BoxShadow(
+          const BoxShadow(
             offset: Offset(0, 5),
             blurRadius: 15,
             color: Color(0x12000000),
           )
         ],
         elevation: 0,
+        textStyle:
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
+        primaryButtonBackgroundColor: Theme.of(context).primaryColor,
       );
-  factory ControlButtonThemeData.dark() => ControlButtonThemeData(
-        primaryButtonBackgroundColor: Color(0xff3E77C8),
-        // backgroundColor: ,
-        textStyle: TextStyle(
-          color: Color(0xFFEABE75),
-        ),
-        primaryButtonTextStyle: TextStyle(
-          color: Color(
-            0xffFFBC00,
-          ),
-        ),
+  factory ControlButtonThemeData.dark(BuildContext context) =>
+      ControlButtonThemeData(
+        primaryButtonBackgroundColor: Theme.of(context).primaryColor,
+        textStyle: const TextStyle(color: Color(0xFFEABE75)),
+        primaryButtonTextStyle: const TextStyle(color: Color(0xffFFBC00)),
       );
 
   /// Control button elevation
@@ -130,15 +120,15 @@ class ControlButtonThemeData with Diagnosticable {
 
   /// The background color of the primary button.
   ///
-  /// The default is Ligt blue.
-  final Color primaryButtonBackgroundColor;
+  /// The default is Light blue.
+  final Color? primaryButtonBackgroundColor;
 
   /// Background color of the control button.
   ///
   /// The default is [Colors.white].
   final Color? backgroundColor;
 
-  /// The box shadow of contrl button.
+  /// The box shadow of control button.
   final List<BoxShadow>? boxShadow;
 
   /// The padding of control button.
@@ -166,7 +156,7 @@ class ControlButtonThemeData with Diagnosticable {
           primaryButtonBackgroundColor ?? this.primaryButtonBackgroundColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       boxShadow: boxShadow ?? this.boxShadow,
-      textStyle: textStyle ?? this.textStyle,
+      textStyle: textStyle ?? textStyle,
       padding: padding ?? this.padding,
     );
   }

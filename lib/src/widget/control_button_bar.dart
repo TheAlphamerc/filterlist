@@ -22,7 +22,7 @@ class ControlButtonBar<T> extends StatelessWidget {
   final VoidCallback? onApplyButtonClick;
 
   /// {@macro control_buttons}
-  final List<ContolButtonType> controlButtons;
+  final List<ControlButtonType> controlButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +39,8 @@ class ControlButtonBar<T> extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Container(
                 decoration: theme.controlContainerDecoration!.copyWith(
-                  color: theme.controlContainerDecoration!.color == null
-                      ? theme.backgroundColor
-                      : theme.controlContainerDecoration!.color,
+                  color: theme.controlContainerDecoration!.color ??
+                      theme.backgroundColor,
                 ),
                 padding: theme.padding,
                 child: Row(
@@ -50,36 +49,36 @@ class ControlButtonBar<T> extends StatelessWidget {
                   children: <Widget>[
                     /* All Button */
                     if (!enableOnlySingleSelection &&
-                        controlButtons.contains(ContolButtonType.All)) ...[
-                      ContorlButton(
+                        controlButtons.contains(ControlButtonType.All)) ...[
+                      ControlButton(
                         choiceChipLabel: '$allButtonText',
                         onPressed: () {
                           final state = StateProvider.of<FilterState<T>>(
                             context,
                             rebuildOnChange: true,
                           );
-                          state.selctedItems = state.items;
+                          state.selectedItems = state.items;
                         },
                       ),
                       SizedBox(width: theme.buttonSpacing),
 
                       /* Reset Button */
                     ],
-                    if (controlButtons.contains(ContolButtonType.Reset)) ...[
-                      ContorlButton(
+                    if (controlButtons.contains(ControlButtonType.Reset)) ...[
+                      ControlButton(
                         choiceChipLabel: '$resetButtonText',
                         onPressed: () {
                           final state = StateProvider.of<FilterState<T>>(
                             context,
                             rebuildOnChange: true,
                           );
-                          state.selctedItems = [];
+                          state.selectedItems = [];
                         },
                       ),
                       SizedBox(width: theme.buttonSpacing),
                     ],
                     /* Apply Button */
-                    ContorlButton(
+                    ControlButton(
                       choiceChipLabel: '$applyButtonText',
                       primaryButton: true,
                       onPressed: () {

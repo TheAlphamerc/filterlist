@@ -208,7 +208,7 @@ Empty screen |  FilterListDialog        |  Selected chip           |  Result fro
 | height | `double` | Set height of filter dialog.|
 | width  | `double` | Set width of filter dialog.|
 | hideCloseIcon|`bool`|Hide close Icon.|
-| hideheader|`bool`|Hide complete header section from filter dialog.|
+| hideHeader|`bool`|Hide complete header section from filter dialog.|
 | headerCloseIcon|`Widget`|Widget to close the dialog.|
 | hideSelectedTextCount|`bool`|Hide selected text count.|
 | hideSearchField|`bool`|Hide search text field.|
@@ -219,13 +219,13 @@ Empty screen |  FilterListDialog        |  Selected chip           |  Result fro
 | choiceChipLabel|`String Function(T item)`| Display text on choice chip.|
 | validateSelectedItem|`bool Function(List<T>? list, T item)`| Identifies weather a item is selected or not|
 | onItemSearch|`List<T> Function(List<T>? list, String text)`| Perform search operation and returns filtered list|
-| choiceChipBuilder|`Widget Function(BuildContext context, T? item, bool? iselected)`|The choiceChipBuilder is a builder to design custom choice chip.|
+| choiceChipBuilder|`Widget Function(BuildContext context, T? item, bool? isSelected)`|The choiceChipBuilder is a builder to design custom choice chip.|
 | onApplyButtonClick|`Function(List<T> list)`|Returns list of items when apply button is clicked|
 | validateRemoveItem|`List<T> Function(List<T>? list, T item)`| Function Delegate responsible for delete item from list |
 | resetButtonText|`String`| Reset button text to customize or translate |
 | allButtonText|`String`| All button text to customize or translate |
 | selectedItemsText|`String`| Selected items text to customize or translate |
-| controlButtons|`List<ContolButtonType>`| configure which control button needs to be display on bottom of dialog along with 'Apply' button.|
+| controlButtons|`List<ControlButtonType>`| configure which control button needs to be display on bottom of dialog along with 'Apply' button.|
 | insetPadding| `EdgeInsets`| The amount of padding added to the outside of the dialog.|
 | themeData|`FilterListThemeData`| Configure theme of filter dialog and widget.|
 | choiceChipTheme|`ChoiceChipThemeData`| Configure theme of choice chip.|
