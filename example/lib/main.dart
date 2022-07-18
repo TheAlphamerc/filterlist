@@ -94,6 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
         });
         Navigator.pop(context);
       },
+      onCloseWidgetPress: () {
+        print("hello");
+      },
 
       /// uncomment below code to create custom choice chip
       /* choiceChipBuilder: (context, item, isSelected) {
@@ -245,6 +248,9 @@ class FilterPage extends StatelessWidget {
             ///
             /// Check if items contains query
             return user.name!.toLowerCase().contains(query.toLowerCase());
+          },
+          onCloseWidgetPress: () {
+            print("hello");
           },
         ),
       ),

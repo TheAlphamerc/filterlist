@@ -64,6 +64,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     this.onApplyButtonClick,
     this.choiceChipBuilder,
     this.headerCloseIcon,
+    this.onCloseWidgetPress,
     this.headlineText,
     this.hideSelectedTextCount = false,
     this.hideSearchField = false,
@@ -104,6 +105,11 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   ///
   /// If widget is not provided then default close icon will be used.
   final Widget? headerCloseIcon;
+
+  /// Function to execute on close widget press. To pass user define function and do a different task with this button rather than close. (Example: Add item to the List.)
+  ///
+  /// Default is `Navigator.pop(context, null)`
+  final void Function()? onCloseWidgetPress;
 
   /// If true then it hide complete header section.
   final bool? hideHeader;
@@ -181,6 +187,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                     FilterState.of<T>(context)
                         .filter((item) => onItemSearch(item, value));
                   },
+                  onCloseWidgetPress: onCloseWidgetPress,
                 ),
               if (hideSelectedTextCount)
                 const SizedBox()
