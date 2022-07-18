@@ -95,7 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pop(context);
       },
       onCloseWidgetPress: () {
-        print("hello");
+        // Do anything with the close button.
+        //print("hello");
+        Navigator.pop(context, null);
       },
 
       /// uncomment below code to create custom choice chip
