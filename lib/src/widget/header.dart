@@ -10,6 +10,7 @@ class Header extends StatelessWidget {
     this.hideCloseIcon = false,
     this.headerCloseIcon,
     this.hideSearchField = false,
+    this.onCloseWidgetPress,
   }) : super(key: key);
 
   final String? headlineText;
@@ -17,6 +18,7 @@ class Header extends StatelessWidget {
   final Widget? headerCloseIcon;
   final bool hideSearchField;
   final ValueChanged<String> onSearch;
+  final void Function()? onCloseWidgetPress;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +51,10 @@ class Header extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(30)),
-                    onTap: () {
-                      Navigator.pop(context, null);
-                    },
+                    onTap: onCloseWidgetPress ??
+                        () {
+                          Navigator.pop(context, null);
+                        },
                     child: hideCloseIcon
                         ? const SizedBox()
                         : headerCloseIcon ??

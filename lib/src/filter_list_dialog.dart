@@ -131,6 +131,11 @@ class FilterListDialog {
     /// If widget is not provided then default close icon will be used.
     final Widget? headerCloseIcon,
 
+    /// Function to execute on close widget press. To pass user define function and do a different task with this button rather than close. (Example: Add item to the List.)
+    ///
+    /// Default is `Navigator.pop(context, null)`
+    final void Function()? onCloseWidgetPress,
+
     /// Used to hide header.
     bool hideHeader = false,
 
@@ -211,6 +216,7 @@ class FilterListDialog {
                 hideSelectedTextCount: hideSelectedTextCount,
                 hideCloseIcon: hideCloseIcon,
                 headerCloseIcon: headerCloseIcon,
+                onCloseWidgetPress: onCloseWidgetPress,
                 hideSearchField: hideSearchField,
                 choiceChipBuilder: choiceChipBuilder,
                 enableOnlySingleSelection: enableOnlySingleSelection,
