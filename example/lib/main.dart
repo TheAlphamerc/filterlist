@@ -73,7 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
     await FilterListDialog.display<User>(
       context,
       hideSelectedTextCount: true,
-      themeData: FilterListThemeData(context),
+      themeData: FilterListThemeData(
+        context,
+        backgroundColor: Color.fromARGB(255, 80, 80, 80),
+        choiceChipTheme: ChoiceChipThemeData(
+          backgroundColor: Color.fromARGB(255, 77, 77, 77),
+          canvasColor: Colors.transparent,
+        ),
+      ),
       headlineText: 'Select Users',
       height: 500,
       listData: userList,

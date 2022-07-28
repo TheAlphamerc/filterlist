@@ -53,21 +53,26 @@ class ChoiceChipWidget<T> extends StatelessWidget {
           )
         : Padding(
             padding: theme.margin,
-            child: ChoiceChip(
-              labelPadding: theme.labelPadding,
-              padding: theme.padding,
-              backgroundColor: getBackgroundColor(context),
-              selectedColor: theme.selectedBackgroundColor,
-              label: Text('$text'),
-              labelStyle: getSelectedTextStyle(context),
-              visualDensity: theme.visualDensity,
-              selected: selected!,
-              onSelected: onSelected,
-              elevation: theme.elevation,
-              side: getSide(context),
-              shape: getShape(context),
-              shadowColor: theme.shadowColor,
-              selectedShadowColor: theme.selectedShadowColor,
+            child: Theme(
+              data: ThemeData().copyWith(
+                canvasColor: theme.canvasColor ?? Colors.transparent,
+              ),
+              child: ChoiceChip(
+                labelPadding: theme.labelPadding,
+                padding: theme.padding,
+                backgroundColor: getBackgroundColor(context),
+                selectedColor: theme.selectedBackgroundColor,
+                label: Text('$text'),
+                labelStyle: getSelectedTextStyle(context),
+                visualDensity: theme.visualDensity,
+                selected: selected!,
+                onSelected: onSelected,
+                elevation: theme.elevation,
+                side: getSide(context),
+                shape: getShape(context),
+                shadowColor: theme.shadowColor,
+                selectedShadowColor: theme.selectedShadowColor,
+              ),
             ),
           );
   }
