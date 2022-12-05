@@ -77,7 +77,6 @@ class ChoiceChipThemeData with Diagnosticable {
     this.padding,
     this.labelPadding = const EdgeInsets.symmetric(horizontal: 4.0),
     this.margin = const EdgeInsets.symmetric(horizontal: 10.0),
-    this.canvasColor,
   });
 
   factory ChoiceChipThemeData.light(BuildContext context) =>
@@ -179,10 +178,6 @@ class ChoiceChipThemeData with Diagnosticable {
   /// The margin around choice chip
   final EdgeInsetsGeometry margin;
 
-  /// Give a CanvasColor for ChoiceChips
-  /// Default value is [Colors.transparent]
-  final Color? canvasColor;
-
   /// Creates a copy of this theme, but with the given fields replaced with
   /// the new values.
   ChoiceChipThemeData copyWith({
@@ -222,7 +217,6 @@ class ChoiceChipThemeData with Diagnosticable {
       padding: padding ?? this.padding,
       labelPadding: labelPadding ?? this.labelPadding,
       margin: margin ?? this.margin,
-      canvasColor: canvasColor ?? this.canvasColor,
     );
   }
 
@@ -251,7 +245,6 @@ class ChoiceChipThemeData with Diagnosticable {
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t),
       labelPadding: EdgeInsetsGeometry.lerp(a.labelPadding, b.labelPadding, t),
       margin: EdgeInsetsGeometry.lerp(a.margin, b.margin, t)!,
-      canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t),
     );
   }
 
@@ -274,8 +267,7 @@ class ChoiceChipThemeData with Diagnosticable {
           selectedShadowColor == other.selectedShadowColor &&
           padding == other.padding &&
           labelPadding == other.labelPadding &&
-          margin == other.margin &&
-          canvasColor == other.canvasColor;
+          margin == other.margin;
 
   @override
   int get hashCode =>
@@ -293,8 +285,7 @@ class ChoiceChipThemeData with Diagnosticable {
       selectedShadowColor.hashCode ^
       padding.hashCode ^
       labelPadding.hashCode ^
-      margin.hashCode ^
-      canvasColor.hashCode;
+      margin.hashCode;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -322,6 +313,5 @@ class ChoiceChipThemeData with Diagnosticable {
     properties.add(
         DiagnosticsProperty<EdgeInsetsGeometry>('labelPadding', labelPadding));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin));
-    properties.add(DiagnosticsProperty<Color>('canvasColor', canvasColor));
   }
 }

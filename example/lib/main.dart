@@ -75,10 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(
         context,
-        backgroundColor: Color.fromARGB(255, 80, 80, 80),
+        backgroundColor: Colors.white,
         choiceChipTheme: ChoiceChipThemeData(
-          backgroundColor: Color.fromARGB(255, 77, 77, 77),
-          canvasColor: Colors.transparent,
+          backgroundColor: Colors.grey.shade200,
         ),
       ),
       headlineText: 'Select Users',

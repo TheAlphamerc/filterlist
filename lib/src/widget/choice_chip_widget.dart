@@ -54,8 +54,8 @@ class ChoiceChipWidget<T> extends StatelessWidget {
         : Padding(
             padding: theme.margin,
             child: Theme(
-              data: ThemeData().copyWith(
-                canvasColor: theme.canvasColor ?? Colors.transparent,
+              data: Theme.of(context).copyWith(
+                canvasColor: Colors.transparent,
               ),
               child: ChoiceChip(
                 labelPadding: theme.labelPadding,
