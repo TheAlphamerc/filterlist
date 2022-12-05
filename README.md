@@ -24,7 +24,7 @@ dependencies:
 ```
 2. Import library in dart file
 ```dart
-import package:filter_list/filter_list.dart';
+import 'package:filter_list/filter_list.dart';
 ```
 
 3. Create a list of Strings / dynamic object
