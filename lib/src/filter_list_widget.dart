@@ -189,15 +189,13 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                   },
                   onCloseWidgetPress: onCloseWidgetPress,
                 ),
-              if (hideSelectedTextCount)
-                const SizedBox()
-              else
+              if (!hideSelectedTextCount)
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
                   child: ChangeNotifierProvider<FilterState<T>>(
                     builder: (context, state, child) => Text(
                       '${state.selectedItemsCount} $selectedItemsText',
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                 ),

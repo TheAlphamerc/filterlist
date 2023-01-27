@@ -90,13 +90,17 @@ class HeaderThemeData with Diagnosticable {
           )
         ],
       );
-  factory HeaderThemeData.dark() => const HeaderThemeData(
-        backgroundColor: Color(0xff19355D),
-        searchFieldBackgroundColor: Color(0xff101e31),
-        searchFieldHintTextStyle: TextStyle(color: Color(0xff8A9AAA)),
-        searchFieldIconColor: Color(0xff8A9AAA),
-        searchFieldTextStyle: TextStyle(color: Color(0xff8A9AAA)),
-      );
+  factory HeaderThemeData.dark() {
+    return const HeaderThemeData(
+      backgroundColor: Color(0xff25272C),
+      searchFieldBackgroundColor: Color(0xff25272C),
+      searchFieldHintTextStyle: TextStyle(color: Color(0xff8A9AAA)),
+      searchFieldIconColor: Color(0xff8A9AAA),
+      searchFieldTextStyle: TextStyle(color: Color(0xff8A9AAA)),
+      headerTextStyle: TextStyle(color: Color(0xff8A9AAA), fontSize: 18),
+      closeIconColor: Color(0xff8A9AAA),
+    );
+  }
 
   /// TextStyle for the header text.
   final TextStyle? headerTextStyle;

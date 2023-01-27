@@ -62,10 +62,10 @@ class ChoiceChipTheme extends InheritedTheme {
 class ChoiceChipThemeData with Diagnosticable {
   /// Builds a [ChoiceChipThemeData].
   const ChoiceChipThemeData({
-    this.selectedTextStyle = const TextStyle(color: Colors.white),
+    this.selectedTextStyle,
     this.textStyle,
-    this.selectedBackgroundColor = const Color(0xFF649BEC),
-    this.backgroundColor = const Color(0xfff8f8f8),
+    this.selectedBackgroundColor,
+    this.backgroundColor,
     this.visualDensity,
     this.elevation,
     this.side,
@@ -82,31 +82,36 @@ class ChoiceChipThemeData with Diagnosticable {
   factory ChoiceChipThemeData.light(BuildContext context) =>
       ChoiceChipThemeData(
         selectedTextStyle:
-            TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            TextStyle(color: Theme.of(context).colorScheme.primary),
         textStyle: const TextStyle(color: Colors.black),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevation: 0,
         padding: const EdgeInsets.all(4),
+        selectedBackgroundColor:
+            Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
       );
 
-  factory ChoiceChipThemeData.dark() => ChoiceChipThemeData(
-        backgroundColor: const Color(0xff4a70a7),
-        side: const BorderSide(color: Color(0xff101e31)),
-        textStyle: const TextStyle(
-          color: Color(0xff101e31),
-        ),
-        selectedTextStyle: const TextStyle(
-          color: Color(0xFFE4B057),
-        ),
-        selectedSide: const BorderSide(color: Color(0xffFFBC00)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        selectedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        selectedBackgroundColor: const Color(0xff3E77C8),
-      );
+  factory ChoiceChipThemeData.dark(BuildContext context) {
+    final theme = Theme.of(context);
+    final darkTheme = ThemeData.dark();
+    return ChoiceChipThemeData(
+      backgroundColor: const Color(0xff25272C),
+      side: BorderSide(color: theme.colorScheme.onSurface.withOpacity(0.12)),
+      textStyle: const TextStyle(color: Color(0xffb0b0c0)),
+      selectedTextStyle: TextStyle(color: darkTheme.colorScheme.primary),
+      selectedSide: BorderSide(
+        color: theme.colorScheme.primaryContainer,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      selectedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      selectedBackgroundColor:
+          Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
+    );
+  }
 
   /// TextStyle for chip when selected.
   final TextStyle? selectedTextStyle;

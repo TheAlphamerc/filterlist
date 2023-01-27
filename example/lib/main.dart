@@ -8,9 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Filter list example'),
     );
@@ -75,10 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(
         context,
-        backgroundColor: Colors.white,
-        choiceChipTheme: ChoiceChipThemeData(
-          backgroundColor: Colors.grey.shade200,
-        ),
+        choiceChipTheme: ChoiceChipThemeData.light(context),
       ),
       headlineText: 'Select Users',
       height: 500,
@@ -136,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            TextButton(
+            FilledButton(
               onPressed: () async {
                 final list = await Navigator.push(
                   context,
@@ -153,35 +148,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                "Filter Page",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text("Filter Page"),
             ),
-            TextButton(
+            FilledButton(
               onPressed: _openFilterDialog,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                "Filter Dialog",
-                style: TextStyle(color: Colors.white),
-              ),
-              // color: Colors.blue,
+              child: const Text("Filter Dialog"),
             ),
-            TextButton(
+            FilledButton(
               onPressed: openFilterDelegate,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                "Filter Delegate",
-                style: TextStyle(color: Colors.white),
-              ),
-              // color: Colors.blue,
+              child: const Text("Filter Delegate"),
             ),
           ],
         ),
@@ -220,9 +195,6 @@ class FilterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Filter list Page"),
-      ),
       body: SafeArea(
         child: FilterListWidget<User>(
           themeData: FilterListThemeData(context),

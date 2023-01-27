@@ -27,7 +27,7 @@ class Header extends StatelessWidget {
       decoration: BoxDecoration(
           color: headerTheme.backgroundColor, boxShadow: headerTheme.boxShadow),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 0, 10),
+        padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

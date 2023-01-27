@@ -94,17 +94,19 @@ class FilterListThemeData with Diagnosticable {
   factory FilterListThemeData.light(BuildContext context) =>
       FilterListThemeData(context);
 
-  factory FilterListThemeData.dark(BuildContext context) => FilterListThemeData(
-        context,
-        backgroundColor: const Color(0xff101e31),
-        headerTheme: HeaderThemeData.dark(),
-        choiceChipTheme: ChoiceChipThemeData.dark(),
-        controlButtonBarTheme: ControlButtonBarThemeData.dark(context),
-        borderRadius: 20,
-        wrapAlignment: WrapAlignment.start,
-        wrapCrossAxisAlignment: WrapCrossAlignment.start,
-        wrapSpacing: 0.0,
-      );
+  factory FilterListThemeData.dark(BuildContext context) {
+    return FilterListThemeData(
+      context,
+      backgroundColor: const Color(0xff141519),
+      headerTheme: HeaderThemeData.dark(),
+      choiceChipTheme: ChoiceChipThemeData.dark(context),
+      controlButtonBarTheme: ControlButtonBarThemeData.dark(context),
+      borderRadius: 20,
+      wrapAlignment: WrapAlignment.start,
+      wrapCrossAxisAlignment: WrapCrossAlignment.start,
+      wrapSpacing: 0.0,
+    );
+  }
 
   /// Raw [FilterListThemeData] initialization.
   const FilterListThemeData.raw({

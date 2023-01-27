@@ -70,7 +70,7 @@ class ChoiceList<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = FilterListTheme.of(context);
     return Container(
-      padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: SingleChildScrollView(
         child: ChangeNotifierProvider<FilterState<T>>(
           builder: (

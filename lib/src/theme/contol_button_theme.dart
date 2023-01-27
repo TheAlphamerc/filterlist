@@ -68,10 +68,8 @@ class ControlButtonThemeData with Diagnosticable {
   const ControlButtonThemeData({
     this.textStyle = const TextStyle(
       fontSize: 16,
-      color: Color(0xFF649BEC),
     ),
-    this.primaryButtonTextStyle =
-        const TextStyle(fontSize: 16, color: Colors.white),
+    this.primaryButtonTextStyle = const TextStyle(fontSize: 16),
     this.primaryButtonBackgroundColor,
     this.backgroundColor = Colors.transparent,
     this.borderRadius = 25,
@@ -93,13 +91,17 @@ class ControlButtonThemeData with Diagnosticable {
         elevation: 0,
         textStyle:
             TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
-        primaryButtonBackgroundColor: Theme.of(context).primaryColor,
+        primaryButtonBackgroundColor:
+            Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
       );
   factory ControlButtonThemeData.dark(BuildContext context) =>
       ControlButtonThemeData(
-        primaryButtonBackgroundColor: Theme.of(context).primaryColor,
-        textStyle: const TextStyle(color: Color(0xFFEABE75)),
-        primaryButtonTextStyle: const TextStyle(color: Color(0xffFFBC00)),
+        primaryButtonBackgroundColor:
+            Theme.of(context).colorScheme.primaryContainer,
+        textStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        primaryButtonTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
       );
 
   /// Control button elevation

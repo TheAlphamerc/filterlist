@@ -111,7 +111,7 @@ class ControlButtonBarThemeData with Diagnosticable {
       ControlButtonBarThemeData(
         context,
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         buttonSpacing: 0,
         height: 50,
         controlButtonTheme: ControlButtonThemeData.light(context),
@@ -133,12 +133,12 @@ class ControlButtonBarThemeData with Diagnosticable {
       ControlButtonBarThemeData(
         context,
         buttonSpacing: 20,
-        backgroundColor: const Color(0xff19355D),
         decoration: BoxDecoration(
-          color: const Color(0xff19355D),
+          color: const Color(0xff25272C),
           borderRadius: BorderRadius.circular(50),
         ),
         controlButtonTheme: ControlButtonThemeData.dark(context),
+        backgroundColor: const Color(0xff25272C),
       );
 
   /// {@template control_container_decoration}

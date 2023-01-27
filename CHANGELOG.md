@@ -1,9 +1,15 @@
+## [1.0.3] - Next Release
+
+### Changed
+
+- Update dark theme colors
+
 ## [1.0.2] - 02 Jul 2022
+
 - Make compatible with Flutter 3.0.0
 - Add `applyButtonText` prop to change Apply button text in FilterListDelegate
 - Add copyWith method in `FilterListDelegateThemeData` to copy theme data
 - Add copyWith method in `FilterListThemeData` to copy theme data
-
 
 ## [1.0.1] - 18 Jan 2022
 
