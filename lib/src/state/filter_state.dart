@@ -5,12 +5,14 @@ class FilterState<K> extends ListenableState {
   FilterState({List<K>? allItems, List<K>? selectedItems}) {
     this.selectedItems = selectedItems;
     items = allItems;
+    _allItems = allItems;
   }
 
   static FilterState<T> of<T>(BuildContext context) =>
       StateProvider.of<FilterState<T>>(context);
 
   /// List of all items
+  List<K>? _allItems;
   List<K>? _items;
   List<K>? get items => _items;
   set items(List<K>? value) {
@@ -57,7 +59,7 @@ class FilterState<K> extends ListenableState {
 
   // perform filter operation
   void filter(bool Function(K) filter) {
-    _items = _items!.where(filter).toList();
+    _items = _allItems!.where(filter).toList();
     notifyListeners();
   }
 
