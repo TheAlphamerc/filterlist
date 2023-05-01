@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FilterState<K> extends ListenableState {
   FilterState({List<K>? allItems, List<K>? selectedItems}) {
-    this.selectedItems = selectedItems;
+    this.selectedItems = selectedItems ?? [];
     items = allItems;
   }
 
