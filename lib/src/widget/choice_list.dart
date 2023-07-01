@@ -12,12 +12,15 @@ class ChoiceList<T> extends StatelessWidget {
     this.choiceChipLabel,
     this.enableOnlySingleSelection = false,
     this.validateRemoveItem,
+    this.onSelected,
   }) : super(key: key);
   final ValidateSelectedItem<T> validateSelectedItem;
   final ChoiceChipBuilder? choiceChipBuilder;
   final LabelDelegate<T>? choiceChipLabel;
   final bool enableOnlySingleSelection;
   final ValidateRemoveItem<T>? validateRemoveItem;
+  ///
+  final void Function(T, bool)? onSelected;
 
   List<Widget> _buildChoiceList(BuildContext context) {
     final theme = FilterListTheme.of(context).controlBarButtonTheme;
@@ -50,6 +53,9 @@ class ChoiceList<T> extends StatelessWidget {
               } else {
                 state.addSelectedItem(item);
               }
+            }
+            if (onSelected != null) {
+              onSelected!(item, !selected);
             }
           },
           selected: selected,
