@@ -80,6 +80,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
       ControlButtonType.All,
       ControlButtonType.Reset
     ],
+    this.header,
     this.onReset,
     this.onSelected,
   }) : super(key: key);
@@ -112,6 +113,8 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   ///
   /// Default is `Navigator.pop(context, null)`
   final void Function()? onCloseWidgetPress;
+
+  final Widget? header;
   ///
   final void Function()? onReset;
   ///
@@ -169,6 +172,33 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// {@endtemplate}
   final List<ControlButtonType> controlButtons;
 
+  Widget _buildHeader(BuildContext context) {
+    if (header != null) {
+      return header!;
+    }
+    if (hideHeader!) {
+      return const SizedBox();
+    }
+    return Header(
+      headlineText: headlineText,
+      hideSearchField: hideSearchField,
+      hideCloseIcon: hideCloseIcon,
+      headerCloseIcon: headerCloseIcon,
+      onSearch: (String value) {
+        if (value.isEmpty) {
+          FilterState
+              .of<T>(context)
+              .items = listData;
+          return;
+        }
+        if (onItemSearch != null) {
+          FilterState.of<T>(context)
+              .filter((item) => onItemSearch!(item, value));
+        }
+      },
+      onCloseWidgetPress: onCloseWidgetPress,
+    );
+  }
   Widget _body(BuildContext context) {
     final theme = FilterListTheme.of(context);
     return Container(
@@ -177,26 +207,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
-              if (hideHeader!)
-                const SizedBox()
-              else
-                Header(
-                  headlineText: headlineText,
-                  hideSearchField: hideSearchField,
-                  hideCloseIcon: hideCloseIcon,
-                  headerCloseIcon: headerCloseIcon,
-                  onSearch: (String value) {
-                    if (value.isEmpty) {
-                      FilterState.of<T>(context).items = listData;
-                      return;
-                    }
-                    if (onItemSearch!=null) {
-                      FilterState.of<T>(context)
-                          .filter((item) => onItemSearch!(item, value));
-                    }
-                  },
-                  onCloseWidgetPress: onCloseWidgetPress,
-                ),
+              _buildHeader(context),
               if (!hideSelectedTextCount)
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
@@ -262,4 +273,5 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
       ),
     );
   }
+
 }
