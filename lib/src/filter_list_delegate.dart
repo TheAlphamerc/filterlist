@@ -26,6 +26,28 @@ typedef AppbarBottom = PreferredSizeWidget Function(BuildContext context);
 ///
 /// The [onApplyButtonClick] is a callback which return list of all selected items on apply button click.  if no item is selected then it will return empty list.
 ///
+/// The [applyButtonStyle] is used to configure the apply button's visuals.
+///
+/// The [applyButtonText] is used to configure the apply button's text.
+///
+/// The [buildAppbarBottom] is used to configure the bottom of the appbar.
+///
+/// The [enableOnlySingleSelection] is used to configure the selection mode. If true, only one item can be selected at a time.
+///
+/// The [hideClearSearchIcon] is used to configure the clear search icon. If true, the clear search icon will be hidden.
+///
+/// The [emptySearchChild] is used to configure the empty search child. If null, the empty search child will be a SizedBox.
+///
+/// The [searchFieldHint] is used to configure the search field hint text.
+///
+/// The [theme] is used to configure the theme of the filter list delegate.
+///
+/// The [maximumSelectionLength] is used to configure the maximum number of items that can be selected.
+///
+/// The [selectedListData] is used to configure the list of items that are selected by default.
+///
+/// The [searchFieldStyle] is used to configure the search field's text style.
+///
 /// ### This example shows how to use [FilterListDialog]
 ///
 ///  ``` dart
@@ -74,6 +96,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
 
   final ButtonStyle? applyButtonStyle;
   final List<T>? selectedListData;
+  final int? maximumSelectionLength;
 
   final FilterListDelegateThemeData? theme;
   FilterListDelegate({
@@ -91,6 +114,7 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     this.emptySearchChild,
     this.theme,
     this.applyButtonStyle,
+    this.maximumSelectionLength,
     this.hideClearSearchIcon = false,
     this.applyButtonText = 'Apply',
   })  : assert(searchFieldStyle == null || searchFieldDecorationTheme == null,
@@ -151,6 +175,8 @@ One of the tileLabel or suggestionBuilder is required
     TextStyle? searchFieldStyle,
     AppbarBottom? buildAppbarBottom,
     bool enableOnlySingleSelection = false,
+    int? maximumSelectionLength,
+    bool hideClearSearchIcon = false,
     Widget? emptySearchChild,
     FilterListDelegateThemeData? theme,
     ButtonStyle? applyButtonStyle,
@@ -174,6 +200,8 @@ One of the tileLabel or suggestionBuilder is required
         theme: theme,
         applyButtonStyle: applyButtonStyle,
         applyButtonText: applyButtonText!,
+        hideClearSearchIcon: hideClearSearchIcon,
+        maximumSelectionLength: maximumSelectionLength,
       ),
     );
 
@@ -234,9 +262,9 @@ One of the tileLabel or suggestionBuilder is required
   Widget _result(BuildContext ctx) {
     return StateProvider<FilterState<T>>(
       value: FilterState<T>(
-        allItems: listData,
-        selectedItems: selectedListData,
-      ),
+          allItems: listData,
+          selectedItems: selectedListData,
+          maximumSelectionLength: maximumSelectionLength),
       child: FilterListDelegateTheme(
         theme: theme ?? FilterListDelegateThemeData(),
         child: Builder(
@@ -247,6 +275,13 @@ One of the tileLabel or suggestionBuilder is required
               itemBuilder: (context, index) {
                 final theme = FilterListDelegateTheme.of(innerContext);
                 final item = tempList[index];
+                final selected = isSelected(item);
+                // ignore: avoid_bool_literals_in_conditional_expressions
+                final maxSelectionReached = !selected &&
+                        maximumSelectionLength != null &&
+                        selectedItems != null
+                    ? selectedItems!.length >= maximumSelectionLength!
+                    : false;
                 if (suggestionBuilder != null) {
                   return GestureDetector(
                     onTap: () => onItemSelect(context, item),
@@ -268,16 +303,18 @@ One of the tileLabel or suggestionBuilder is required
                             data: theme.listTileTheme,
                             child: ListTile(
                               onTap: () => onItemSelect(context, item),
-                              selected: isSelected(item),
+                              selected: selected,
                               title: _title(context, item, theme.tileTextStyle),
                             ),
                           )
                         : ListTileTheme(
                             data: theme.listTileTheme,
                             child: CheckboxListTile(
-                              value: isSelected(item),
-                              selected: isSelected(item),
-                              onChanged: (value) => onItemSelect(context, item),
+                              value: selected,
+                              selected: selected,
+                              onChanged: maxSelectionReached
+                                  ? null
+                                  : (value) => onItemSelect(context, item),
                               title: _title(context, item, theme.tileTextStyle),
                             ),
                           ),
@@ -308,6 +345,11 @@ One of the tileLabel or suggestionBuilder is required
       if (selectedItems!.contains(item)) {
         selectedItems!.remove(item);
       } else {
+        // Add maximum selection length check
+        if (maximumSelectionLength != null &&
+            selectedItems!.length >= maximumSelectionLength!) {
+          return;
+        }
         selectedItems!.add(item);
       }
       final qq = query;

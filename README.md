@@ -211,6 +211,8 @@ Empty screen |  FilterListDialog        |  Selected chip           |  Result fro
 | hideHeader|`bool`|Hide complete header section from filter dialog.|
 | headerCloseIcon|`Widget`|Widget to close the dialog.|
 | hideSelectedTextCount|`bool`|Hide selected text count.|
+| enableOnlySingleSelection|`bool`| Enable only single selection |
+| maximumSelectionLength|`int`| Set maximum selection length.|
 | hideSearchField|`bool`|Hide search text field.|
 | headlineText|`String`|Set header text of filter dialog.|
 | backgroundColor|`Color`|Set background color of filter color|
