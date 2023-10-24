@@ -41,23 +41,25 @@ class FilterListDelegateThemeData with Diagnosticable {
     Color? tileColor,
     TextStyle? tileTextStyle,
   }) {
-    tileTextStyle = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: Colors.black,
-    );
+    tileTextStyle = tileTextStyle ??
+        const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        );
 
     listTileTheme ??= const ListTileThemeData();
 
     tileMargin ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 8);
 
     return FilterListDelegateThemeData.raw(
-        listTileTheme: listTileTheme,
-        tileBorder: tileBorder,
-        tileShadow: tileShadow,
-        tileMargin: tileMargin,
-        tileColor: tileColor,
-        tileTextStyle: tileTextStyle);
+      listTileTheme: listTileTheme,
+      tileBorder: tileBorder,
+      tileShadow: tileShadow,
+      tileMargin: tileMargin,
+      tileColor: tileColor,
+      tileTextStyle: tileTextStyle,
+    );
   }
 
   /// Raw [FilterListDelegateThemeData] initialization.

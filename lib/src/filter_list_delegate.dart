@@ -1,4 +1,6 @@
 import 'package:filter_list/src/filter_list_dialog.dart';
+import 'package:filter_list/src/state/filter_state.dart';
+import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/theme/filter_list_delegate_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -230,59 +232,66 @@ One of the tileLabel or suggestionBuilder is required
   }
 
   Widget _result(BuildContext ctx) {
-    return FilterListDelegateTheme(
-      theme: theme ?? FilterListDelegateThemeData(),
-      child: Builder(
-        builder: (BuildContext innerContext) {
-          return ListView.builder(
-            itemCount: tempList.length,
-            itemBuilder: (context, index) {
-              final theme = FilterListDelegateTheme.of(innerContext);
-              final item = tempList[index];
-              if (suggestionBuilder != null) {
-                return GestureDetector(
-                  onTap: () => onItemSelect(context, item),
-                  child: suggestionBuilder!(
-                    context,
-                    item,
-                    isSelected(item),
-                  ),
-                );
-              } else {
-                return Container(
-                  margin: theme.tileMargin,
-                  decoration: BoxDecoration(
-                    boxShadow: theme.tileShadow,
-                    border: theme.tileBorder,
-                  ),
-                  child: enableOnlySingleSelection
-                      ? ListTileTheme(
-                          data: theme.listTileTheme,
-                          child: ListTile(
-                            onTap: () => onItemSelect(context, item),
-                            selected: isSelected(item),
-                            title: _title(context, item, theme.tileTextStyle),
+    return StateProvider<FilterState<T>>(
+      value: FilterState<T>(
+        allItems: listData,
+        selectedItems: selectedListData,
+      ),
+      child: FilterListDelegateTheme(
+        theme: theme ?? FilterListDelegateThemeData(),
+        child: Builder(
+          builder: (BuildContext innerContext) {
+            final state = StateProvider.of<FilterState<T>>(innerContext);
+            return ListView.builder(
+              itemCount: state.items!.length,
+              itemBuilder: (context, index) {
+                final theme = FilterListDelegateTheme.of(innerContext);
+                final item = tempList[index];
+                if (suggestionBuilder != null) {
+                  return GestureDetector(
+                    onTap: () => onItemSelect(context, item),
+                    child: suggestionBuilder!(
+                      context,
+                      item,
+                      isSelected(item),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    margin: theme.tileMargin,
+                    decoration: BoxDecoration(
+                      boxShadow: theme.tileShadow,
+                      border: theme.tileBorder,
+                    ),
+                    child: enableOnlySingleSelection
+                        ? ListTileTheme(
+                            data: theme.listTileTheme,
+                            child: ListTile(
+                              onTap: () => onItemSelect(context, item),
+                              selected: isSelected(item),
+                              title: _title(context, item, theme.tileTextStyle),
+                            ),
+                          )
+                        : ListTileTheme(
+                            data: theme.listTileTheme,
+                            child: CheckboxListTile(
+                              value: isSelected(item),
+                              selected: isSelected(item),
+                              onChanged: (value) => onItemSelect(context, item),
+                              title: _title(context, item, theme.tileTextStyle),
+                            ),
                           ),
-                        )
-                      : ListTileTheme(
-                          data: theme.listTileTheme,
-                          child: CheckboxListTile(
-                            value: isSelected(item),
-                            selected: isSelected(item),
-                            onChanged: (value) => onItemSelect(context, item),
-                            title: _title(context, item, theme.tileTextStyle),
-                          ),
-                        ),
-                );
-              }
-            },
-          );
-        },
+                  );
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _title(BuildContext context, T item, TextStyle style) {
+  Widget _title(BuildContext context, T item, TextStyle? style) {
     return Text(
       tileLabel!(item) ?? '',
       style: style,
