@@ -59,7 +59,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     required this.validateSelectedItem,
     this.validateRemoveItem,
     required this.choiceChipLabel,
-    required this.onItemSearch,
+    this.onItemSearch,
     this.selectedListData,
     this.onApplyButtonClick,
     this.choiceChipBuilder,
@@ -81,6 +81,9 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
       ControlButtonType.All,
       ControlButtonType.Reset
     ],
+    this.header,
+    this.onReset,
+    this.onSelected,
   }) : super(key: key);
 
   /// Filter theme
@@ -112,6 +115,12 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// Default is `Navigator.pop(context, null)`
   final void Function()? onCloseWidgetPress;
 
+  final Widget? header;
+  ///
+  final void Function()? onReset;
+  ///
+  final void Function(T, bool)? onSelected;
+
   /// If true then it hide complete header section.
   final bool? hideHeader;
 
@@ -137,7 +146,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   final ValidateRemoveItem<T>? validateRemoveItem;
 
   /// The `onItemSearch` is delegate which filter the list on the basis of search field text.
-  final SearchPredict<T> onItemSearch; /*required*/
+  final SearchPredict<T>? onItemSearch;
 
   /// The `choiceChipLabel` is callback which required [String] value to display text on choice chip.
   final LabelDelegate<T> choiceChipLabel; /*required*/
@@ -170,6 +179,33 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   /// {@endtemplate}
   final List<ControlButtonType> controlButtons;
 
+  Widget _buildHeader(BuildContext context) {
+    if (header != null) {
+      return header!;
+    }
+    if (hideHeader!) {
+      return const SizedBox();
+    }
+    return Header(
+      headlineText: headlineText,
+      hideSearchField: hideSearchField,
+      hideCloseIcon: hideCloseIcon,
+      headerCloseIcon: headerCloseIcon,
+      onSearch: (String value) {
+        if (value.isEmpty) {
+          FilterState
+              .of<T>(context)
+              .items = listData;
+          return;
+        }
+        if (onItemSearch != null) {
+          FilterState.of<T>(context)
+              .filter((item) => onItemSearch!(item, value));
+        }
+      },
+      onCloseWidgetPress: onCloseWidgetPress,
+    );
+  }
   Widget _body(BuildContext context) {
     final theme = FilterListTheme.of(context);
     return Container(
@@ -178,24 +214,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
-              if (hideHeader!)
-                const SizedBox()
-              else
-                Header(
-                  headlineText: headlineText,
-                  hideSearchField: hideSearchField,
-                  hideCloseIcon: hideCloseIcon,
-                  headerCloseIcon: headerCloseIcon,
-                  onSearch: (String value) {
-                    if (value.isEmpty) {
-                      FilterState.of<T>(context).items = listData;
-                      return;
-                    }
-                    FilterState.of<T>(context)
-                        .filter((item) => onItemSearch(item, value));
-                  },
-                  onCloseWidgetPress: onCloseWidgetPress,
-                ),
+              _buildHeader(context),
               if (!hideSelectedTextCount)
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
@@ -213,6 +232,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                   enableOnlySingleSelection: enableOnlySingleSelection,
                   validateSelectedItem: validateSelectedItem,
                   validateRemoveItem: validateRemoveItem,
+                  onSelected: onSelected,
                   maximumSelectionLength: maximumSelectionLength,
                 ),
               ),
@@ -227,6 +247,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
             applyButtonText: applyButtonText,
             resetButtonText: resetButtonText,
             enableOnlySingleSelection: enableOnlySingleSelection,
+            onReset:onReset,
             onApplyButtonClick: () {
               final selectedItems = FilterState.of<T>(context).selectedItems;
               if (onApplyButtonClick != null) {
@@ -261,4 +282,5 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
       ),
     );
   }
+
 }

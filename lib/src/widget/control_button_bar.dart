@@ -1,7 +1,6 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:filter_list/src/state/filter_state.dart';
 import 'package:filter_list/src/state/provider.dart';
-
 import 'package:filter_list/src/widget/control_button.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +16,7 @@ class ControlButtonBar<T> extends StatelessWidget {
     this.resetButtonText,
     this.applyButtonText,
     this.onApplyButtonClick,
+    this.onReset,
     this.maximumSelectionLength,
     required this.controlButtons,
   }) : super(key: key);
@@ -26,6 +26,9 @@ class ControlButtonBar<T> extends StatelessWidget {
   final String? applyButtonText;
   final VoidCallback? onApplyButtonClick;
   final int? maximumSelectionLength;
+
+  ///
+  final void Function()? onReset;
 
   /// {@macro control_buttons}
   final List<ControlButtonType> controlButtons;
@@ -80,6 +83,9 @@ class ControlButtonBar<T> extends StatelessWidget {
                             rebuildOnChange: true,
                           );
                           state.selectedItems = [];
+                          if (onReset != null) {
+                            onReset!();
+                          }
                         },
                       ),
                       SizedBox(width: theme.buttonSpacing),

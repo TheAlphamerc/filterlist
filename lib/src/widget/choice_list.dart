@@ -12,6 +12,7 @@ class ChoiceList<T> extends StatelessWidget {
     this.choiceChipLabel,
     this.enableOnlySingleSelection = false,
     this.validateRemoveItem,
+    this.onSelected,
     this.maximumSelectionLength,
   }) : super(key: key);
   final ValidateSelectedItem<T> validateSelectedItem;
@@ -19,6 +20,8 @@ class ChoiceList<T> extends StatelessWidget {
   final LabelDelegate<T>? choiceChipLabel;
   final bool enableOnlySingleSelection;
   final ValidateRemoveItem<T>? validateRemoveItem;
+  ///
+  final void Function(T, bool)? onSelected;
   final int? maximumSelectionLength;
 
   List<Widget> _buildChoiceList(BuildContext context) {
@@ -62,6 +65,9 @@ class ChoiceList<T> extends StatelessWidget {
                 }
                 state.addSelectedItem(item);
               }
+            }
+            if (onSelected != null) {
+              onSelected!(item, !selected);
             }
           },
           selected: selected,
