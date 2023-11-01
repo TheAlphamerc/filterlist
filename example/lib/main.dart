@@ -34,13 +34,12 @@ class _MyHomePageState extends State<MyHomePage> {
       theme: FilterListDelegateThemeData(
         listTileTheme: ListTileThemeData(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
           ),
           tileColor: Colors.white,
-          selectedColor: Colors.red,
           selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
-          textColor: Colors.blue,
         ),
+        tileTextStyle: TextStyle(fontSize: 14),
       ),
       // enableOnlySingleSelection: true,
       onItemSearch: (user, query) {

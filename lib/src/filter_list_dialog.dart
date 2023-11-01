@@ -29,7 +29,6 @@ part 'filter_list_widget.dart';
 ///
 ///
 /// The [onApplyButtonClick] is a callback which return list of all selected items on apply button click.  if no item is selected then it will return empty list.
-/// {@endtemplate}
 /// The [useSafeArea] argument is used to indicate if the dialog should only display in 'safe' areas of the screen not used by the operating system (see [SafeArea] for more details). It is true by default, which means the dialog will not overlap operating system areas. If it is set to false the dialog will only be constrained by the screen size. It can not be null.
 ///
 /// The [useRootNavigator] argument is used to determine whether to push the dialog to the [Navigator] furthest from or nearest to the given context. By default, useRootNavigator is true and the dialog route created by this method is pushed to the root navigator. It can not be null.
@@ -40,6 +39,13 @@ part 'filter_list_widget.dart';
 /// This defines the minimum space between the screen's edges and the dialog.
 ///
 /// Defaults to EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0).
+///
+/// The [controlButtons] is a list of [ControlButtonType] which is used to display control buttons on dialog.
+///
+/// The [enableOnlySingleSelection] is a boolean which is used to enable/disable single selection mode.
+///
+/// The [maximumSelectionLength] is a integer which is used to limit the maximum selection length.
+/// {@endtemplate}
 ///
 /// ### This example shows how to use [FilterListDialog]
 ///
@@ -76,7 +82,6 @@ part 'filter_list_widget.dart';
 class FilterListDialog {
   static Future display<T extends Object>(
     BuildContext context, {
-
     /// Filter theme
     FilterListThemeData? themeData,
 
@@ -153,6 +158,12 @@ class FilterListDialog {
     /// Default value is [false]
     bool enableOnlySingleSelection = false,
 
+    /// if `maximumSelectionLength` is not null then it will limit the maximum selection length.
+    /// `maximumSelectionLength` should be greater than 0. If `maximumSelectionLength` is less than 0 then it will throw an exception.
+    /// Only works when `enableOnlySingleSelection` is false.
+    /// Default value is [null]
+    int? maximumSelectionLength,
+
     /// Background color of dialog box.
     Color backgroundColor = Colors.white,
 
@@ -225,6 +236,7 @@ class FilterListDialog {
                 resetButtonText: resetButtonText,
                 allButtonText: allButtonText,
                 validateRemoveItem: validateRemoveItem,
+                maximumSelectionLength: maximumSelectionLength,
                 controlButtons: controlButtons ??
                     [ControlButtonType.All, ControlButtonType.Reset],
               ),
