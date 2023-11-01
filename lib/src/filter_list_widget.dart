@@ -146,7 +146,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   final ValidateRemoveItem<T>? validateRemoveItem;
 
   /// The `onItemSearch` is delegate which filter the list on the basis of search field text.
-  final SearchPredict<T>? onItemSearch; /*required*/
+  final SearchPredict<T>? onItemSearch;
 
   /// The `choiceChipLabel` is callback which required [String] value to display text on choice chip.
   final LabelDelegate<T> choiceChipLabel; /*required*/
