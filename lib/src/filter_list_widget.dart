@@ -187,9 +187,27 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                   hideCloseIcon: hideCloseIcon,
                   headerCloseIcon: headerCloseIcon,
                   onSearch: (String value) {
+                    final stateList = FilterState.of<T>(context).items;
+
+                    // Reset filter list if search box is empty
                     if (value.isEmpty) {
                       FilterState.of<T>(context).items = listData;
                       return;
+                    }
+                    // Reassign items to filter list when it is empty but local list has data
+                    else if (stateList != null &&
+                        stateList.isEmpty &&
+                        listData != null &&
+                        listData!.isNotEmpty) {
+                      final isFoundInLocalState =
+                          listData!.any((item) => onItemSearch(item, value));
+
+                      if (isFoundInLocalState) {
+                        FilterState.of<T>(context).items = listData!
+                            .where((item) => onItemSearch(item, value))
+                            .toList();
+                        return;
+                      }
                     }
                     FilterState.of<T>(context)
                         .filter((item) => onItemSearch(item, value));
