@@ -176,7 +176,7 @@ class ControlButtonThemeData with Diagnosticable {
       primaryButtonTextStyle:
           TextStyle.lerp(a.primaryButtonTextStyle, b.primaryButtonTextStyle, t),
       primaryButtonBackgroundColor: Color.lerp(
-          a.primaryButtonBackgroundColor, b.primaryButtonBackgroundColor, t)!,
+          a.primaryButtonBackgroundColor, b.primaryButtonBackgroundColor, t),
       backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
       borderRadius: borderRadius,
       boxShadow: a.boxShadow,
