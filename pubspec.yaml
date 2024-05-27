@@ -1,6 +1,6 @@
 name: filter_list
 description: Filter_list Package is designed to make single/multiple item selection from a list of string/object.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/TheAlphamerc/flutter_plugin_filter_list
 
 environment:
