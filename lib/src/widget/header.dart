@@ -11,6 +11,7 @@ class Header extends StatelessWidget {
     this.headerCloseIcon,
     this.hideSearchField = false,
     this.onCloseWidgetPress,
+    this.searchFieldHint,
   }) : super(key: key);
 
   final String? headlineText;
@@ -19,6 +20,8 @@ class Header extends StatelessWidget {
   final bool hideSearchField;
   final ValueChanged<String> onSearch;
   final void Function()? onCloseWidgetPress;
+
+  final String? searchFieldHint;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +83,8 @@ class Header extends StatelessWidget {
             if (!hideSearchField) ...[
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: SearchFieldWidget(onChanged: onSearch),
+                child: SearchFieldWidget(
+                    onChanged: onSearch, searchFieldHint: searchFieldHint),
               ),
             ]
           ],

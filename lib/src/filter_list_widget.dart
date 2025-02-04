@@ -66,6 +66,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     this.headerCloseIcon,
     this.onCloseWidgetPress,
     this.headlineText,
+    this.searchFieldHint,
     this.hideSelectedTextCount = false,
     this.hideSearchField = false,
     this.hideCloseIcon = true,
@@ -94,6 +95,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   final Color? backgroundColor;
 
   final String? headlineText;
+  final String? searchFieldHint;
 
   final bool hideSelectedTextCount;
   final bool hideSearchField;
@@ -177,6 +179,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
                 Header(
                   headlineText: headlineText,
                   hideSearchField: hideSearchField,
+                  searchFieldHint: searchFieldHint,
                   hideCloseIcon: hideCloseIcon,
                   headerCloseIcon: headerCloseIcon,
                   onSearch: (String value) {

@@ -76,7 +76,6 @@ part 'filter_list_widget.dart';
 class FilterListDialog {
   static Future display<T extends Object>(
     BuildContext context, {
-
     /// Filter theme
     FilterListThemeData? themeData,
 
@@ -116,6 +115,9 @@ class FilterListDialog {
 
     /// Headline text to be display as header of dialog.
     String? headlineText,
+
+    /// Text to be displayed as a hint in the search field.
+    String? searchFieldHint,
 
     /// Used to hide selected text count.
     bool hideSelectedTextCount = false,
@@ -208,6 +210,7 @@ class FilterListDialog {
                 choiceChipLabel: choiceChipLabel,
                 hideHeader: hideHeader,
                 headlineText: headlineText,
+                searchFieldHint: searchFieldHint,
                 onItemSearch: onItemSearch,
                 backgroundColor: backgroundColor,
                 selectedListData: selectedListData,

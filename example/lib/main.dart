@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
       tileLabel: (user) => user!.name,
       emptySearchChild: const Center(child: Text('No user found')),
       // enableOnlySingleSelection: true,
-      searchFieldHint: 'Search Here..',
+      searchFieldHint: '',
       /*suggestionBuilder: (context, user, isSelected) {
         return ListTile(
           title: Text(user.name!),
@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         choiceChipTheme: ChoiceChipThemeData.light(context),
       ),
       headlineText: 'Select Users',
+      searchFieldHint: '',
       height: 500,
       listData: userList,
       selectedListData: selectedUserList,

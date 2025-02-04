@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 
 class SearchFieldWidget<T> extends StatelessWidget {
   final ValueChanged<String> onChanged;
+
+  final String? searchFieldHint;
   const SearchFieldWidget({
     Key? key,
     required this.onChanged,
+    this.searchFieldHint,
   }) : super(key: key);
 
   @override
@@ -26,7 +29,7 @@ class SearchFieldWidget<T> extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon:
                 Icon(Icons.search, color: headerTheme.searchFieldIconColor),
-            hintText: headerTheme.searchFieldHintText,
+            hintText: searchFieldHint ?? headerTheme.searchFieldHintText,
             hintStyle: headerTheme.searchFieldHintTextStyle,
             border: headerTheme.searchFieldInputBorder,
           ),
