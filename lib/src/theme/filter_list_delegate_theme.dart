@@ -44,8 +44,7 @@ class FilterListDelegateThemeData with Diagnosticable {
     tileTextStyle = tileTextStyle ??
         const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
+          fontWeight: FontWeight.w500
         );
 
     listTileTheme ??= const ListTileThemeData();
