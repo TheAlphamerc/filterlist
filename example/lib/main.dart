@@ -22,10 +22,10 @@ class MyHomePage extends StatefulWidget {
   final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
   Future<void> openFilterDelegate() async {
@@ -230,7 +230,7 @@ class FilterPage extends StatelessWidget {
             return user.name!.toLowerCase().contains(query.toLowerCase());
           },
           onCloseWidgetPress: () {
-            print("hello");
+            debugPrint("hello");
           },
         ),
       ),
@@ -266,7 +266,7 @@ List<User> userList = [
   User(name: "Jan", avatar: "user.png"),
   User(name: "Jane", avatar: "user.png"),
   User(name: "Julia", avatar: "user.png"),
-  User(name: "Kylie", avatar: "user.png"),
+  User(name: "Kyle", avatar: "user.png"),
   User(name: "Lauren", avatar: "user.png"),
   User(name: "Leah", avatar: "user.png"),
   User(name: "Lisa", avatar: "user.png"),
@@ -288,6 +288,7 @@ List<User> userList = [
   User(name: "Yvonne", avatar: "user.png"),
   User(name: "Zoe", avatar: "user.png"),
 ];
+
 /// Another example of [FilterListWidget] to filter list of strings
 /*
  FilterListWidget<String>(
