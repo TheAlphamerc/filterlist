@@ -53,7 +53,7 @@ class Header extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(30)),
                     onTap: onCloseWidgetPress ??
                         () {
-                          Navigator.pop(context, null);
+                          Navigator.pop(context);
                         },
                     child: hideCloseIcon
                         ? const SizedBox()

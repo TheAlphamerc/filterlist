@@ -1,9 +1,11 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
+  const MyHomePage({super.key, this.title});
   final String? title;
 
   @override
@@ -39,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
           tileColor: Colors.white,
           selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
         ),
-        tileTextStyle: TextStyle(fontSize: 14),
+        tileTextStyle: const TextStyle(fontSize: 14),
       ),
       // enableOnlySingleSelection: true,
       onItemSearch: (user, query) {
@@ -187,8 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class FilterPage extends StatelessWidget {
-  const FilterPage({Key? key, this.allTextList, this.selectedUserList})
-      : super(key: key);
+  const FilterPage({super.key, this.allTextList, this.selectedUserList});
   final List<User>? allTextList;
   final List<User>? selectedUserList;
   @override

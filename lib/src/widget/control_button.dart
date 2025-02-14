@@ -17,24 +17,24 @@ class ControlButton extends StatelessWidget {
     final theme = ControlButtonTheme.of(context);
     return TextButton(
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(theme.borderRadius)),
         )),
-        backgroundColor: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(
           primaryButton
               ? theme.primaryButtonBackgroundColor
               : theme.backgroundColor,
         ),
-        elevation: MaterialStateProperty.all(theme.elevation),
-        foregroundColor: MaterialStateProperty.all(
+        elevation: WidgetStateProperty.all(theme.elevation),
+        foregroundColor: WidgetStateProperty.all(
           primaryButton
               ? theme.primaryButtonTextStyle!.color
               : theme.textStyle!.color,
         ),
-        textStyle: MaterialStateProperty.all(
+        textStyle: WidgetStateProperty.all(
           primaryButton ? theme.primaryButtonTextStyle : theme.textStyle,
         ),
-        padding: MaterialStateProperty.all(theme.padding),
+        padding: WidgetStateProperty.all(theme.padding),
       ),
       onPressed: onPressed,
       clipBehavior: Clip.antiAlias,
