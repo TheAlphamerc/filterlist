@@ -6,7 +6,7 @@ class FilterState<K> extends ListenableState {
       {List<K>? allItems,
       List<K>? selectedItems,
       this.maximumSelectionLength}) {
-    this.selectedItems = selectedItems;
+    this.selectedItems = selectedItems ?? [];
     items = allItems;
   }
 
