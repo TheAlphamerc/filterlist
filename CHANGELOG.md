@@ -1,8 +1,24 @@
-## [1.0.3] - Next Release
+## [1.0.3] - 27 May 2024
 
 ### Changed
 
 - Update dark theme colors
+- Update flutter sdk constraint
+- upgrade code as per new flutter version
+
+### Added
+
+- Added `onCloseWidgetPress` callback for FilterListDialog
+- Add max selected chips param to limit maximum selection. Ref -> https://github.com/TheAlphamerc/filterlist/issues/36
+
+### Removed
+
+- Remove canvasColor from ChoiceChipThemeData
+
+### Fixed
+
+- Filter list delegate tile selection issue.
+- Search filter issue after its being empty. Ref:-https://github.com/TheAlphamerc/filterlist/issues/49
 
 ## [1.0.2] - 02 Jul 2022
 

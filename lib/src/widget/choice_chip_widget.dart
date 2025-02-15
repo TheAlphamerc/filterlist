@@ -9,12 +9,14 @@ class ChoiceChipWidget<T> extends StatelessWidget {
     this.selected,
     this.onSelected,
     this.choiceChipBuilder,
+    this.disabled = false,
   }) : super(key: key);
 
   final String? text;
   final bool? selected;
   final void Function(bool)? onSelected;
   final T? item;
+  final bool disabled;
 
   /// Builder for custom choice chip
   final ChoiceChipBuilder? choiceChipBuilder;
@@ -66,7 +68,7 @@ class ChoiceChipWidget<T> extends StatelessWidget {
                 labelStyle: getSelectedTextStyle(context),
                 visualDensity: theme.visualDensity,
                 selected: selected!,
-                onSelected: onSelected,
+                onSelected: disabled ? null : onSelected,
                 elevation: theme.elevation,
                 side: getSide(context),
                 shape: getShape(context),

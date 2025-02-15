@@ -1,9 +1,11 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,14 +18,14 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
+  const MyHomePage({super.key, this.title});
   final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
   Future<void> openFilterDelegate() async {
@@ -34,13 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
       theme: FilterListDelegateThemeData(
         listTileTheme: ListTileThemeData(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
           ),
           tileColor: Colors.white,
-          selectedColor: Colors.red,
           selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
-          textColor: Colors.blue,
         ),
+        tileTextStyle: const TextStyle(fontSize: 14),
       ),
       // enableOnlySingleSelection: true,
       onItemSearch: (user, query) {
@@ -188,8 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class FilterPage extends StatelessWidget {
-  const FilterPage({Key? key, this.allTextList, this.selectedUserList})
-      : super(key: key);
+  const FilterPage({super.key, this.allTextList, this.selectedUserList});
   final List<User>? allTextList;
   final List<User>? selectedUserList;
   @override
@@ -230,7 +230,7 @@ class FilterPage extends StatelessWidget {
             return user.name!.toLowerCase().contains(query.toLowerCase());
           },
           onCloseWidgetPress: () {
-            print("hello");
+            debugPrint("hello");
           },
         ),
       ),
@@ -266,7 +266,7 @@ List<User> userList = [
   User(name: "Jan", avatar: "user.png"),
   User(name: "Jane", avatar: "user.png"),
   User(name: "Julia", avatar: "user.png"),
-  User(name: "Kylie", avatar: "user.png"),
+  User(name: "Kyle", avatar: "user.png"),
   User(name: "Lauren", avatar: "user.png"),
   User(name: "Leah", avatar: "user.png"),
   User(name: "Lisa", avatar: "user.png"),
@@ -288,6 +288,7 @@ List<User> userList = [
   User(name: "Yvonne", avatar: "user.png"),
   User(name: "Zoe", avatar: "user.png"),
 ];
+
 /// Another example of [FilterListWidget] to filter list of strings
 /*
  FilterListWidget<String>(

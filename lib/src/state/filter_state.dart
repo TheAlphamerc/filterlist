@@ -2,13 +2,17 @@ import 'package:filter_list/src/state/provider.dart';
 import 'package:flutter/material.dart';
 
 class FilterState<K> extends ListenableState {
-  FilterState({List<K>? allItems, List<K>? selectedItems}) {
+  FilterState(
+      {List<K>? allItems,
+      List<K>? selectedItems,
+      this.maximumSelectionLength}) {
     this.selectedItems = selectedItems ?? [];
     items = allItems;
   }
 
   static FilterState<T> of<T>(BuildContext context) =>
       StateProvider.of<FilterState<T>>(context);
+  final int? maximumSelectionLength;
 
   /// List of all items
   List<K>? _items;

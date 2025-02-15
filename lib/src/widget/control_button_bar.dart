@@ -5,6 +5,10 @@ import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/widget/control_button.dart';
 import 'package:flutter/material.dart';
 
+/// {@template control_buttons}
+/// control buttons to show on bottom of dialog along with 'Apply' button.
+/// Generally used to show 'All', 'Reset' and 'Apply' button.
+/// {@endtemplate}
 class ControlButtonBar<T> extends StatelessWidget {
   const ControlButtonBar({
     Key? key,
@@ -13,6 +17,7 @@ class ControlButtonBar<T> extends StatelessWidget {
     this.resetButtonText,
     this.applyButtonText,
     this.onApplyButtonClick,
+    this.maximumSelectionLength,
     required this.controlButtons,
   }) : super(key: key);
   final bool enableOnlySingleSelection;
@@ -20,6 +25,7 @@ class ControlButtonBar<T> extends StatelessWidget {
   final String? resetButtonText;
   final String? applyButtonText;
   final VoidCallback? onApplyButtonClick;
+  final int? maximumSelectionLength;
 
   /// {@macro control_buttons}
   final List<ControlButtonType> controlButtons;
@@ -48,7 +54,8 @@ class ControlButtonBar<T> extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     /* All Button */
-                    if (!enableOnlySingleSelection &&
+                    if (maximumSelectionLength == null &&
+                        !enableOnlySingleSelection &&
                         controlButtons.contains(ControlButtonType.All)) ...[
                       ControlButton(
                         choiceChipLabel: '$allButtonText',
