@@ -340,7 +340,6 @@ One of the tileLabel or suggestionBuilder is required
   }
 
   void onItemSelect(BuildContext context, T item) {
-    final state = StateProvider.of<FilterState<T>>(context);
     if (enableOnlySingleSelection) {
       onApplyButtonClick([item]);
       close(context, null);
@@ -356,6 +355,7 @@ One of the tileLabel or suggestionBuilder is required
         }
         selectedItems!.add(item);
       }
+      final state = StateProvider.of<FilterState<T>>(context);
       state.selectedItems = selectedItems;
       final qq = query;
       query = '';
