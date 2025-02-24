@@ -269,7 +269,10 @@ One of the tileLabel or suggestionBuilder is required
         theme: theme ?? FilterListDelegateThemeData(),
         child: Builder(
           builder: (BuildContext innerContext) {
-            final state = StateProvider.of<FilterState<T>>(innerContext);
+            final state = StateProvider.of<FilterState<T>>(
+              innerContext,
+              rebuildOnChange: true,
+            );
             return ListView.builder(
               itemCount: state.items!.length,
               itemBuilder: (context, index) {
@@ -337,6 +340,7 @@ One of the tileLabel or suggestionBuilder is required
   }
 
   void onItemSelect(BuildContext context, T item) {
+    final state = StateProvider.of<FilterState<T>>(context);
     if (enableOnlySingleSelection) {
       onApplyButtonClick([item]);
       close(context, null);
@@ -352,6 +356,7 @@ One of the tileLabel or suggestionBuilder is required
         }
         selectedItems!.add(item);
       }
+      state.selectedItems = selectedItems;
       final qq = query;
       query = '';
       query = qq;
