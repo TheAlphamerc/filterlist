@@ -271,7 +271,7 @@ One of the tileLabel or suggestionBuilder is required
           builder: (BuildContext innerContext) {
             final state = StateProvider.of<FilterState<T>>(innerContext);
             return ListView.builder(
-              itemCount: state.items!.length,
+              itemCount: tempList!.length,
               itemBuilder: (context, index) {
                 final theme = FilterListDelegateTheme.of(innerContext);
                 final item = tempList[index];
