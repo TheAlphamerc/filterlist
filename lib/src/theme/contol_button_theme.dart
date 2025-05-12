@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'control_button_bar_theme.dart';
 
-/// Overrides the default style of [ContorlButton]
+/// Overrides the default style of [ControlButton]
 ///
 /// See also:
 ///

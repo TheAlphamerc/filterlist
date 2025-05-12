@@ -274,7 +274,7 @@ One of the tileLabel or suggestionBuilder is required
               rebuildOnChange: true,
             );
             return ListView.builder(
-              itemCount: tempList!.length,
+              itemCount: tempList.length,
               itemBuilder: (context, index) {
                 final theme = FilterListDelegateTheme.of(innerContext);
                 final item = tempList[index];

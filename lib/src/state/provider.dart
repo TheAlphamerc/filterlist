@@ -38,11 +38,9 @@ abstract class ListenableState extends Listenable {
 }
 
 class StateProvider<T extends ListenableState> extends StatelessWidget {
-  @override
-  final Key? key;
   final T value;
   final Widget child;
-  const StateProvider({this.key, required this.child, required this.value});
+  const StateProvider({super.key, required this.child, required this.value});
 
   @override
   Widget build(BuildContext context) {
