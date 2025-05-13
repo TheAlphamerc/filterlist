@@ -9,10 +9,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      title: 'Filter List Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Filter list example'),
+      home: const MyHomePage(title: 'Filter List Example'),
     );
   }
 }
@@ -28,11 +31,29 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   List<User>? selectedUserList = [];
 
+  // Using the new FilterListDelegate.showWithCore implementation
   Future<void> openFilterDelegate() async {
-    await FilterListDelegate.show<User>(
+    await FilterListDelegate.showWithCore<User>(
       context: context,
-      list: userList,
-      selectedListData: selectedUserList,
+      allItems: userList,
+      selectedItems: selectedUserList,
+      callbacks: FilterCallbacks<User>(
+        searchPredicate: (user, query) {
+          return user.name!.toLowerCase().contains(query.toLowerCase());
+        },
+        validateSelection: (list, val) => list!.contains(val),
+        labelProvider: (user) => user!.name,
+        onApplyButtonClick: (list) {
+          setState(() {
+            selectedUserList = list;
+          });
+        },
+      ),
+      uiConfig: const FilterUIConfig(
+        headlineText: 'Select Users',
+        searchFieldHint: 'Search Here..',
+        hideSelectedTextCount: false,
+      ),
       theme: FilterListDelegateThemeData(
         listTileTheme: ListTileThemeData(
           shape: RoundedRectangleBorder(
@@ -43,32 +64,83 @@ class MyHomePageState extends State<MyHomePage> {
         ),
         tileTextStyle: const TextStyle(fontSize: 14),
       ),
-      // enableOnlySingleSelection: true,
-      onItemSearch: (user, query) {
-        return user.name!.toLowerCase().contains(query.toLowerCase());
-      },
-      tileLabel: (user) => user!.name,
       emptySearchChild: const Center(child: Text('No user found')),
-      // enableOnlySingleSelection: true,
-      searchFieldHint: 'Search Here..',
-      /*suggestionBuilder: (context, user, isSelected) {
-        return ListTile(
-          title: Text(user.name!),
-          leading: const CircleAvatar(
-            backgroundColor: Colors.blue,
-          ),
-          selected: isSelected,
-        );
-      },*/
-      onApplyButtonClick: (list) {
-        setState(() {
-          selectedUserList = list;
-        });
-      },
     );
   }
 
-  Future<void> _openFilterDialog() async {
+  // Using the new FilterListDialog.showWithCore implementation
+  Future<void> openFilterDialog() async {
+    await FilterListDialog.showWithCore<User>(
+      context,
+      allItems: userList,
+      selectedItems: selectedUserList,
+      callbacks: FilterCallbacks<User>(
+        searchPredicate: (user, query) {
+          return user.name!.toLowerCase().contains(query.toLowerCase());
+        },
+        validateSelection: (list, val) => list!.contains(val),
+        labelProvider: (user) => user!.name,
+        onApplyButtonClick: (list) {
+          setState(() {
+            selectedUserList = List.from(list!);
+          });
+        },
+      ),
+      uiConfig: FilterUIConfig(
+        headlineText: 'Select Users',
+        hideSelectedTextCount: true,
+        controlButtons: [
+          ControlButtonType.All,
+          ControlButtonType.Reset,
+          ControlButtonType.Apply
+        ],
+        onClosePressed: () {
+          Navigator.pop(context, null);
+        },
+      ),
+      themeData: FilterListThemeData(
+        context,
+        choiceChipTheme: ChoiceChipThemeData.light(context),
+      ),
+      height: 500,
+    );
+  }
+
+  // Using the modern implementation with Provider-based state management
+  Future<void> openFilterDialogModern() async {
+    // Create a proper theme
+    final themeData = FilterListThemeData.light(context);
+
+    // Use the modern dialog implementation now that we've fixed the theme issues
+    final result = await FilterListDialog.showFilterListModern<User>(
+      context,
+      themeData: themeData,
+      listData: userList,
+      selectedListData: selectedUserList,
+      labelProvider: (user) => user!.name,
+      validateSelection: (list, val) => list!.contains(val),
+      searchPredicate: (user, query) {
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedUserList = List.from(list!);
+        });
+      },
+      headlineText: 'Select Users (Modern)',
+      hideSelectedTextCount: false,
+      enableOnlySingleSelection: false,
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedUserList = result;
+      });
+    }
+  }
+
+  // Legacy implementation kept for comparison
+  Future<void> _openFilterDialogLegacy() async {
     await FilterListDialog.display<User>(
       context,
       hideSelectedTextCount: true,
@@ -76,7 +148,7 @@ class MyHomePageState extends State<MyHomePage> {
         context,
         choiceChipTheme: ChoiceChipThemeData.light(context),
       ),
-      headlineText: 'Select Users',
+      headlineText: 'Select Users (Legacy)',
       height: 500,
       listData: userList,
       selectedListData: selectedUserList,
@@ -84,12 +156,8 @@ class MyHomePageState extends State<MyHomePage> {
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
       onItemSearch: (user, query) {
-        /// When search query change in search bar then this method will be called
-        ///
-        /// Check if items contains query
         return user.name!.toLowerCase().contains(query.toLowerCase());
       },
-
       onApplyButtonClick: (list) {
         setState(() {
           selectedUserList = List.from(list!);
@@ -97,27 +165,8 @@ class MyHomePageState extends State<MyHomePage> {
         Navigator.pop(context);
       },
       onCloseWidgetPress: () {
-        // Do anything with the close button.
-        //print("hello");
         Navigator.pop(context, null);
       },
-
-      /// uncomment below code to create custom choice chip
-      /* choiceChipBuilder: (context, item, isSelected) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-          )),
-          child: Text(
-            item.name,
-            style: TextStyle(
-                color: isSelected ? Colors.blue[300] : Colors.grey[500]),
-          ),
-        );
-      }, */
     );
   }
 
@@ -129,35 +178,73 @@ class MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            FilledButton(
-              onPressed: () async {
-                final list = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FilterPage(
-                      allTextList: userList,
-                      selectedUserList: selectedUserList,
-                    ),
-                  ),
-                );
-                if (list != null) {
-                  setState(() {
-                    selectedUserList = List.from(list);
-                  });
-                }
-              },
-              child: const Text("Filter Page"),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FilledButton(
+                  onPressed: () async {
+                    final list = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterPageModern(
+                          allItems: userList,
+                          selectedItems: selectedUserList,
+                        ),
+                      ),
+                    );
+                    if (list != null) {
+                      setState(() {
+                        selectedUserList = List.from(list);
+                      });
+                    }
+                  },
+                  child: const Text("Modern Page"),
+                ),
+                FilledButton(
+                  onPressed: openFilterDialog,
+                  child: const Text("Core Dialog"),
+                ),
+                FilledButton(
+                  onPressed: openFilterDelegate,
+                  child: const Text("Core Delegate"),
+                ),
+              ],
             ),
-            FilledButton(
-              onPressed: _openFilterDialog,
-              child: const Text("Filter Dialog"),
-            ),
-            FilledButton(
-              onPressed: openFilterDelegate,
-              child: const Text("Filter Delegate"),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FilledButton(
+                  onPressed: () async {
+                    final list = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterPage(
+                          allTextList: userList,
+                          selectedUserList: selectedUserList,
+                        ),
+                      ),
+                    );
+                    if (list != null) {
+                      setState(() {
+                        selectedUserList = List.from(list);
+                      });
+                    }
+                  },
+                  child: const Text("Legacy Page"),
+                ),
+                FilledButton(
+                  onPressed: _openFilterDialogLegacy,
+                  child: const Text("Legacy Dialog"),
+                ),
+                FilledButton(
+                  onPressed: openFilterDialogModern,
+                  child: const Text("Modern Dialog"),
+                ),
+              ],
             ),
           ],
         ),
@@ -188,6 +275,7 @@ class MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// Legacy implementation
 class FilterPage extends StatelessWidget {
   const FilterPage({super.key, this.allTextList, this.selectedUserList});
   final List<User>? allTextList;
@@ -195,6 +283,7 @@ class FilterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Legacy Filter Page')),
       body: SafeArea(
         child: FilterListWidget<User>(
           themeData: FilterListThemeData(context),
@@ -205,33 +294,61 @@ class FilterPage extends StatelessWidget {
             Navigator.pop(context, list);
           },
           choiceChipLabel: (item) {
-            /// Used to print text on chip
             return item!.name;
           },
-          // choiceChipBuilder: (context, item, isSelected) {
-          //   return Container(
-          //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          //     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          //     decoration: BoxDecoration(
-          //         border: Border.all(
-          //       color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-          //     )),
-          //     child: Text(item.name),
-          //   );
-          // },
           validateSelectedItem: (list, val) {
-            ///  identify if item is selected or not
             return list!.contains(val);
           },
           onItemSearch: (user, query) {
-            /// When search query change in search bar then this method will be called
-            ///
-            /// Check if items contains query
             return user.name!.toLowerCase().contains(query.toLowerCase());
           },
           onCloseWidgetPress: () {
             debugPrint("hello");
           },
+        ),
+      ),
+    );
+  }
+}
+
+// Modern implementation using FilterListWidgetModern
+class FilterPageModern extends StatelessWidget {
+  const FilterPageModern({super.key, this.allItems, this.selectedItems});
+  final List<User>? allItems;
+  final List<User>? selectedItems;
+
+  @override
+  Widget build(BuildContext context) {
+    // Create a complete theme using the light factory method
+    final themeData = FilterListThemeData.light(context);
+
+    // Create controller with all the necessary callbacks and configuration
+    final controller = FilterListController<User>(
+      allItems: allItems ?? userList,
+      selectedItems: selectedItems,
+      searchPredicate: (user, query) {
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+      validateSelection: (list, val) => list!.contains(val),
+      onApplyButtonClick: (list) {
+        Navigator.pop(context, list);
+      },
+      uiConfig: const FilterUIConfig(
+        headlineText: 'Select Users (Modern)',
+        hideSelectedTextCount: false,
+        enableOnlySingleSelection: false,
+      ),
+    );
+
+    // Use our improved FilterListWidgetModern with proper theme handling
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Modern Filter Example'),
+      ),
+      body: FilterListProvider<User>(
+        controller: controller,
+        child: FilterListWidgetModern<User>(
+          themeData: themeData,
         ),
       ),
     );

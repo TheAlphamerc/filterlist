@@ -1,4 +1,5 @@
 import 'package:filter_list/filter_list.dart';
+import 'package:filter_list/src/core/typedefs.dart' as core_types;
 import 'package:filter_list/src/state/filter_state.dart';
 import 'package:filter_list/src/state/provider.dart';
 
@@ -28,7 +29,7 @@ class ControlButtonBar<T> extends StatelessWidget {
   final int? maximumSelectionLength;
 
   /// {@macro control_buttons}
-  final List<ControlButtonType> controlButtons;
+  final List<core_types.ControlButtonType> controlButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,8 @@ class ControlButtonBar<T> extends StatelessWidget {
                     /* All Button */
                     if (maximumSelectionLength == null &&
                         !enableOnlySingleSelection &&
-                        controlButtons.contains(ControlButtonType.All)) ...[
+                        controlButtons
+                            .contains(core_types.ControlButtonType.All)) ...[
                       ControlButton(
                         choiceChipLabel: '$allButtonText',
                         onPressed: () {
@@ -68,10 +70,11 @@ class ControlButtonBar<T> extends StatelessWidget {
                         },
                       ),
                       SizedBox(width: theme.buttonSpacing),
-
-                      /* Reset Button */
                     ],
-                    if (controlButtons.contains(ControlButtonType.Reset)) ...[
+
+                    /* Reset Button */
+                    if (controlButtons
+                        .contains(core_types.ControlButtonType.Reset)) ...[
                       ControlButton(
                         choiceChipLabel: '$resetButtonText',
                         onPressed: () {
@@ -84,14 +87,19 @@ class ControlButtonBar<T> extends StatelessWidget {
                       ),
                       SizedBox(width: theme.buttonSpacing),
                     ],
+
                     /* Apply Button */
-                    ControlButton(
-                      choiceChipLabel: '$applyButtonText',
-                      primaryButton: true,
-                      onPressed: () {
-                        onApplyButtonClick?.call();
-                      },
-                    ),
+                    if (controlButtons
+                            .contains(core_types.ControlButtonType.Apply) ||
+                        !controlButtons.any((element) =>
+                            element == core_types.ControlButtonType.Apply))
+                      ControlButton(
+                        choiceChipLabel: '$applyButtonText',
+                        primaryButton: true,
+                        onPressed: () {
+                          onApplyButtonClick?.call();
+                        },
+                      ),
                   ],
                 ),
               ),

@@ -1,3 +1,29 @@
+## [1.0.4] - Upcoming
+
+### Added
+- Added `FilterCore` class to centralize filtering operations
+- Added `FilterCallbacks` for unified callback interfaces
+- Added `FilterUIConfig` for UI configuration options
+- Added `FilterListViewModel` for MVVM pattern support
+- Added `FilterListController` with debouncing search support
+- Added `FilterListWidgetModern` using Provider-based state management
+- Added `FilterListProvider` for modern state management
+- Added `FilterListDialog.showWithCore()` method using core components
+- Added `FilterListDialog.showFilterListModern()` for modern implementation
+- Added `FilterListDelegate.showWithCore()` method using core components
+
+### Changed
+- Reorganized code structure for better maintainability
+- Moved typedefs to a central location to avoid conflicts
+- Updated exports to handle name conflicts
+- Improved theme handling and configuration
+- Enhanced example app to demonstrate new components
+
+### Fixed
+- Fixed selection state management in filter components
+- Fixed theme inheritance issues in nested components
+- Improved search performance with debounced queries
+
 ## [1.0.3] - 27 May 2024
 
 ### Changed
@@ -123,7 +149,6 @@
 ## [0.0.3] - 02 Mar 2020
 
 - Added pop-up height
-
 - Added pop-up width
 - Added header hide prop
 - Added search field hide prop

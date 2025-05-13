@@ -1,10 +1,13 @@
 library filter_list;
 
+import 'package:filter_list/src/core/core.dart';
+import 'package:filter_list/src/core/typedefs.dart' as core_types;
 import 'package:filter_list/src/state/filter_state.dart';
 import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/theme/theme.dart';
 import 'package:filter_list/src/widget/choice_list.dart';
 import 'package:filter_list/src/widget/control_button_bar.dart';
+import 'package:filter_list/src/widget/filter_list_widget_modern.dart';
 import 'package:filter_list/src/widget/header.dart';
 import 'package:flutter/material.dart';
 
@@ -190,7 +193,7 @@ class FilterListDialog {
     ChoiceChipBuilder? choiceChipBuilder,
 
     /// {@macro control_buttons}
-    List<ControlButtonType>? controlButtons,
+    List<core_types.ControlButtonType>? controlButtons,
   }) async {
     height ??= MediaQuery.of(context).size.height * .5;
     width ??= MediaQuery.of(context).size.width;
@@ -238,7 +241,328 @@ class FilterListDialog {
                 validateRemoveItem: validateRemoveItem,
                 maximumSelectionLength: maximumSelectionLength,
                 controlButtons: controlButtons ??
-                    [ControlButtonType.All, ControlButtonType.Reset],
+                    [
+                      core_types.ControlButtonType.All,
+                      core_types.ControlButtonType.Reset,
+                      core_types.ControlButtonType.Apply
+                    ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Modern implementation of FilterListDialog using the FilterCore, FilterCallbacks, and FilterUIConfig components
+  /// for a more modular and maintainable approach.
+  ///
+  /// Example:
+  /// ```dart
+  /// await FilterListDialog.showWithCore<User>(
+  ///   context,
+  ///   allItems: userList,
+  ///   selectedItems: selectedUserList,
+  ///   callbacks: FilterCallbacks(
+  ///     searchPredicate: (user, query) => user.name.toLowerCase().contains(query.toLowerCase()),
+  ///     labelProvider: (user) => user?.name,
+  ///     validateSelection: (list, item) => list!.contains(item),
+  ///     onApplyButtonClick: (list) {
+  ///       setState(() { selectedUserList = List.from(list!); });
+  ///       Navigator.pop(context);
+  ///     },
+  ///   ),
+  ///   uiConfig: FilterUIConfig(
+  ///     headlineText: 'Select Users',
+  ///     searchFieldHint: 'Search users...',
+  ///   ),
+  /// );
+  /// ```
+  static Future showWithCore<T extends Object>(
+    BuildContext context, {
+    /// List of all items to filter
+    required List<T> allItems,
+
+    /// Initially selected items
+    List<T>? selectedItems,
+
+    /// Callbacks for filtering operations
+    required FilterCallbacks<T> callbacks,
+
+    /// UI configuration options
+    FilterUIConfig? uiConfig,
+
+    /// Theme data for filter dialog
+    FilterListThemeData? themeData,
+
+    /// Height of the dialog
+    double? height,
+
+    /// Width of the dialog
+    double? width,
+
+    /// Custom choice chip builder
+    ChoiceChipBuilder? choiceChipBuilder,
+
+    /// Dialog configuration
+    bool barrierDismissible = true,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    EdgeInsets? insetPadding =
+        const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+  }) async {
+    height ??= MediaQuery.of(context).size.height * .5;
+    width ??= MediaQuery.of(context).size.width;
+
+    // Use default UI config if not provided
+    final config = uiConfig ?? const FilterUIConfig();
+
+    // Initialize the filter core with the provided data and callbacks
+    final filterCore = FilterCore<T>(
+      allItems: allItems,
+      selectedItems: selectedItems,
+      searchPredicate: callbacks.searchPredicate,
+      validateSelection: callbacks.validateSelection,
+      validateRemoveItem: callbacks.validateRemoveItem,
+      onApplyButtonClick: callbacks.onApplyButtonClick,
+      maximumSelectionLength: config.enableOnlySingleSelection ? 1 : null,
+    );
+
+    // Convert core ControlButtonType to widget ControlButtonType
+    final List<core_types.ControlButtonType> convertedButtons = [];
+    for (final button in config.controlButtons) {
+      if (button == core_types.ControlButtonType.All) {
+        convertedButtons.add(core_types.ControlButtonType.All);
+      } else if (button == core_types.ControlButtonType.Reset) {
+        convertedButtons.add(core_types.ControlButtonType.Reset);
+      } else if (button == core_types.ControlButtonType.Apply) {
+        convertedButtons.add(core_types.ControlButtonType.Apply);
+      }
+    }
+
+    await showDialog(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      routeSettings: routeSettings,
+      useRootNavigator: useRootNavigator,
+      useSafeArea: useSafeArea,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          insetPadding: insetPadding,
+          child: Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(themeData?.borderRadius ?? 20),
+              ),
+              child: FilterListWidget(
+                themeData: themeData,
+                listData: allItems,
+                choiceChipLabel: callbacks.labelProvider,
+                hideHeader: config.hideHeader,
+                headlineText: config.headlineText,
+                onItemSearch: callbacks.searchPredicate,
+                backgroundColor: config.backgroundColor,
+                selectedListData: selectedItems,
+                onApplyButtonClick: callbacks.onApplyButtonClick,
+                validateSelectedItem: callbacks.validateSelection,
+                hideSelectedTextCount: config.hideSelectedTextCount,
+                hideCloseIcon: config.hideCloseIcon,
+                headerCloseIcon: config.closeIcon,
+                onCloseWidgetPress: config.onClosePressed,
+                hideSearchField: config.hideSearchField,
+                choiceChipBuilder: choiceChipBuilder,
+                enableOnlySingleSelection: config.enableOnlySingleSelection,
+                selectedItemsText: config.selectedItemsText,
+                applyButtonText: config.applyButtonText,
+                resetButtonText: config.resetButtonText,
+                allButtonText: config.allButtonText,
+                validateRemoveItem: callbacks.validateRemoveItem,
+                controlButtons: convertedButtons,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Shows a dialog with the modern implementation of the filter list.
+  ///
+  /// This method uses the new Provider-based state management system with
+  /// the FilterListWidgetModern for better performance and maintainability.
+  static Future<List<T>?> showFilterListModern<T extends Object>(
+    BuildContext context, {
+    /// Filter list theme data
+    FilterListThemeData? themeData,
+
+    /// List of all items to filter
+    required List<T> listData,
+
+    /// Initially selected items
+    List<T>? selectedListData,
+
+    /// Custom choice chip builder
+    ChoiceChipBuilder? choiceChipBuilder,
+
+    /// Function to get the label text for an item
+    required LabelDelegate<T> labelProvider,
+
+    /// Function to validate if an item is selected
+    required ValidateSelectedItem<T> validateSelection,
+
+    /// Function to handle the removal of items
+    ValidateRemoveItem<T>? validateRemoveItem,
+
+    /// Function to search/filter items by query
+    required SearchPredict<T> searchPredicate,
+
+    /// Callback when the apply button is clicked
+    required OnApplyButtonClick<T> onApplyButtonClick,
+
+    /// Height of the dialog
+    double? height,
+
+    /// Width of the dialog
+    double? width,
+
+    /// Border radius of the dialog
+    double borderRadius = 20,
+
+    /// Headline text to display in the header
+    String? headlineText,
+
+    /// Whether to hide the selected text count
+    bool hideSelectedTextCount = false,
+
+    /// Whether to hide the search field
+    bool hideSearchField = false,
+
+    /// Whether to hide the close icon
+    bool hideCloseIcon = false,
+
+    /// Custom close icon widget
+    Widget? headerCloseIcon,
+
+    /// Custom function to execute when close widget is pressed
+    void Function()? onCloseWidgetPress,
+
+    /// Whether to hide the header
+    bool hideHeader = false,
+
+    /// Whether tapping on the barrier dismisses the dialog
+    bool barrierDismissible = true,
+
+    /// Whether to use safe area
+    bool useSafeArea = true,
+
+    /// Whether to use root navigator
+    bool useRootNavigator = true,
+
+    /// Route settings
+    RouteSettings? routeSettings,
+
+    /// Whether to enable single selection only
+    bool enableOnlySingleSelection = false,
+
+    /// Maximum selection length
+    int? maximumSelectionLength,
+
+    /// Background color
+    Color backgroundColor = Colors.white,
+
+    /// Apply button text
+    String applyButtonText = 'Apply',
+
+    /// Reset button text
+    String resetButtonText = 'Reset',
+
+    /// All button text
+    String allButtonText = 'All',
+
+    /// Selected items text
+    String selectedItemsText = 'selected items',
+
+    /// Inset padding
+    EdgeInsets? insetPadding =
+        const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+
+    /// Control buttons to display
+    List<core_types.ControlButtonType>? controlButtons,
+
+    /// Duration to debounce search queries
+    Duration? debounceDuration,
+  }) async {
+    // Default height and width based on screen size
+    height ??= MediaQuery.of(context).size.height * .5;
+    width ??= MediaQuery.of(context).size.width;
+
+    // Create UI configuration
+    final config = FilterUIConfig(
+      headlineText: headlineText,
+      hideSelectedTextCount: hideSelectedTextCount,
+      hideSearchField: hideSearchField,
+      hideCloseIcon: hideCloseIcon,
+      hideHeader: hideHeader,
+      closeIcon: headerCloseIcon,
+      onClosePressed: onCloseWidgetPress,
+      enableOnlySingleSelection: enableOnlySingleSelection,
+      applyButtonText: applyButtonText,
+      resetButtonText: resetButtonText,
+      allButtonText: allButtonText,
+      selectedItemsText: selectedItemsText,
+      controlButtons: controlButtons ??
+          [
+            core_types.ControlButtonType.Reset,
+            core_types.ControlButtonType.All,
+            core_types.ControlButtonType.Apply,
+          ],
+    );
+
+    // Create controller
+    final controller = FilterListController<T>(
+      allItems: listData,
+      selectedItems: selectedListData,
+      searchPredicate: searchPredicate,
+      validateSelection: validateSelection,
+      validateRemoveItem: validateRemoveItem,
+      onApplyButtonClick: onApplyButtonClick,
+      maximumSelectionLength: maximumSelectionLength,
+      uiConfig: config,
+      debounceDuration: debounceDuration,
+    );
+
+    // Show dialog with the modern filter list implementation
+    return await showDialog<List<T>>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      useSafeArea: useSafeArea,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: insetPadding,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius),
+              color: backgroundColor,
+            ),
+            child: FilterListProvider<T>(
+              controller: controller,
+              child: FilterListWidgetModern<T>(
+                themeData: themeData,
+                choiceChipBuilder: choiceChipBuilder,
               ),
             ),
           ),

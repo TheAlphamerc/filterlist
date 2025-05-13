@@ -1,3 +1,4 @@
+import 'package:filter_list/src/core/core.dart' as core;
 import 'package:filter_list/src/filter_list_dialog.dart';
 import 'package:filter_list/src/state/filter_state.dart';
 import 'package:filter_list/src/state/provider.dart';
@@ -202,6 +203,83 @@ One of the tileLabel or suggestionBuilder is required
         applyButtonText: applyButtonText!,
         hideClearSearchIcon: hideClearSearchIcon,
         maximumSelectionLength: maximumSelectionLength,
+      ),
+    );
+
+    return Future.value(selectedItem);
+  }
+
+  /// Modern implementation of FilterListDelegate using the FilterCore, FilterCallbacks, and FilterUIConfig components
+  /// for a more modular and maintainable approach.
+  ///
+  /// Example:
+  /// ```dart
+  /// await FilterListDelegate.showWithCore<User>(
+  ///   context,
+  ///   allItems: userList,
+  ///   selectedItems: selectedUserList,
+  ///   callbacks: FilterCallbacks(
+  ///     searchPredicate: (user, query) => user.name.toLowerCase().contains(query.toLowerCase()),
+  ///     labelProvider: (user) => user?.name,
+  ///     validateSelection: (list, item) => list!.contains(item),
+  ///     onApplyButtonClick: (list) {
+  ///       setState(() { selectedUserList = List.from(list!); });
+  ///       Navigator.pop(context);
+  ///     },
+  ///   ),
+  ///   delegateConfig: FilterDelegateConfig(
+  ///     searchFieldHint: 'Search users...',
+  ///     emptySearchChild: Center(child: Text('No users found')),
+  ///   ),
+  /// );
+  /// ```
+  static Future<T?>? showWithCore<T>({
+    required BuildContext context,
+    required List<T> allItems,
+    List<T>? selectedItems,
+    required core.FilterCallbacks<T> callbacks,
+    core.FilterUIConfig? uiConfig,
+    InputDecorationTheme? searchFieldDecorationTheme,
+    TextStyle? searchFieldStyle,
+    AppbarBottom? buildAppbarBottom,
+    Widget? emptySearchChild,
+    FilterListDelegateThemeData? theme,
+    ButtonStyle? applyButtonStyle,
+    bool hideClearSearchIcon = false,
+  }) async {
+    // Use default UI config if not provided
+    final config = uiConfig ?? const core.FilterUIConfig();
+
+    // Initialize the filter core with the provided data and callbacks
+    final filterCore = core.FilterCore<T>(
+      allItems: allItems,
+      selectedItems: selectedItems,
+      searchPredicate: callbacks.searchPredicate,
+      validateSelection: callbacks.validateSelection,
+      validateRemoveItem: callbacks.validateRemoveItem,
+      onApplyButtonClick: callbacks.onApplyButtonClick,
+      maximumSelectionLength: config.enableOnlySingleSelection ? 1 : null,
+    );
+
+    final selectedItem = await showSearch(
+      context: context,
+      delegate: FilterListDelegate(
+        listData: allItems,
+        selectedListData: selectedItems,
+        tileLabel: callbacks.labelProvider,
+        onItemSearch: callbacks.searchPredicate,
+        onApplyButtonClick: callbacks.onApplyButtonClick,
+        searchFieldHint: config.searchFieldHint,
+        searchFieldDecorationTheme: searchFieldDecorationTheme,
+        searchFieldStyle: searchFieldStyle,
+        buildAppbarBottom: buildAppbarBottom,
+        enableOnlySingleSelection: config.enableOnlySingleSelection,
+        emptySearchChild: emptySearchChild,
+        theme: theme,
+        applyButtonStyle: applyButtonStyle,
+        applyButtonText: config.applyButtonText,
+        hideClearSearchIcon: hideClearSearchIcon,
+        maximumSelectionLength: config.enableOnlySingleSelection ? 1 : null,
       ),
     );
 

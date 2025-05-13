@@ -9,7 +9,7 @@ typedef SearchPredict<T> = bool Function(T item, String query);
 typedef LabelDelegate<T> = String? Function(T?);
 typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 
-enum ControlButtonType { All, Reset }
+// Using ControlButtonType from core_types
 
 /// The [FilterListWidget] is a widget with some filter utilities and callbacks which helps in single/multiple selection from list of data.
 ///
@@ -78,8 +78,8 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
     this.resetButtonText = 'Reset',
     this.selectedItemsText = 'selected items',
     this.controlButtons = const [
-      ControlButtonType.All,
-      ControlButtonType.Reset
+      core_types.ControlButtonType.All,
+      core_types.ControlButtonType.Reset
     ],
   }) : super(key: key);
 
@@ -168,7 +168,7 @@ class FilterListWidget<T extends Object> extends StatelessWidget {
   ///
   /// If `enableOnlySingleSelection` is true then it will hide 'All' button.
   /// {@endtemplate}
-  final List<ControlButtonType> controlButtons;
+  final List<core_types.ControlButtonType> controlButtons;
 
   Widget _body(BuildContext context) {
     final theme = FilterListTheme.of(context);
