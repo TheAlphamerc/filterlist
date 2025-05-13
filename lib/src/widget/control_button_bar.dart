@@ -33,79 +33,73 @@ class ControlButtonBar<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ControlButtonBarTheme(
-      data: FilterListTheme.of(context).controlBarButtonTheme,
-      child: Builder(
-        builder: (context) {
-          final theme = ControlButtonBarTheme.of(context);
-          return Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: theme.height,
-              margin: theme.margin,
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: theme.controlContainerDecoration!.copyWith(
-                  color: theme.controlContainerDecoration!.color ??
-                      theme.backgroundColor,
-                ),
-                padding: theme.padding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    /* All Button */
-                    if (maximumSelectionLength == null &&
-                        !enableOnlySingleSelection &&
-                        controlButtons
-                            .contains(core_types.ControlButtonType.All)) ...[
-                      ControlButton(
-                        choiceChipLabel: '$allButtonText',
-                        onPressed: () {
-                          final state = StateProvider.of<FilterState<T>>(
-                            context,
-                            rebuildOnChange: true,
-                          );
-                          state.selectedItems = state.items;
-                        },
-                      ),
-                      SizedBox(width: theme.buttonSpacing),
-                    ],
+    // Get theme directly from context using the safe method
+    final theme = ControlButtonBarTheme.safeOf(context);
 
-                    /* Reset Button */
-                    if (controlButtons
-                        .contains(core_types.ControlButtonType.Reset)) ...[
-                      ControlButton(
-                        choiceChipLabel: '$resetButtonText',
-                        onPressed: () {
-                          final state = StateProvider.of<FilterState<T>>(
-                            context,
-                            rebuildOnChange: true,
-                          );
-                          state.selectedItems = [];
-                        },
-                      ),
-                      SizedBox(width: theme.buttonSpacing),
-                    ],
-
-                    /* Apply Button */
-                    if (controlButtons
-                            .contains(core_types.ControlButtonType.Apply) ||
-                        !controlButtons.any((element) =>
-                            element == core_types.ControlButtonType.Apply))
-                      ControlButton(
-                        choiceChipLabel: '$applyButtonText',
-                        primaryButton: true,
-                        onPressed: () {
-                          onApplyButtonClick?.call();
-                        },
-                      ),
-                  ],
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: theme.height,
+        margin: theme.margin,
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          decoration: theme.controlContainerDecoration!.copyWith(
+            color: theme.controlContainerDecoration!.color ??
+                theme.backgroundColor,
+          ),
+          padding: theme.padding,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              /* All Button */
+              if (maximumSelectionLength == null &&
+                  !enableOnlySingleSelection &&
+                  controlButtons
+                      .contains(core_types.ControlButtonType.All)) ...[
+                ControlButton(
+                  choiceChipLabel: '$allButtonText',
+                  onPressed: () {
+                    final state = StateProvider.of<FilterState<T>>(
+                      context,
+                      rebuildOnChange: true,
+                    );
+                    state.selectedItems = state.items;
+                  },
                 ),
-              ),
-            ),
-          );
-        },
+                SizedBox(width: theme.buttonSpacing),
+              ],
+
+              /* Reset Button */
+              if (controlButtons
+                  .contains(core_types.ControlButtonType.Reset)) ...[
+                ControlButton(
+                  choiceChipLabel: '$resetButtonText',
+                  onPressed: () {
+                    final state = StateProvider.of<FilterState<T>>(
+                      context,
+                      rebuildOnChange: true,
+                    );
+                    state.selectedItems = [];
+                  },
+                ),
+                SizedBox(width: theme.buttonSpacing),
+              ],
+
+              /* Apply Button */
+              if (controlButtons.contains(core_types.ControlButtonType.Apply) ||
+                  !controlButtons.any((element) =>
+                      element == core_types.ControlButtonType.Apply))
+                ControlButton(
+                  choiceChipLabel: '$applyButtonText',
+                  primaryButton: true,
+                  onPressed: () {
+                    onApplyButtonClick?.call();
+                  },
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

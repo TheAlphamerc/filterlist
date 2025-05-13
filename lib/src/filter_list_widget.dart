@@ -51,6 +51,10 @@ typedef ValidateRemoveItem<T> = List<T> Function(List<T>? list, T item);
 ///   )
 /// ```
 /// {@endtemplate}
+@Deprecated(
+    'This widget is deprecated. Use FilterListWidgetModern with FilterListProvider '
+    'instead. The modern implementation provides better performance, '
+    'more maintainable code, and improved state management.')
 class FilterListWidget<T extends Object> extends StatelessWidget {
   const FilterListWidget({
     Key? key,

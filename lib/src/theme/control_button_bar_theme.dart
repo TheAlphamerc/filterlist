@@ -1,4 +1,5 @@
 import 'package:filter_list/src/theme/contol_button_theme.dart';
+import 'package:filter_list/src/theme/filter_list_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +27,34 @@ class ControlButtonBarTheme extends InheritedWidget {
     final theme =
         context.dependOnInheritedWidgetOfExactType<ControlButtonBarTheme>();
 
-    assert(
-      theme != null,
-      'You must have a ControlButtonBarTheme widget at the top of your widget tree',
-    );
+    if (theme != null) {
+      return theme.data;
+    }
 
-    return theme!.data;
+    // If no theme is found, try to get from FilterListTheme or use default
+    try {
+      return FilterListTheme.of(context).controlBarButtonTheme;
+    } catch (_) {
+      return ControlButtonBarThemeData.light(context);
+    }
+  }
+
+  /// Safely retrieves the theme from context or returns default
+  static ControlButtonBarThemeData safeOf(BuildContext context) {
+    try {
+      final theme =
+          context.dependOnInheritedWidgetOfExactType<ControlButtonBarTheme>();
+      if (theme != null) {
+        return theme.data;
+      }
+
+      // Try to get from FilterListTheme
+      return FilterListTheme.safeOf(context).controlBarButtonTheme;
+    } catch (_) {
+      // Ignore errors and return default
+    }
+
+    return ControlButtonBarThemeData.light(context);
   }
 
   @override

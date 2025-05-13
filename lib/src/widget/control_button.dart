@@ -14,27 +14,43 @@ class ControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ControlButtonTheme.of(context);
+    // Get the button theme using the safer methods
+    ControlButtonThemeData effectiveTheme;
+
+    // Check for direct theme first
+    final directTheme =
+        context.dependOnInheritedWidgetOfExactType<ControlButtonTheme>()?.data;
+    if (directTheme != null) {
+      effectiveTheme = directTheme;
+    } else {
+      // If not available, try to get from control button bar theme
+      final barTheme = ControlButtonBarTheme.safeOf(context);
+      effectiveTheme = barTheme.controlButtonTheme;
+    }
+
     return TextButton(
       style: ButtonStyle(
         shape: WidgetStateProperty.all(RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(theme.borderRadius)),
+          borderRadius:
+              BorderRadius.all(Radius.circular(effectiveTheme.borderRadius)),
         )),
         backgroundColor: WidgetStateProperty.all(
           primaryButton
-              ? theme.primaryButtonBackgroundColor
-              : theme.backgroundColor,
+              ? effectiveTheme.primaryButtonBackgroundColor
+              : effectiveTheme.backgroundColor,
         ),
-        elevation: WidgetStateProperty.all(theme.elevation),
+        elevation: WidgetStateProperty.all(effectiveTheme.elevation),
         foregroundColor: WidgetStateProperty.all(
           primaryButton
-              ? theme.primaryButtonTextStyle!.color
-              : theme.textStyle!.color,
+              ? effectiveTheme.primaryButtonTextStyle!.color
+              : effectiveTheme.textStyle!.color,
         ),
         textStyle: WidgetStateProperty.all(
-          primaryButton ? theme.primaryButtonTextStyle : theme.textStyle,
+          primaryButton
+              ? effectiveTheme.primaryButtonTextStyle
+              : effectiveTheme.textStyle,
         ),
-        padding: WidgetStateProperty.all(theme.padding),
+        padding: WidgetStateProperty.all(effectiveTheme.padding),
       ),
       onPressed: onPressed,
       clipBehavior: Clip.antiAlias,

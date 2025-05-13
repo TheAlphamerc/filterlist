@@ -267,4 +267,119 @@ I welcome and encourage all pull requests. It usually will take me within 24-48 
 
 <img align="left" src = "https://profile-counter.glitch.me/flutter_plugin_filter_list/count.svg" alt ="Loading">
 
+## Modern Implementation
+
+The package now includes a modern implementation with improved performance and state management:
+
+```dart
+// Example using the modern implementation
+import 'package:filter_list/filter_list.dart';
+import 'package:flutter/material.dart';
+
+void openFilterDialog() async {
+  // Sample list of strings
+  List<String> items = [
+    "Apple", "Banana", "Cherry", "Date", "Elderberry",
+    "Fig", "Grape", "Honeydew", "Kiwi", "Lemon"
+  ];
+  
+  // Initially selected items
+  List<String> selectedItems = ["Cherry", "Date", "Kiwi"];
+  
+  // Show filter dialog with modern implementation
+  final results = await FilterListDialog.showFilterListModern<String>(
+    context,
+    listData: items,
+    selectedListData: selectedItems,
+    labelProvider: (item) => item,  // Function to display the label
+    validateSelection: (list, item) => list!.contains(item),  // Check if item is selected
+    searchPredicate: (item, query) => item.toLowerCase().contains(query.toLowerCase()),  // Search function
+    onApplyButtonClick: (list) {
+      // Handle the selected items
+      print("Selected items: $list");
+    },
+    // UI Customization
+    headlineText: "Select Fruits",
+    applyButtonText: "Save",
+    resetButtonText: "Clear",
+    allButtonText: "Select All",
+    themeData: FilterListThemeData.light(context),
+    controlButtons: [
+      ControlButtonType.All,
+      ControlButtonType.Reset,
+      ControlButtonType.Apply
+    ],
+    // Performance options
+    debounceDuration: Duration(milliseconds: 300),
+  );
+  
+  if (results != null) {
+    // Do something with the results
+    setState(() {
+      this.selectedItems = results;
+    });
+  }
+}
+```
+
+### Using with Custom Objects
+
+```dart
+class User {
+  final String name;
+  final String avatar;
+  final String email;
+  
+  User({required this.name, required this.avatar, required this.email});
+}
+
+void openUserFilterDialog() async {
+  List<User> users = [
+    User(name: "John", avatar: "assets/john.png", email: "john@example.com"),
+    User(name: "Jane", avatar: "assets/jane.png", email: "jane@example.com"),
+    // More users...
+  ];
+  
+  List<User> selectedUsers = [];
+  
+  final results = await FilterListDialog.showFilterListModern<User>(
+    context,
+    listData: users,
+    selectedListData: selectedUsers,
+    labelProvider: (user) => user?.name ?? "",  // Show the user's name
+    validateSelection: (list, item) => list!.any((user) => user.email == item.email), // Compare by email
+    searchPredicate: (user, query) => 
+      user.name.toLowerCase().contains(query.toLowerCase()) || 
+      user.email.toLowerCase().contains(query.toLowerCase()),
+    onApplyButtonClick: (list) {
+      // Handle selected users
+    },
+    // Custom choice chip builder
+    choiceChipBuilder: (context, user, isSelected) {
+      return ListTile(
+        leading: CircleAvatar(backgroundImage: AssetImage(user!.avatar)),
+        title: Text(user.name),
+        subtitle: Text(user.email),
+        selected: isSelected!,
+        trailing: isSelected ? Icon(Icons.check_circle) : null,
+      );
+    },
+  );
+  
+  if (results != null) {
+    setState(() {
+      selectedUsers = results;
+    });
+  }
+}
+```
+
+### Benefits of Modern Implementation
+
+- Better performance with debouncing for search operations
+- Clean separation of concerns (MVVM pattern)
+- Improved state management
+- More flexible theming
+- Better developer experience
+
 

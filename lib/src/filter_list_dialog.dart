@@ -81,8 +81,11 @@ part 'filter_list_widget.dart';
 ///  }
 /// ```
 /// {@macro control_buttons}
-
 class FilterListDialog {
+  @Deprecated(
+      'This method is deprecated. Use FilterListDialog.showFilterListModern() or '
+      'FilterListDialog.showWithCore() instead. These methods provide better '
+      'performance, more maintainable code, and improved type safety.')
   static Future display<T extends Object>(
     BuildContext context, {
     /// Filter theme

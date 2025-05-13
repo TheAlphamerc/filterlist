@@ -25,61 +25,50 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     final controller = FilterListProvider.of<T>(context);
     final config = controller.uiConfig;
 
-    // Check if there's already a FilterListTheme in the widget tree
-    final existingTheme =
-        context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
+    // Create FilterListTheme with appropriate precedence:
+    // 1. Explicitly provided theme
+    // 2. Theme from context
+    // 3. Default light theme
+    FilterListThemeData effectiveTheme =
+        themeData ?? FilterListTheme.safeOf(context);
 
-    if (existingTheme != null) {
-      // If a theme already exists, use it directly
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _buildBody(context, controller, config),
-      );
-    } else {
-      // If no theme exists, create one
-      return FilterListTheme(
-        theme: themeData ?? FilterListThemeData.light(context),
-        child: Scaffold(
+    return FilterListTheme(
+      theme: effectiveTheme,
+      child: Builder(builder: (context) {
+        // Access the theme safely through the context
+        final theme = FilterListTheme.of(context);
+
+        return Scaffold(
           backgroundColor: Colors.transparent,
-          body: _buildBody(context, controller, config),
-        ),
-      );
-    }
-  }
-
-  Widget _buildBody(
-    BuildContext context,
-    FilterListController<T> controller,
-    FilterUIConfig config,
-  ) {
-    final theme = FilterListTheme.of(context);
-
-    return Container(
-      color: theme.backgroundColor,
-      child: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              if (config.hideHeader)
-                const SizedBox()
-              else
-                _buildHeader(context, controller, config),
-              if (!config.hideSelectedTextCount)
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Text(
-                    '${controller.selectedItemCount} ${config.selectedItemsText}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+          body: Container(
+            color: theme.backgroundColor,
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    if (config.hideHeader)
+                      const SizedBox()
+                    else
+                      _buildHeader(context, controller, config),
+                    if (!config.hideSelectedTextCount)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Text(
+                          '${controller.selectedItemCount} ${config.selectedItemsText}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    Expanded(
+                      child: _buildItemList(context, controller, config),
+                    ),
+                  ],
                 ),
-              Expanded(
-                child: _buildItemList(context, controller, config),
-              ),
-            ],
+                _buildControlButtonBar(context, controller, config),
+              ],
+            ),
           ),
-          _buildControlButtonBar(context, controller, config),
-        ],
-      ),
+        );
+      }),
     );
   }
 

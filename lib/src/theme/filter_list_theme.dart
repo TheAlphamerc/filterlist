@@ -25,12 +25,29 @@ class FilterListTheme extends InheritedWidget {
   static FilterListThemeData of(BuildContext context) {
     final FilterListTheme? theme =
         context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
-    assert(
-      theme != null,
-      'You must have a FilterListTheme widget at the top of your widget tree',
-    );
+    if (theme != null) {
+      return theme.theme;
+    }
 
-    return theme!.theme;
+    // If no theme is found, return a default theme
+    return FilterListThemeData.light(context);
+  }
+
+  /// Safely retrieves the theme from context or returns the default theme if none exists
+  /// This avoids throwing assertions when no theme is in the tree
+  static FilterListThemeData safeOf(BuildContext context) {
+    try {
+      final FilterListTheme? theme =
+          context.dependOnInheritedWidgetOfExactType<FilterListTheme>();
+      if (theme != null) {
+        return theme.theme;
+      }
+    } catch (_) {
+      // Ignore any errors and fallback to default
+    }
+
+    // Return default theme
+    return FilterListThemeData.light(context);
   }
 }
 
