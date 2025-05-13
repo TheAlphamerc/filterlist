@@ -1,9 +1,8 @@
-import 'package:filter_list/src/core/core.dart' as core;
-import 'package:filter_list/src/filter_list_dialog.dart';
-import 'package:filter_list/src/state/filter_state.dart';
-import 'package:filter_list/src/state/provider.dart';
-import 'package:filter_list/src/theme/filter_list_delegate_theme.dart';
+import 'dart:async';
+
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 typedef SuggestionBuilder<T> = Widget Function(
     BuildContext context, T suggestion, bool isSelected);
@@ -100,6 +99,16 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
   final int? maximumSelectionLength;
 
   final FilterListDelegateThemeData? theme;
+
+  /// The core filtering operations handler
+  late final FilterOperations<T> _filterOperations;
+
+  /// Timer for debouncing search queries
+  Timer? _debounceTimer;
+
+  /// Duration for debouncing search operations
+  final Duration _debounceDuration;
+
   FilterListDelegate({
     required this.listData,
     this.selectedListData,
@@ -118,7 +127,10 @@ class FilterListDelegate<T> extends SearchDelegate<T?> {
     this.maximumSelectionLength,
     this.hideClearSearchIcon = false,
     this.applyButtonText = 'Apply',
-  })  : assert(searchFieldStyle == null || searchFieldDecorationTheme == null,
+    Duration? debounceDuration,
+  })  : _debounceDuration =
+            debounceDuration ?? const Duration(milliseconds: 300),
+        assert(searchFieldStyle == null || searchFieldDecorationTheme == null,
             "You can't set both searchFieldStyle and searchFieldDecorationTheme at the same time."),
         assert(tileLabel == null || suggestionBuilder == null, '''
 \nYou can't set both tileLabel and suggestionBuilder at the same time.
@@ -134,190 +146,106 @@ One of the tileLabel or suggestionBuilder is required
             textInputAction: TextInputAction.search,
             searchFieldStyle: searchFieldStyle,
             searchFieldDecorationTheme: searchFieldDecorationTheme) {
-    tempList = listData;
-    if (selectedListData != null) {
-      selectedItems = selectedListData;
-    }
+    tempList = List<T>.from(listData);
+
+    // Initialize filter operations
+    _filterOperations = FilterCore<T>(
+      allItems: listData,
+      selectedItems: selectedListData,
+      searchPredicate: onItemSearch,
+      validateSelection: (list, item) => list?.contains(item) ?? false,
+      onApplyButtonClick: onApplyButtonClick,
+      maximumSelectionLength:
+          enableOnlySingleSelection ? 1 : maximumSelectionLength,
+    );
   }
 
-  List<T>? selectedItems;
+  /// Update the search query with debouncing
+  void updateSearchQuery(String query, BuildContext context) {
+    // Cancel previous timer if exists
+    _debounceTimer?.cancel();
 
-  bool isSelected(T item) =>
-      selectedItems != null && selectedItems!.contains(item);
+    // Set a new timer
+    _debounceTimer = Timer(_debounceDuration, () {
+      tempList = query.isEmpty
+          ? List<T>.from(listData)
+          : _filterOperations.filter(query);
 
-  /// Shows a full screen search page and returns the search result selected by the user when the page is closed.
-  /// Open search view page that implement [SearchDelegate]
-  ///  ``` dart
-  /// await FilterListDelegate.show<String>(
-  ///      context: context,
-  ///      list: ['Jon', 'Abraham', 'John', 'Peter', 'Paul', 'Mary', 'Jane'],
-  ///      onItemSearch: (user, query) {
-  ///        return user.toLowerCase().contains(query.toLowerCase());
-  ///      },
-  ///      tileLabel: (user) => user,
-  ///      emptySearchChild: Center(child: Text('No user found')),
-  ///      enableOnlySingleSelection: true,
-  ///      searchFieldHint: 'Search Here..',
-  ///      onApplyButtonClick: (list) {
-  ///         // do something with list
-  ///      },
-  ///    );
-  /// ```
-  static Future<T?>? show<T>({
-    required BuildContext context,
-    required List<T> list,
-    List<T>? selectedListData,
-    LabelDelegate<T>? tileLabel,
-    required SearchPredict<T> onItemSearch,
-    required OnApplyButtonClick<T> onApplyButtonClick,
-    SuggestionBuilder<T>? suggestionBuilder,
-    String? searchFieldHint,
-    InputDecorationTheme? searchFieldDecorationTheme,
-    TextStyle? searchFieldStyle,
-    AppbarBottom? buildAppbarBottom,
-    bool enableOnlySingleSelection = false,
-    int? maximumSelectionLength,
-    bool hideClearSearchIcon = false,
-    Widget? emptySearchChild,
-    FilterListDelegateThemeData? theme,
-    ButtonStyle? applyButtonStyle,
-    String? applyButtonText = 'Apply',
-  }) async {
-    final selectedItem = await showSearch(
-      context: context,
-      delegate: FilterListDelegate(
-        listData: list,
-        selectedListData: selectedListData,
-        tileLabel: tileLabel,
-        onItemSearch: onItemSearch,
-        onApplyButtonClick: onApplyButtonClick,
-        searchFieldHint: searchFieldHint,
-        suggestionBuilder: suggestionBuilder,
-        searchFieldDecorationTheme: searchFieldDecorationTheme,
-        searchFieldStyle: searchFieldStyle,
-        buildAppbarBottom: buildAppbarBottom,
-        enableOnlySingleSelection: enableOnlySingleSelection,
-        emptySearchChild: emptySearchChild,
-        theme: theme,
-        applyButtonStyle: applyButtonStyle,
-        applyButtonText: applyButtonText!,
-        hideClearSearchIcon: hideClearSearchIcon,
-        maximumSelectionLength: maximumSelectionLength,
-      ),
-    );
-
-    return Future.value(selectedItem);
-  }
-
-  /// Modern implementation of FilterListDelegate using the FilterCore, FilterCallbacks, and FilterUIConfig components
-  /// for a more modular and maintainable approach.
-  ///
-  /// Example:
-  /// ```dart
-  /// await FilterListDelegate.showWithCore<User>(
-  ///   context,
-  ///   allItems: userList,
-  ///   selectedItems: selectedUserList,
-  ///   callbacks: FilterCallbacks(
-  ///     searchPredicate: (user, query) => user.name.toLowerCase().contains(query.toLowerCase()),
-  ///     labelProvider: (user) => user?.name,
-  ///     validateSelection: (list, item) => list!.contains(item),
-  ///     onApplyButtonClick: (list) {
-  ///       setState(() { selectedUserList = List.from(list!); });
-  ///       Navigator.pop(context);
-  ///     },
-  ///   ),
-  ///   delegateConfig: FilterDelegateConfig(
-  ///     searchFieldHint: 'Search users...',
-  ///     emptySearchChild: Center(child: Text('No users found')),
-  ///   ),
-  /// );
-  /// ```
-  static Future<T?>? showWithCore<T>({
-    required BuildContext context,
-    required List<T> allItems,
-    List<T>? selectedItems,
-    required core.FilterCallbacks<T> callbacks,
-    core.FilterUIConfig? uiConfig,
-    InputDecorationTheme? searchFieldDecorationTheme,
-    TextStyle? searchFieldStyle,
-    AppbarBottom? buildAppbarBottom,
-    Widget? emptySearchChild,
-    FilterListDelegateThemeData? theme,
-    ButtonStyle? applyButtonStyle,
-    bool hideClearSearchIcon = false,
-  }) async {
-    // Use default UI config if not provided
-    final config = uiConfig ?? const core.FilterUIConfig();
-
-    // Initialize the filter core with the provided data and callbacks
-    final filterCore = core.FilterCore<T>(
-      allItems: allItems,
-      selectedItems: selectedItems,
-      searchPredicate: callbacks.searchPredicate,
-      validateSelection: callbacks.validateSelection,
-      validateRemoveItem: callbacks.validateRemoveItem,
-      onApplyButtonClick: callbacks.onApplyButtonClick,
-      maximumSelectionLength: config.enableOnlySingleSelection ? 1 : null,
-    );
-
-    final selectedItem = await showSearch(
-      context: context,
-      delegate: FilterListDelegate(
-        listData: allItems,
-        selectedListData: selectedItems,
-        tileLabel: callbacks.labelProvider,
-        onItemSearch: callbacks.searchPredicate,
-        onApplyButtonClick: callbacks.onApplyButtonClick,
-        searchFieldHint: config.searchFieldHint,
-        searchFieldDecorationTheme: searchFieldDecorationTheme,
-        searchFieldStyle: searchFieldStyle,
-        buildAppbarBottom: buildAppbarBottom,
-        enableOnlySingleSelection: config.enableOnlySingleSelection,
-        emptySearchChild: emptySearchChild,
-        theme: theme,
-        applyButtonStyle: applyButtonStyle,
-        applyButtonText: config.applyButtonText,
-        hideClearSearchIcon: hideClearSearchIcon,
-        maximumSelectionLength: config.enableOnlySingleSelection ? 1 : null,
-      ),
-    );
-
-    return Future.value(selectedItem);
+      // Trigger UI update
+      showResults(context);
+    });
   }
 
   @override
-  List<Widget> buildActions(BuildContext context) {
+  void dispose() {
+    // Cancel debounce timer to prevent memory leaks
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  /// Get the currently selected items
+  List<T> get selectedItems => _filterOperations.selectedItems;
+
+  /// Check if an item is selected
+  bool isSelected(T item) => _filterOperations.isItemSelected(item);
+
+  /// Toggle selection of an item
+  void toggleSelection(T item) {
+    _filterOperations.toggleItem(item,
+        enableOnlySingleSelection: enableOnlySingleSelection);
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Results are already computed in updateSearchQuery
+    // Just return the widget with current tempList
+    return buildBottomSheet(context, tempList);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Initial search or when text changes
+    updateSearchQuery(query, context);
+
+    // If no results, show empty state
+    if (tempList.isEmpty) {
+      return emptySearchChild ?? const SizedBox();
+    }
+
+    // Show results
+    return buildBottomSheet(context, tempList);
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
     return [
-      if (hideClearSearchIcon == false)
-        AnimatedOpacity(
-          opacity: query.isNotEmpty ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOutCubic,
-          child: SizedBox(
-            width: 25,
-            height: 25,
-            child: IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () => query = '',
-            ),
+      if (!hideClearSearchIcon && query.isNotEmpty)
+        IconButton(
+          tooltip: 'Clear',
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            query = '';
+            showSuggestions(context);
+          },
+        )
+      else
+        Container(),
+      Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        child: TextButton(
+          style: applyButtonStyle,
+          onPressed: () {
+            // Use filter operations to apply filter
+            _filterOperations.applyFilter();
+            close(context, null);
+          },
+          child: Text(
+            applyButtonText,
+            style: theme?.applyButtonTextStyle ??
+                const TextStyle(color: Colors.blue),
           ),
         ),
-      if (!enableOnlySingleSelection)
-        Container(
-          alignment: Alignment.center,
-          margin: const EdgeInsets.only(right: 10),
-          child: TextButtonTheme(
-            data: TextButtonThemeData(style: applyButtonStyle),
-            child: TextButton(
-              onPressed: () {
-                onApplyButtonClick(selectedItems);
-                close(context, null);
-              },
-              child: Text(applyButtonText),
-            ),
-          ),
-        )
+      ),
     ];
   }
 
@@ -332,37 +260,40 @@ One of the tileLabel or suggestionBuilder is required
   }
 
   @override
-  Widget buildResults(BuildContext context) {
-    tempList = listData;
-    return _result(context);
+  PreferredSizeWidget? buildBottom(BuildContext context) {
+    if (buildAppbarBottom != null) {
+      return buildAppbarBottom!(context);
+    }
+    return null;
   }
 
-  Widget _result(BuildContext ctx) {
+  Widget buildBottomSheet(BuildContext context, List<T> items) {
     return StateProvider<FilterState<T>>(
       value: FilterState<T>(
           allItems: listData,
-          selectedItems: selectedListData,
+          selectedItems: selectedItems,
           maximumSelectionLength: maximumSelectionLength),
       child: FilterListDelegateTheme(
         theme: theme ?? FilterListDelegateThemeData(),
         child: Builder(
           builder: (BuildContext innerContext) {
-            final state = StateProvider.of<FilterState<T>>(
+            // Remove reference to unused variable 'state'
+            StateProvider.of<FilterState<T>>(
               innerContext,
               rebuildOnChange: true,
             );
+
             return ListView.builder(
-              itemCount: tempList.length,
+              itemCount: items.length,
               itemBuilder: (context, index) {
                 final theme = FilterListDelegateTheme.of(innerContext);
-                final item = tempList[index];
+                final item = items[index];
                 final selected = isSelected(item);
-                // ignore: avoid_bool_literals_in_conditional_expressions
-                final maxSelectionReached = !selected &&
-                        maximumSelectionLength != null &&
-                        selectedItems != null
-                    ? selectedItems!.length >= maximumSelectionLength!
-                    : false;
+
+                // Check if maximum selection is reached
+                final maxSelectionReached =
+                    !selected && _filterOperations.isMaximumSelectionReached;
+
                 if (suggestionBuilder != null) {
                   return GestureDetector(
                     onTap: () => onItemSelect(context, item),
@@ -422,35 +353,356 @@ One of the tileLabel or suggestionBuilder is required
       onApplyButtonClick([item]);
       close(context, null);
     } else {
-      selectedItems ??= <T>[];
-      if (selectedItems!.contains(item)) {
-        selectedItems!.remove(item);
-      } else {
-        // Add maximum selection length check
-        if (maximumSelectionLength != null &&
-            selectedItems!.length >= maximumSelectionLength!) {
-          return;
-        }
-        selectedItems!.add(item);
-      }
+      // Use filter operations to toggle item selection
+      toggleSelection(item);
+
+      // Update filter state for compatibility with old implementation
       final state = StateProvider.of<FilterState<T>>(context);
       state.selectedItems = selectedItems;
-      final qq = query;
+
+      // Refresh the view
+      final currentQuery = query;
       query = '';
-      query = qq;
+      query = currentQuery;
     }
+  }
+}
+
+/// Modern version of FilterListDelegate that uses FilterOperations interface
+/// for better state management and integration with the core architecture.
+///
+/// This implementation provides a more maintainable and extensible approach to filtering
+/// by leveraging the FilterOperations interface for all filtering logic, making the UI layer
+/// focused solely on presentation concerns.
+class FilterListDelegateModern<T> extends SearchDelegate<List<T>?> {
+  /// All items available for filtering
+  final List<T> allItems;
+
+  /// Items currently matching the search query
+  late List<T> filteredItems;
+
+  /// The filter operations core that handles all filtering logic
+  final FilterOperations<T> filterOperations;
+
+  /// Function to get the display label for each item
+  final LabelDelegate<T> labelProvider;
+
+  /// Custom builder for suggestion items
+  final SuggestionBuilder<T>? suggestionBuilder;
+
+  /// Builder for the bottom part of the app bar
+  final AppbarBottom? buildAppbarBottom;
+
+  /// Whether to enable only single selection
+  final bool enableOnlySingleSelection;
+
+  /// Whether to hide the clear search icon
+  final bool hideClearSearchIcon;
+
+  /// The UI configuration
+  final FilterUIConfig uiConfig;
+
+  /// Widget to show when search returns no results
+  final Widget? emptySearchChild;
+
+  /// Theme data for the delegate
+  final FilterListDelegateThemeData? theme;
+
+  /// Style for the apply button
+  final ButtonStyle? applyButtonStyle;
+
+  /// Creates a FilterListDelegateModern instance
+  ///
+  /// [allItems]: List of all items available for filtering
+  /// [filterOperations]: Implementation of FilterOperations that handles filtering logic
+  /// [labelProvider]: Function to extract display text from items
+  /// [uiConfig]: Configuration for UI elements like search hint text, button labels, etc.
+  /// [suggestionBuilder]: Optional custom builder for suggestion items
+  /// [buildAppbarBottom]: Optional builder for appbar bottom widget
+  /// [emptySearchChild]: Optional widget to display when no results are found
+  /// [theme]: Optional theme data for visual styling
+  /// [applyButtonStyle]: Optional style for the apply button
+  /// [hideClearSearchIcon]: Whether to hide the clear icon in search field
+  /// [enableOnlySingleSelection]: Whether to enable single selection mode
+  FilterListDelegateModern({
+    required this.allItems,
+    required this.filterOperations,
+    required this.labelProvider,
+    this.uiConfig = const FilterUIConfig(),
+    this.suggestionBuilder,
+    this.buildAppbarBottom,
+    this.emptySearchChild,
+    this.theme,
+    this.applyButtonStyle,
+    this.hideClearSearchIcon = false,
+    this.enableOnlySingleSelection = false,
+  }) : super(
+          searchFieldLabel: uiConfig.searchFieldHint ?? "Search here..",
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        ) {
+    filteredItems = List<T>.from(allItems);
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      if (!hideClearSearchIcon && query.isNotEmpty)
+        IconButton(
+          tooltip: 'Clear',
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            query = '';
+            showSuggestions(context);
+          },
+        )
+      else
+        Container(),
+      Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        child: TextButton(
+          style: applyButtonStyle,
+          onPressed: () {
+            // Apply the filter and close the delegate
+            final result = filterOperations.applyFilter();
+            close(context, result);
+          },
+          child: Text(
+            uiConfig.applyButtonText,
+            style: theme?.applyButtonTextStyle ??
+                const TextStyle(color: Colors.blue),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, null);
+      },
+      icon: const BackButtonIcon(),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Filter the items based on the query
+    filteredItems = query.isEmpty ? allItems : filterOperations.filter(query);
+    return _buildItemList(context);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    tempList = listData.where((item) => onItemSearch(item, query)).toList();
-    if (tempList.isEmpty) {
+    // Filter the items based on the query
+    filteredItems = query.isEmpty ? allItems : filterOperations.filter(query);
+
+    if (filteredItems.isEmpty) {
       return emptySearchChild ?? const SizedBox();
     }
-    return _result(context);
+
+    return _buildItemList(context);
   }
 
   @override
-  PreferredSizeWidget? buildBottom(BuildContext context) =>
-      buildAppbarBottom != null ? buildAppbarBottom!(context) : null;
+  PreferredSizeWidget? buildBottom(BuildContext context) {
+    return buildAppbarBottom?.call(context);
+  }
+
+  /// Builds the list of filtered items
+  Widget _buildItemList(BuildContext context) {
+    final effectiveTheme = theme ?? FilterListDelegateThemeData();
+
+    return FilterListDelegateTheme(
+      theme: effectiveTheme,
+      child: Builder(
+        builder: (BuildContext innerContext) {
+          return ListView.builder(
+            itemCount: filteredItems.length,
+            itemBuilder: (context, index) {
+              final item = filteredItems[index];
+              final selected = filterOperations.isItemSelected(item);
+              final maxSelectionReached =
+                  !selected && filterOperations.isMaximumSelectionReached;
+
+              if (suggestionBuilder != null) {
+                return GestureDetector(
+                  onTap: () => _toggleSelection(context, item),
+                  child: suggestionBuilder!(
+                    context,
+                    item,
+                    selected,
+                  ),
+                );
+              } else {
+                return Container(
+                  margin: effectiveTheme.tileMargin,
+                  decoration: BoxDecoration(
+                    boxShadow: effectiveTheme.tileShadow,
+                    border: effectiveTheme.tileBorder,
+                  ),
+                  child: enableOnlySingleSelection
+                      ? ListTileTheme(
+                          data: effectiveTheme.listTileTheme,
+                          child: ListTile(
+                            onTap: () => _toggleSelection(context, item),
+                            selected: selected,
+                            title: _buildTitle(
+                                context, item, effectiveTheme.tileTextStyle),
+                          ),
+                        )
+                      : ListTileTheme(
+                          data: effectiveTheme.listTileTheme,
+                          child: CheckboxListTile(
+                            value: selected,
+                            selected: selected,
+                            onChanged: maxSelectionReached
+                                ? null
+                                : (_) => _toggleSelection(context, item),
+                            title: _buildTitle(
+                                context, item, effectiveTheme.tileTextStyle),
+                          ),
+                        ),
+                );
+              }
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  /// Builds the title widget for an item
+  Widget _buildTitle(BuildContext context, T item, TextStyle? style) {
+    return Text(
+      labelProvider(item) ?? '',
+      style: style,
+      textAlign: TextAlign.start,
+    );
+  }
+
+  /// Toggles the selection state of an item
+  void _toggleSelection(BuildContext context, T item) {
+    filterOperations.toggleItem(item,
+        enableOnlySingleSelection: enableOnlySingleSelection);
+
+    if (enableOnlySingleSelection) {
+      // If single selection is enabled, apply filter and close on selection
+      final result = filterOperations.applyFilter();
+      close(context, result);
+    } else {
+      // Refresh the view to show updated selection state
+      final currentQuery = query;
+      query = '';
+      query = currentQuery;
+    }
+  }
+}
+
+extension FilterListDelegateExtension on FilterListDelegate {
+  /// Show a FilterListDelegate with modern implementation using FilterOperations interface
+  static Future<List<T>?> showFilterListDelegateModern<T>({
+    required BuildContext context,
+    required List<T> listData,
+    List<T>? selectedListData,
+    required LabelDelegate<T> labelProvider,
+    required SearchPredict<T> searchPredicate,
+    required OnApplyButtonClick<T> onApplyButtonClick,
+    ValidateRemoveItem<T>? validateRemoveItem,
+    ValidateSelectedItem<T>? validateSelection,
+    SuggestionBuilder<T>? suggestionBuilder,
+    String? searchFieldHint,
+    AppbarBottom? buildAppbarBottom,
+    bool enableOnlySingleSelection = false,
+    int? maximumSelectionLength,
+    bool hideClearSearchIcon = false,
+    Widget? emptySearchChild,
+    FilterListDelegateThemeData? theme,
+    ButtonStyle? applyButtonStyle,
+    FilterUIConfig? uiConfig,
+    Duration? debounceDuration,
+  }) {
+    // Create a filter core using the FilterListBase utility
+    final filterCore = FilterListBase.createFilterCore<T>(
+      allItems: listData,
+      selectedItems: selectedListData,
+      searchPredicate: searchPredicate,
+      validateSelection:
+          validateSelection ?? ((list, item) => list?.contains(item) ?? false),
+      validateRemoveItem: validateRemoveItem,
+      onApplyButtonClick: onApplyButtonClick,
+      maximumSelectionLength:
+          enableOnlySingleSelection ? 1 : maximumSelectionLength,
+    );
+
+    // Use default UI config if not provided
+    final effectiveUIConfig = uiConfig ??
+        FilterUIConfig(
+          searchFieldHint: searchFieldHint,
+          enableOnlySingleSelection: enableOnlySingleSelection,
+          applyButtonText: 'Apply',
+        );
+
+    // Show search with modern delegate
+    return showSearch<List<T>?>(
+      context: context,
+      delegate: FilterListDelegateModern<T>(
+        allItems: listData,
+        filterOperations: filterCore,
+        labelProvider: labelProvider,
+        uiConfig: effectiveUIConfig,
+        suggestionBuilder: suggestionBuilder,
+        buildAppbarBottom: buildAppbarBottom,
+        emptySearchChild: emptySearchChild,
+        theme: theme,
+        applyButtonStyle: applyButtonStyle,
+        hideClearSearchIcon: hideClearSearchIcon,
+        enableOnlySingleSelection: enableOnlySingleSelection,
+      ),
+    );
+  }
+
+  /// Show a FilterListDelegate with the core implementation
+  ///
+  /// This method uses the FilterCallbacks class to encapsulate all callback functions,
+  /// making the API cleaner and more maintainable.
+  static Future<List<T>?> showWithCore<T>({
+    required BuildContext context,
+    required List<T> allItems,
+    List<T>? selectedItems,
+    required FilterCallbacks<T> callbacks,
+    SuggestionBuilder<T>? suggestionBuilder,
+    AppbarBottom? buildAppbarBottom,
+    bool enableOnlySingleSelection = false,
+    int? maximumSelectionLength,
+    bool hideClearSearchIcon = false,
+    Widget? emptySearchChild,
+    FilterListDelegateThemeData? theme,
+    ButtonStyle? applyButtonStyle,
+    FilterUIConfig? uiConfig,
+    Duration? debounceDuration,
+  }) {
+    return showFilterListDelegateModern<T>(
+      context: context,
+      listData: allItems,
+      selectedListData: selectedItems,
+      labelProvider: callbacks.labelProvider,
+      searchPredicate: callbacks.searchPredicate,
+      validateSelection: callbacks.validateSelection,
+      validateRemoveItem: callbacks.validateRemoveItem,
+      onApplyButtonClick: callbacks.onApplyButtonClick,
+      suggestionBuilder: suggestionBuilder,
+      buildAppbarBottom: buildAppbarBottom,
+      enableOnlySingleSelection: enableOnlySingleSelection,
+      maximumSelectionLength: maximumSelectionLength,
+      hideClearSearchIcon: hideClearSearchIcon,
+      emptySearchChild: emptySearchChild,
+      theme: theme,
+      applyButtonStyle: applyButtonStyle,
+      uiConfig: uiConfig,
+      debounceDuration: debounceDuration,
+    );
+  }
 }

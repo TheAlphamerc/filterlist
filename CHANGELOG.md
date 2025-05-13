@@ -1,28 +1,23 @@
 ## [1.0.4] - Upcoming
 
 ### Added
-- Added `FilterCore` class to centralize filtering operations
-- Added `FilterCallbacks` for unified callback interfaces
-- Added `FilterUIConfig` for UI configuration options
-- Added `FilterListViewModel` for MVVM pattern support
-- Added `FilterListController` with debouncing search support
-- Added `FilterListWidgetModern` using Provider-based state management
-- Added `FilterListProvider` for modern state management
-- Added `FilterListDialog.showWithCore()` method using core components
-- Added `FilterListDialog.showFilterListModern()` for modern implementation
-- Added `FilterListDelegate.showWithCore()` method using core components
+- Added `FilterOperations<T>` interface to standardize filtering operations
+- Added comprehensive tests for filter operations
+- Implemented debouncing for search operations
+- Added safer null handling throughout the codebase
+- Enhanced example app with direct `FilterOperations` usage demonstration
 
 ### Changed
 - Reorganized code structure for better maintainability
-- Moved typedefs to a central location to avoid conflicts
-- Updated exports to handle name conflicts
-- Improved theme handling and configuration
-- Enhanced example app to demonstrate new components
+- Improved performance with debounced search operations
+- Updated FilterCore to implement FilterOperations interface
+- Enhanced documentation with new usage patterns
 
 ### Fixed
-- Fixed selection state management in filter components
+- Fixed potential null safety issues in search predicates
+- Improved memory management by properly disposing resources
 - Fixed theme inheritance issues in nested components
-- Improved search performance with debounced queries
+- Fixed type casting in filter callbacks creation
 
 ## [1.0.3] - 27 May 2024
 

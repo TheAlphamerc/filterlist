@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 // Typedefs moved to a separate file to avoid conflicts
 export 'typedefs.dart';
+import 'filter_operations.dart';
 
 /// Core filtering logic class that centralizes common operations across different
 /// filter implementations (dialog, widget, delegate)
-class FilterCore<T> {
+class FilterCore<T> implements FilterOperations<T> {
   /// All available items for filtering
-  final List<T>? allItems;
+  final List<T>? _allItems;
 
   /// Currently selected items
   List<T>? _selectedItems;
@@ -29,21 +30,23 @@ class FilterCore<T> {
 
   /// Creates a FilterCore instance
   FilterCore({
-    required this.allItems,
+    required List<T>? allItems,
     List<T>? selectedItems,
     required this.searchPredicate,
     required this.validateSelection,
     this.validateRemoveItem,
     this.onApplyButtonClick,
     this.maximumSelectionLength,
-  }) {
+  }) : _allItems = allItems {
     _selectedItems = selectedItems != null ? List<T>.from(selectedItems) : [];
   }
 
   /// Get the list of all items
-  List<T> get items => allItems != null ? List<T>.from(allItems!) : [];
+  @override
+  List<T> get allItems => _allItems != null ? List<T>.from(_allItems!) : [];
 
   /// Get the list of selected items
+  @override
   List<T> get selectedItems =>
       _selectedItems != null ? List<T>.from(_selectedItems!) : [];
 
@@ -53,25 +56,41 @@ class FilterCore<T> {
   }
 
   /// Get the number of selected items
+  @override
   int get selectedItemsCount => _selectedItems?.length ?? 0;
 
   /// Check if an item is selected
-  bool isSelected(T item) => validateSelection(_selectedItems, item);
+  @override
+  bool isItemSelected(T item) => validateSelection(_selectedItems, item);
 
   /// Check if maximum selection is reached
+  @override
   bool get isMaximumSelectionReached =>
       maximumSelectionLength != null &&
       selectedItemsCount >= maximumSelectionLength!;
 
   /// Filter items based on a search query
-  List<T> performSearch(String query) {
-    if (query.isEmpty || allItems == null) return items;
+  @override
+  List<T> filter(String query) {
+    // Return all items for empty query or null allItems
+    if (query.isEmpty || _allItems == null) return allItems;
 
-    return allItems!.where((item) => searchPredicate(item, query)).toList();
+    return _allItems!.where((item) {
+      // Safely handle potential null items or errors in search predicate
+      try {
+        return searchPredicate(item, query);
+      } catch (e) {
+        // If an error occurs during search (often due to null values),
+        // don't include this item in results
+        debugPrint('Error filtering item: $e');
+        return false;
+      }
+    }).toList();
   }
 
   /// Add an item to the selected items list
-  void addSelectedItem(T item) {
+  @override
+  void addItem(T item) {
     _selectedItems ??= [];
 
     if (maximumSelectionLength != null &&
@@ -85,7 +104,8 @@ class FilterCore<T> {
   }
 
   /// Remove an item from the selected items list
-  void removeSelectedItem(T item) {
+  @override
+  void removeItem(T item) {
     if (_selectedItems == null) return;
 
     if (validateRemoveItem != null) {
@@ -96,43 +116,70 @@ class FilterCore<T> {
   }
 
   /// Toggle selection of an item
-  void toggleSelection(T item, {bool enableOnlySingleSelection = false}) {
+  @override
+  void toggleItem(T item, {bool enableOnlySingleSelection = false}) {
     if (enableOnlySingleSelection) {
-      clearSelectedItems();
-      addSelectedItem(item);
+      clearSelection();
+      addItem(item);
     } else {
-      if (isSelected(item)) {
-        removeSelectedItem(item);
+      if (isItemSelected(item)) {
+        removeItem(item);
       } else {
-        addSelectedItem(item);
+        addItem(item);
       }
     }
   }
 
   /// Clear all selected items
-  void clearSelectedItems() {
+  @override
+  void clearSelection() {
     if (_selectedItems == null) return;
     _selectedItems!.clear();
   }
 
   /// Select all available items
-  void selectAllItems() {
-    if (allItems == null) return;
+  @override
+  void selectAll() {
+    if (_allItems == null) return;
 
     if (maximumSelectionLength != null) {
       // If maximum selection length is set, only add up to that limit
-      _selectedItems =
-          List<T>.from(allItems!.take(maximumSelectionLength!).toList());
+      _selectedItems = _allItems!.take(maximumSelectionLength!).toList();
     } else {
-      _selectedItems = List<T>.from(allItems!);
+      _selectedItems = List<T>.from(_allItems!);
     }
   }
 
   /// Apply the filter and return selected items
+  @override
   List<T>? applyFilter() {
     if (onApplyButtonClick != null) {
       onApplyButtonClick!(_selectedItems);
     }
     return _selectedItems;
   }
+
+  // Legacy method names to maintain backward compatibility
+
+  /// @deprecated Use [isItemSelected] instead
+  bool isSelected(T item) => isItemSelected(item);
+
+  /// @deprecated Use [filter] instead
+  List<T> performSearch(String query) => filter(query);
+
+  /// @deprecated Use [addItem] instead
+  void addSelectedItem(T item) => addItem(item);
+
+  /// @deprecated Use [removeItem] instead
+  void removeSelectedItem(T item) => removeItem(item);
+
+  /// @deprecated Use [toggleItem] instead
+  void toggleSelection(T item, {bool enableOnlySingleSelection = false}) =>
+      toggleItem(item, enableOnlySingleSelection: enableOnlySingleSelection);
+
+  /// @deprecated Use [clearSelection] instead
+  void clearSelectedItems() => clearSelection();
+
+  /// @deprecated Use [selectAll] instead
+  void selectAllItems() => selectAll();
 }

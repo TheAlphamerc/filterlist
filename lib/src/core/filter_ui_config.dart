@@ -65,9 +65,9 @@ class FilterUIConfig {
     this.allButtonText = 'All',
     this.selectedItemsText = 'selected items',
     this.controlButtons = const [
-      ControlButtonType.All,
-      ControlButtonType.Reset,
-      ControlButtonType.Apply,
+      ControlButtonType.all,
+      ControlButtonType.reset,
+      ControlButtonType.apply,
     ],
   });
 

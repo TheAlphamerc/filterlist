@@ -22,11 +22,11 @@ typedef ChoiceChipBuilder<T> = Widget Function(
 /// Control button types used in the filter list UI
 enum ControlButtonType {
   /// The All button that selects all items.
-  All,
+  all,
 
   /// The Reset button that clears all selections.
-  Reset,
+  reset,
 
   /// The Apply button that confirms selections and closes the dialog.
-  Apply
+  apply
 }

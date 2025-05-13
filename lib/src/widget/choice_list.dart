@@ -1,7 +1,4 @@
 import 'package:filter_list/filter_list.dart';
-import 'package:filter_list/src/state/filter_state.dart';
-import 'package:filter_list/src/state/provider.dart';
-import 'package:filter_list/src/widget/choice_chip_widget.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceList<T> extends StatelessWidget {

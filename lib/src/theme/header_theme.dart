@@ -34,6 +34,28 @@ class HeaderTheme extends InheritedTheme {
     return choiceChipTheme?.data ?? FilterListTheme.of(context).headerTheme;
   }
 
+  /// Retrieves the [HeaderThemeData] from the closest ancestor
+  /// [HeaderTheme] widget or a default theme if none exists
+  static HeaderThemeData safeOf(BuildContext context) {
+    final HeaderTheme? headerTheme =
+        context.dependOnInheritedWidgetOfExactType<HeaderTheme>();
+
+    if (headerTheme != null) {
+      return headerTheme.data;
+    }
+
+    // Attempt to get from FilterListTheme if available
+    try {
+      final filterListTheme = FilterListTheme.safeOf(context);
+      return filterListTheme.headerTheme;
+    } catch (_) {
+      // Ignore errors and use default
+    }
+
+    // If header theme not found in context, return a default theme
+    return HeaderThemeData.light();
+  }
+
   @override
   Widget wrap(BuildContext context, Widget child) =>
       HeaderTheme(data: data, child: child);

@@ -39,21 +39,25 @@ class ControlButtonBarTheme extends InheritedWidget {
     }
   }
 
-  /// Safely retrieves the theme from context or returns default
+  /// Retrieves the [ControlButtonBarThemeData] from the closest ancestor
+  /// [ControlButtonBarTheme] widget or a default theme if none exists
   static ControlButtonBarThemeData safeOf(BuildContext context) {
-    try {
-      final theme =
-          context.dependOnInheritedWidgetOfExactType<ControlButtonBarTheme>();
-      if (theme != null) {
-        return theme.data;
-      }
+    final ControlButtonBarTheme? controlButtonBarTheme =
+        context.dependOnInheritedWidgetOfExactType<ControlButtonBarTheme>();
 
-      // Try to get from FilterListTheme
-      return FilterListTheme.safeOf(context).controlBarButtonTheme;
-    } catch (_) {
-      // Ignore errors and return default
+    if (controlButtonBarTheme != null) {
+      return controlButtonBarTheme.data;
     }
 
+    // Attempt to get from FilterListTheme if available
+    try {
+      final filterListTheme = FilterListTheme.safeOf(context);
+      return filterListTheme.controlBarButtonTheme;
+    } catch (_) {
+      // Ignore errors and use default
+    }
+
+    // If control button bar theme not found in context, return a default theme
     return ControlButtonBarThemeData.light(context);
   }
 

@@ -1,4 +1,4 @@
-import 'package:filter_list/src/theme/filter_list_theme.dart';
+import 'package:filter_list/src/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +32,28 @@ class ChoiceChipTheme extends InheritedTheme {
     final choiceChipTheme =
         context.dependOnInheritedWidgetOfExactType<ChoiceChipTheme>();
     return choiceChipTheme?.data ?? FilterListTheme.of(context).choiceChipTheme;
+  }
+
+  /// Retrieves the [ChoiceChipThemeData] from the closest ancestor
+  /// [ChoiceChipTheme] widget or a default theme if none exists
+  static ChoiceChipThemeData safeOf(BuildContext context) {
+    final ChoiceChipTheme? choiceChipTheme =
+        context.dependOnInheritedWidgetOfExactType<ChoiceChipTheme>();
+
+    if (choiceChipTheme != null) {
+      return choiceChipTheme.data;
+    }
+
+    // Attempt to get from FilterListTheme if available
+    try {
+      final filterListTheme = FilterListTheme.safeOf(context);
+      return filterListTheme.choiceChipTheme;
+    } catch (_) {
+      // Ignore errors and use default
+    }
+
+    // If choice chip theme not found in context, return a default theme
+    return ChoiceChipThemeData.light(context);
   }
 
   @override
@@ -88,7 +110,7 @@ class ChoiceChipThemeData with Diagnosticable {
         elevation: 0,
         padding: const EdgeInsets.all(4),
         selectedBackgroundColor:
-            Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
+            Theme.of(context).colorScheme.primaryContainer.withTransparency(.2),
       );
 
   factory ChoiceChipThemeData.dark(BuildContext context) {
@@ -96,7 +118,8 @@ class ChoiceChipThemeData with Diagnosticable {
     final darkTheme = ThemeData.dark();
     return ChoiceChipThemeData(
       backgroundColor: const Color(0xff25272C),
-      side: BorderSide(color: theme.colorScheme.onSurface.withOpacity(0.12)),
+      side:
+          BorderSide(color: theme.colorScheme.onSurface.withTransparency(0.12)),
       textStyle: const TextStyle(color: Color(0xffb0b0c0)),
       selectedTextStyle: TextStyle(color: darkTheme.colorScheme.primary),
       selectedSide: BorderSide(
@@ -109,7 +132,7 @@ class ChoiceChipThemeData with Diagnosticable {
         borderRadius: BorderRadius.circular(20),
       ),
       selectedBackgroundColor:
-          Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
+          Theme.of(context).colorScheme.primaryContainer.withTransparency(.2),
     );
   }
 
@@ -207,7 +230,7 @@ class ChoiceChipThemeData with Diagnosticable {
   }) {
     return ChoiceChipThemeData(
       selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
-      textStyle: textStyle ?? textStyle,
+      textStyle: textStyle ?? this.textStyle,
       selectedBackgroundColor:
           selectedBackgroundColor ?? this.selectedBackgroundColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,

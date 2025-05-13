@@ -40,12 +40,13 @@ class FilterListDelegateThemeData with Diagnosticable {
     EdgeInsetsGeometry? tileMargin,
     Color? tileColor,
     TextStyle? tileTextStyle,
+    TextStyle? applyButtonTextStyle,
   }) {
     tileTextStyle = tileTextStyle ??
-        const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500
-        );
+        const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+
+    applyButtonTextStyle = applyButtonTextStyle ??
+        const TextStyle(color: Colors.blue, fontWeight: FontWeight.w500);
 
     listTileTheme ??= const ListTileThemeData();
 
@@ -58,6 +59,7 @@ class FilterListDelegateThemeData with Diagnosticable {
       tileMargin: tileMargin,
       tileColor: tileColor,
       tileTextStyle: tileTextStyle,
+      applyButtonTextStyle: applyButtonTextStyle,
     );
   }
 
@@ -68,10 +70,14 @@ class FilterListDelegateThemeData with Diagnosticable {
       required this.tileShadow,
       required this.tileMargin,
       required this.tileColor,
-      required this.tileTextStyle});
+      required this.tileTextStyle,
+      required this.applyButtonTextStyle});
 
   /// TextStyle for tile title
   final TextStyle tileTextStyle;
+
+  /// TextStyle for the apply button
+  final TextStyle applyButtonTextStyle;
 
   final EdgeInsetsGeometry tileMargin;
 
@@ -96,6 +102,7 @@ class FilterListDelegateThemeData with Diagnosticable {
     EdgeInsetsGeometry? tileMargin,
     Color? tileColor,
     TextStyle? tileTextStyle,
+    TextStyle? applyButtonTextStyle,
   }) {
     return FilterListDelegateThemeData.raw(
       listTileTheme: listTileTheme ?? this.listTileTheme,
@@ -104,6 +111,7 @@ class FilterListDelegateThemeData with Diagnosticable {
       tileMargin: tileMargin ?? this.tileMargin,
       tileColor: tileColor ?? this.tileColor,
       tileTextStyle: tileTextStyle ?? this.tileTextStyle,
+      applyButtonTextStyle: applyButtonTextStyle ?? this.applyButtonTextStyle,
     );
   }
 
@@ -111,14 +119,14 @@ class FilterListDelegateThemeData with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
+      ..add(DiagnosticsProperty<TextStyle>('tileTextStyle', tileTextStyle))
+      ..add(DiagnosticsProperty<TextStyle>(
+          'applyButtonTextStyle', applyButtonTextStyle))
+      ..add(DiagnosticsProperty<EdgeInsetsGeometry>('tileMargin', tileMargin))
       ..add(DiagnosticsProperty<Color>('tileColor', tileColor))
       ..add(DiagnosticsProperty<ListTileThemeData>(
           'listTileTheme', listTileTheme))
       ..add(DiagnosticsProperty<BoxBorder>('tileBorder', tileBorder))
-      ..add(DiagnosticsProperty<List<BoxShadow>>('tileShadow', tileShadow))
-      ..add(DiagnosticsProperty<EdgeInsetsGeometry>('tileMargin', tileMargin))
-      ..add(DiagnosticsProperty<ListTileThemeData>(
-          'listTileTheme', listTileTheme))
-      ..add(DiagnosticsProperty<BoxBorder>('tileBorder', tileBorder));
+      ..add(DiagnosticsProperty<List<BoxShadow>>('tileShadow', tileShadow));
   }
 }

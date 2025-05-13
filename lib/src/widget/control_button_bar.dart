@@ -1,9 +1,4 @@
 import 'package:filter_list/filter_list.dart';
-import 'package:filter_list/src/core/typedefs.dart' as core_types;
-import 'package:filter_list/src/state/filter_state.dart';
-import 'package:filter_list/src/state/provider.dart';
-
-import 'package:filter_list/src/widget/control_button.dart';
 import 'package:flutter/material.dart';
 
 /// {@template control_buttons}
@@ -29,7 +24,7 @@ class ControlButtonBar<T> extends StatelessWidget {
   final int? maximumSelectionLength;
 
   /// {@macro control_buttons}
-  final List<core_types.ControlButtonType> controlButtons;
+  final List<ControlButtonType> controlButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +50,7 @@ class ControlButtonBar<T> extends StatelessWidget {
               /* All Button */
               if (maximumSelectionLength == null &&
                   !enableOnlySingleSelection &&
-                  controlButtons
-                      .contains(core_types.ControlButtonType.All)) ...[
+                  controlButtons.contains(ControlButtonType.all)) ...[
                 ControlButton(
                   choiceChipLabel: '$allButtonText',
                   onPressed: () {
@@ -71,8 +65,7 @@ class ControlButtonBar<T> extends StatelessWidget {
               ],
 
               /* Reset Button */
-              if (controlButtons
-                  .contains(core_types.ControlButtonType.Reset)) ...[
+              if (controlButtons.contains(ControlButtonType.reset)) ...[
                 ControlButton(
                   choiceChipLabel: '$resetButtonText',
                   onPressed: () {
@@ -87,9 +80,9 @@ class ControlButtonBar<T> extends StatelessWidget {
               ],
 
               /* Apply Button */
-              if (controlButtons.contains(core_types.ControlButtonType.Apply) ||
-                  !controlButtons.any((element) =>
-                      element == core_types.ControlButtonType.Apply))
+              if (controlButtons.contains(ControlButtonType.apply) ||
+                  !controlButtons
+                      .any((element) => element == ControlButtonType.apply))
                 ControlButton(
                   choiceChipLabel: '$applyButtonText',
                   primaryButton: true,

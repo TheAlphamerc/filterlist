@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// The Filter List theme components.
 ///
 /// This file exports all the theme-related classes for the filter list package.
@@ -16,3 +18,8 @@ export 'control_button_bar_theme.dart';
 export 'filter_list_delegate_theme.dart';
 export 'filter_list_theme.dart';
 export 'header_theme.dart';
+
+extension ColorExtension on Color {
+  Color withTransparency(double opacity) =>
+      withAlpha((255.0 * opacity).round());
+}

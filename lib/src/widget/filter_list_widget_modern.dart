@@ -29,14 +29,14 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     // 1. Explicitly provided theme
     // 2. Theme from context
     // 3. Default light theme
-    FilterListThemeData effectiveTheme =
+    final FilterListThemeData effectiveTheme =
         themeData ?? FilterListTheme.safeOf(context);
 
     return FilterListTheme(
       theme: effectiveTheme,
       child: Builder(builder: (context) {
         // Access the theme safely through the context
-        final theme = FilterListTheme.of(context);
+        final theme = FilterListTheme.safeOf(context);
 
         return Scaffold(
           backgroundColor: Colors.transparent,
@@ -54,7 +54,7 @@ class FilterListWidgetModern<T> extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
-                          '${controller.selectedItemCount} ${config.selectedItemsText}',
+                          '${controller.selectedItemsCount} ${config.selectedItemsText}',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -77,12 +77,12 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     FilterListController<T> controller,
     FilterUIConfig config,
   ) {
-    final theme = FilterListTheme.of(context);
+    final theme = HeaderTheme.safeOf(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.headerTheme.backgroundColor,
-        boxShadow: theme.headerTheme.boxShadow,
+        color: theme.backgroundColor,
+        boxShadow: theme.boxShadow,
       ),
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -94,7 +94,7 @@ class FilterListWidgetModern<T> extends StatelessWidget {
                 Expanded(
                   child: Text(
                     config.headlineText!,
-                    style: theme.headerTheme.headerTextStyle,
+                    style: theme.headerTextStyle,
                   ),
                 ),
               if (!config.hideCloseIcon)
@@ -111,11 +111,11 @@ class FilterListWidgetModern<T> extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: config.searchFieldHint ?? 'Search',
-                  contentPadding: theme
-                          .headerTheme.searchFieldInputBorder?.dimensions
-                          ?.resolve(TextDirection.ltr) ??
-                      EdgeInsets.zero,
-                  border: theme.headerTheme.searchFieldInputBorder,
+                  contentPadding: theme.searchFieldInputBorder != null
+                      ? theme.searchFieldInputBorder!.dimensions
+                          .resolve(TextDirection.ltr)
+                      : EdgeInsets.zero,
+                  border: theme.searchFieldInputBorder,
                   prefixIcon: const Icon(Icons.search),
                 ),
                 onChanged: controller.updateSearchQuery,
@@ -131,7 +131,7 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     FilterListController<T> controller,
     FilterUIConfig config,
   ) {
-    final theme = FilterListTheme.of(context);
+    final theme = FilterListTheme.safeOf(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -170,11 +170,27 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     List<T> items,
     FilterUIConfig config,
   ) {
-    final theme = FilterListTheme.of(context);
+    final theme = FilterListTheme.safeOf(context);
     final List<Widget> choices = [];
 
+    // Function to get display text for each item
+    String getItemText(T item) {
+      // Use controller's createCallbacks to get the proper label
+      try {
+        final callbacks = controller.createCallbacks(
+          labelProvider: (item) => item.toString(),
+        );
+
+        // Use the label provider from callbacks
+        return callbacks.labelProvider(item) ?? item.toString();
+      } catch (e) {
+        // If we can't create callbacks, fall back to toString
+        return item.toString();
+      }
+    }
+
     for (final item in items) {
-      final selected = controller.isSelected(item);
+      final selected = controller.isItemSelected(item);
       final maxSelectionReached =
           controller.isMaximumSelectionReached && !selected;
 
@@ -184,16 +200,13 @@ class FilterListWidgetModern<T> extends StatelessWidget {
           disabled: maxSelectionReached,
           item: item,
           onSelected: (value) {
-            controller.toggleSelection(
+            controller.toggleItem(
               item,
               enableOnlySingleSelection: config.enableOnlySingleSelection,
             );
           },
           selected: selected,
-          text: controller.filterCore.searchPredicate is LabelDelegate<T>
-              ? (controller.filterCore.searchPredicate
-                  as LabelDelegate<T>)(item)
-              : item.toString(),
+          text: getItemText(item),
         ),
       );
     }
@@ -214,24 +227,23 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     FilterListController<T> controller,
     FilterUIConfig config,
   ) {
-    final theme = FilterListTheme.of(context);
+    final theme = ControlButtonBarTheme.safeOf(context);
 
     return Positioned(
       bottom: 0,
       left: 0,
       right: 0,
       child: Container(
-        decoration:
-            theme.controlBarButtonTheme.controlContainerDecoration != null
-                ? theme.controlBarButtonTheme.controlContainerDecoration!
-                : BoxDecoration(
-                    color: theme.controlBarButtonTheme.backgroundColor,
-                  ),
+        decoration: theme.controlContainerDecoration != null
+            ? theme.controlContainerDecoration!
+            : BoxDecoration(
+                color: theme.backgroundColor,
+              ),
         child: SafeArea(
           top: false,
           child: Container(
-            height: theme.controlBarButtonTheme.height,
-            padding: theme.controlBarButtonTheme.padding,
+            height: theme.height,
+            padding: theme.padding,
             child: AnimatedBuilder(
               animation: controller,
               builder: (context, _) {
@@ -252,32 +264,35 @@ class FilterListWidgetModern<T> extends StatelessWidget {
     FilterListController<T> controller,
     FilterUIConfig config,
   ) {
-    final theme = FilterListTheme.of(context);
+    final theme = ControlButtonBarTheme.safeOf(context);
     final List<Widget> buttons = [];
 
-    if (!config.enableOnlySingleSelection &&
-        controller.filterCore.maximumSelectionLength == null &&
-        config.controlButtons.contains(ControlButtonType.All)) {
+    // Check if the button should be shown based on controller properties
+    final shouldShowAllButton = !config.enableOnlySingleSelection &&
+        !controller.isMaximumSelectionReached &&
+        config.controlButtons.contains(ControlButtonType.all);
+
+    if (shouldShowAllButton) {
       buttons.add(
         ControlButton(
           choiceChipLabel: config.allButtonText,
           onPressed: controller.selectAll,
         ),
       );
-      buttons.add(SizedBox(width: theme.controlBarButtonTheme.buttonSpacing));
+      buttons.add(SizedBox(width: theme.buttonSpacing));
     }
 
-    if (config.controlButtons.contains(ControlButtonType.Reset)) {
+    if (config.controlButtons.contains(ControlButtonType.reset)) {
       buttons.add(
         ControlButton(
           choiceChipLabel: config.resetButtonText,
           onPressed: controller.clearSelection,
         ),
       );
-      buttons.add(SizedBox(width: theme.controlBarButtonTheme.buttonSpacing));
+      buttons.add(SizedBox(width: theme.buttonSpacing));
     }
 
-    if (config.controlButtons.contains(ControlButtonType.Apply)) {
+    if (config.controlButtons.contains(ControlButtonType.apply)) {
       buttons.add(
         ControlButton(
           choiceChipLabel: config.applyButtonText,

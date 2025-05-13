@@ -1,8 +1,6 @@
-import 'package:filter_list/src/theme/filter_list_theme.dart';
+import 'package:filter_list/src/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'control_button_bar_theme.dart';
 
 /// Overrides the default style of [ControlButton]
 ///
@@ -92,7 +90,7 @@ class ControlButtonThemeData with Diagnosticable {
         textStyle:
             TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
         primaryButtonBackgroundColor:
-            Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
+            Theme.of(context).colorScheme.primaryContainer.withTransparency(.2),
       );
   factory ControlButtonThemeData.dark(BuildContext context) =>
       ControlButtonThemeData(

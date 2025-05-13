@@ -1,5 +1,4 @@
 import 'package:filter_list/filter_list.dart';
-import 'package:filter_list/src/widget/search_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {

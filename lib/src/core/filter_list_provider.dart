@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'filter_callbacks.dart';
 import 'filter_core.dart';
+import 'filter_operations.dart';
 import 'filter_ui_config.dart';
-import 'typedefs.dart';
 
 /// A Provider-based state management solution for the FilterList package.
 /// This provider is designed to be used with the Flutter Provider package
@@ -33,8 +35,9 @@ class FilterListProvider<T> extends InheritedNotifier<FilterListController<T>> {
 
 /// Controller class that manages the state for FilterList operations.
 /// This class is designed to be used with FilterListProvider.
-class FilterListController<T> extends ChangeNotifier {
-  /// The underlying filter core instance that handles filtering logic.
+class FilterListController<T> extends ChangeNotifier
+    implements FilterOperations<T> {
+  /// The underlying filter operations instance that handles filtering logic.
   final FilterCore<T> _filterCore;
 
   /// The UI configuration for the filter list.
@@ -82,10 +85,10 @@ class FilterListController<T> extends ChangeNotifier {
         _debounceDuration =
             debounceDuration ?? const Duration(milliseconds: 300) {
     // Initialize filtered items with all items
-    _filteredItems = _filterCore.items;
+    _filteredItems = _filterCore.allItems;
   }
 
-  /// Gets the filter core instance.
+  /// Gets the filter operations instance.
   FilterCore<T> get filterCore => _filterCore;
 
   /// Gets the UI configuration.
@@ -97,20 +100,25 @@ class FilterListController<T> extends ChangeNotifier {
   /// Gets the filtered items based on the current search query.
   List<T> get filteredItems => _filteredItems;
 
-  /// Gets the selected items.
-  List<T> get selectedItems => _filterCore.selectedItems;
-
-  /// Gets the number of selected items.
-  int get selectedItemCount => _filterCore.selectedItemsCount;
-
-  /// Indicates if the maximum selection limit is reached.
-  bool get isMaximumSelectionReached => _filterCore.isMaximumSelectionReached;
-
   /// Indicates if the controller is busy performing an operation.
   bool get isBusy => _isBusy;
 
   /// Gets the error message if any.
   String? get errorMessage => _errorMessage;
+
+  // Implement FilterOperations interface
+
+  @override
+  List<T> get allItems => _filterCore.allItems;
+
+  @override
+  List<T> get selectedItems => _filterCore.selectedItems;
+
+  @override
+  int get selectedItemsCount => _filterCore.selectedItemsCount;
+
+  @override
+  bool get isMaximumSelectionReached => _filterCore.isMaximumSelectionReached;
 
   /// Updates the search query and filters items accordingly with debouncing.
   void updateSearchQuery(String query) {
@@ -121,7 +129,7 @@ class FilterListController<T> extends ChangeNotifier {
 
     // Set a new timer
     _debounceTimer = Timer(_debounceDuration, () {
-      _filteredItems = _filterCore.performSearch(query);
+      _filteredItems = filter(query);
       notifyListeners();
     });
   }
@@ -129,36 +137,52 @@ class FilterListController<T> extends ChangeNotifier {
   /// Updates the search query and filters items immediately without debouncing.
   void updateSearchQueryImmediately(String query) {
     _searchQuery = query;
-    _filteredItems = _filterCore.performSearch(query);
+    _filteredItems = filter(query);
     notifyListeners();
   }
 
-  /// Toggles the selection state of an item.
-  void toggleSelection(T item, {bool enableOnlySingleSelection = false}) {
-    _filterCore.toggleSelection(item,
+  @override
+  List<T> filter(String query) {
+    return _filterCore.filter(query);
+  }
+
+  @override
+  void toggleItem(T item, {bool enableOnlySingleSelection = false}) {
+    _filterCore.toggleItem(item,
         enableOnlySingleSelection: enableOnlySingleSelection);
     notifyListeners();
   }
 
-  /// Checks if an item is selected.
-  bool isSelected(T item) => _filterCore.isSelected(item);
+  @override
+  bool isItemSelected(T item) => _filterCore.isItemSelected(item);
 
-  /// Clears all selected items.
+  @override
+  void addItem(T item) {
+    _filterCore.addItem(item);
+    notifyListeners();
+  }
+
+  @override
+  void removeItem(T item) {
+    _filterCore.removeItem(item);
+    notifyListeners();
+  }
+
+  @override
   void clearSelection() {
-    _filterCore.clearSelectedItems();
+    _filterCore.clearSelection();
     notifyListeners();
   }
 
-  /// Selects all available items up to the maximum selection limit if set.
+  @override
   void selectAll() {
-    _filterCore.selectAllItems();
+    _filterCore.selectAll();
     notifyListeners();
   }
 
-  /// Applies the filter and returns the selected items.
+  @override
   List<T>? applyFilter() {
-    final result = _filterCore.applyFilter();
-    return result;
+    return _filterCore.applyFilter();
   }
 
   /// Sets the busy state of the controller.
@@ -196,7 +220,15 @@ class FilterListController<T> extends ChangeNotifier {
 
   @override
   void dispose() {
+    // Cancel any active debounce timer to prevent memory leaks
     _debounceTimer?.cancel();
+
+    // Clear references to release memory
+    _filteredItems = [];
+    _errorMessage = null;
+    _isBusy = false;
+    _searchQuery = '';
+
     super.dispose();
   }
 }

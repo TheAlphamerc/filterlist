@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'filter_callbacks.dart';
 import 'filter_core.dart';
-import 'typedefs.dart';
+import 'filter_operations.dart';
 
 /// ViewModel class for FilterList to demonstrate a more structured approach
 /// to state management.
-class FilterListViewModel<T> extends ChangeNotifier {
+class FilterListViewModel<T> extends ChangeNotifier
+    implements FilterOperations<T> {
   /// Core filtering logic
   final FilterCore<T> _filterCore;
 
@@ -21,9 +25,6 @@ class FilterListViewModel<T> extends ChangeNotifier {
   /// Get the filtered items
   List<T> get filteredItems => _filteredItems;
 
-  /// Get the selected items
-  List<T> get selectedItems => _filterCore.selectedItems;
-
   /// Get the loading state
   bool get isLoading => _isLoading;
 
@@ -36,6 +37,12 @@ class FilterListViewModel<T> extends ChangeNotifier {
   /// Current filtered items based on search query
   List<T> _filteredItems = [];
 
+  /// Timer for debouncing search queries
+  Timer? _debounceTimer;
+
+  /// The duration to wait before executing a search after input changes
+  final Duration _debounceDuration;
+
   /// Creates a new FilterListViewModel instance
   FilterListViewModel({
     required List<T> allItems,
@@ -45,7 +52,8 @@ class FilterListViewModel<T> extends ChangeNotifier {
     ValidateRemoveItem<T>? validateRemoveItem,
     OnApplyButtonClick<T>? onApplyButtonClick,
     int? maximumSelectionLength,
-  }) : _filterCore = FilterCore<T>(
+    Duration? debounceDuration,
+  })  : _filterCore = FilterCore<T>(
           allItems: allItems,
           selectedItems: selectedItems,
           searchPredicate: searchPredicate,
@@ -53,44 +61,84 @@ class FilterListViewModel<T> extends ChangeNotifier {
           validateRemoveItem: validateRemoveItem,
           onApplyButtonClick: onApplyButtonClick,
           maximumSelectionLength: maximumSelectionLength,
-        ) {
+        ),
+        _debounceDuration =
+            debounceDuration ?? const Duration(milliseconds: 300) {
     // Initialize filtered items with all items
-    _filteredItems = _filterCore.items;
+    _filteredItems = _filterCore.allItems;
   }
 
-  /// Update the search query and filter items
-  void updateSearchQuery(String query) {
-    _searchQuery = query;
-    _filteredItems = _filterCore.performSearch(query);
-    notifyListeners();
+  // Implement FilterOperations interface
+
+  @override
+  List<T> get allItems => _filterCore.allItems;
+
+  @override
+  List<T> get selectedItems => _filterCore.selectedItems;
+
+  @override
+  int get selectedItemsCount => _filterCore.selectedItemsCount;
+
+  @override
+  bool get isMaximumSelectionReached => _filterCore.isMaximumSelectionReached;
+
+  @override
+  List<T> filter(String query) {
+    return _filterCore.filter(query);
   }
 
-  /// Toggle selection of an item
-  void toggleSelection(T item, {bool enableOnlySingleSelection = false}) {
-    _filterCore.toggleSelection(item,
+  @override
+  void toggleItem(T item, {bool enableOnlySingleSelection = false}) {
+    _filterCore.toggleItem(item,
         enableOnlySingleSelection: enableOnlySingleSelection);
     notifyListeners();
   }
 
-  /// Check if an item is selected
-  bool isSelected(T item) => _filterCore.isSelected(item);
+  @override
+  bool isItemSelected(T item) => _filterCore.isItemSelected(item);
 
-  /// Clear all selected items
+  @override
+  void addItem(T item) {
+    _filterCore.addItem(item);
+    notifyListeners();
+  }
+
+  @override
+  void removeItem(T item) {
+    _filterCore.removeItem(item);
+    notifyListeners();
+  }
+
+  @override
   void clearSelection() {
-    _filterCore.clearSelectedItems();
+    _filterCore.clearSelection();
     notifyListeners();
   }
 
-  /// Select all available items
+  @override
   void selectAll() {
-    _filterCore.selectAllItems();
+    _filterCore.selectAll();
     notifyListeners();
   }
 
-  /// Apply the filter
+  @override
   List<T>? applyFilter() {
-    final result = _filterCore.applyFilter();
-    return result;
+    return _filterCore.applyFilter();
+  }
+
+  /// Update the search query and filter items with debouncing
+  void updateSearchQuery(String query) {
+    // Cancel any previous timer
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer!.cancel();
+    }
+
+    // Set a new timer
+    _debounceTimer = Timer(_debounceDuration, () {
+      _searchQuery = query;
+      _filteredItems = filter(query);
+      notifyListeners();
+    });
   }
 
   /// Set loading state
@@ -122,7 +170,15 @@ class FilterListViewModel<T> extends ChangeNotifier {
 
   @override
   void dispose() {
-    // Clean up resources if needed
+    // Cancel any active timer to prevent memory leaks
+    _debounceTimer?.cancel();
+
+    // Clear references to release memory
+    _filteredItems = [];
+    _errorMessage = null;
+    _isLoading = false;
+    _searchQuery = '';
+
     super.dispose();
   }
 }

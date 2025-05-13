@@ -1,7 +1,6 @@
 library filter_list;
 
 import 'package:filter_list/src/core/core.dart';
-import 'package:filter_list/src/core/typedefs.dart' as core_types;
 import 'package:filter_list/src/state/filter_state.dart';
 import 'package:filter_list/src/state/provider.dart';
 import 'package:filter_list/src/theme/theme.dart';
@@ -196,7 +195,7 @@ class FilterListDialog {
     ChoiceChipBuilder? choiceChipBuilder,
 
     /// {@macro control_buttons}
-    List<core_types.ControlButtonType>? controlButtons,
+    List<ControlButtonType>? controlButtons,
   }) async {
     height ??= MediaQuery.of(context).size.height * .5;
     width ??= MediaQuery.of(context).size.width;
@@ -245,9 +244,9 @@ class FilterListDialog {
                 maximumSelectionLength: maximumSelectionLength,
                 controlButtons: controlButtons ??
                     [
-                      core_types.ControlButtonType.All,
-                      core_types.ControlButtonType.Reset,
-                      core_types.ControlButtonType.Apply
+                      ControlButtonType.all,
+                      ControlButtonType.reset,
+                      ControlButtonType.apply
                     ],
               ),
             ),
@@ -333,14 +332,14 @@ class FilterListDialog {
     );
 
     // Convert core ControlButtonType to widget ControlButtonType
-    final List<core_types.ControlButtonType> convertedButtons = [];
+    final List<ControlButtonType> convertedButtons = [];
     for (final button in config.controlButtons) {
-      if (button == core_types.ControlButtonType.All) {
-        convertedButtons.add(core_types.ControlButtonType.All);
-      } else if (button == core_types.ControlButtonType.Reset) {
-        convertedButtons.add(core_types.ControlButtonType.Reset);
-      } else if (button == core_types.ControlButtonType.Apply) {
-        convertedButtons.add(core_types.ControlButtonType.Apply);
+      if (button == ControlButtonType.all) {
+        convertedButtons.add(ControlButtonType.all);
+      } else if (button == ControlButtonType.reset) {
+        convertedButtons.add(ControlButtonType.reset);
+      } else if (button == ControlButtonType.apply) {
+        convertedButtons.add(ControlButtonType.apply);
       }
     }
 
@@ -496,7 +495,7 @@ class FilterListDialog {
         const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
 
     /// Control buttons to display
-    List<core_types.ControlButtonType>? controlButtons,
+    List<ControlButtonType>? controlButtons,
 
     /// Duration to debounce search queries
     Duration? debounceDuration,
@@ -521,9 +520,9 @@ class FilterListDialog {
       selectedItemsText: selectedItemsText,
       controlButtons: controlButtons ??
           [
-            core_types.ControlButtonType.Reset,
-            core_types.ControlButtonType.All,
-            core_types.ControlButtonType.Apply,
+            ControlButtonType.reset,
+            ControlButtonType.all,
+            ControlButtonType.apply,
           ],
     );
 
